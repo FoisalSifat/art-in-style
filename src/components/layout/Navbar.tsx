@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Heart, Menu, X, Sun, Moon, Search, User } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, X, Sun, Moon, Search, User, Phone, Mail } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -21,12 +21,23 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
-      <nav className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
+      <nav className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <img src={logo} alt="Art In - Born To Be Different" className="h-20 w-auto" />
+        <Link to="/" className="flex items-center shrink-0">
+          <img src={logo} alt="Art In - Born To Be Different" className="h-14 sm:h-20 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -45,39 +56,39 @@ export default function Navbar() {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Toggle theme">
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        <div className="flex items-center gap-1 sm:gap-3">
+          <button onClick={toggleTheme} className="p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Toggle theme">
+            {theme === 'dark' ? <Sun size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />}
           </button>
-          <Link to="/login" className="p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Account">
+          <Link to="/login" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Account">
             <User size={18} />
           </Link>
-          <Link to="/shop" className="p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Search">
+          <Link to="/shop" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Search">
             <Search size={18} />
           </Link>
-          <Link to="/wishlist" className="relative p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Wishlist">
-            <Heart size={18} />
+          <Link to="/wishlist" className="relative p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Wishlist">
+            <Heart size={16} className="sm:w-[18px] sm:h-[18px]" />
             {wishlist.length > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-accent text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
           </Link>
-          <button onClick={() => setIsOpen(true)} className="relative p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Cart">
-            <ShoppingBag size={18} />
+          <button onClick={() => setIsOpen(true)} className="relative p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Cart">
+            <ShoppingBag size={16} className="sm:w-[18px] sm:h-[18px]" />
             {totalItems > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-accent text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
                 {totalItems}
               </span>
             )}
           </button>
-          <button onClick={() => setMobileOpen(true)} className="p-2 md:hidden" aria-label="Menu">
+          <button onClick={() => setMobileOpen(true)} className="p-1.5 sm:p-2 md:hidden" aria-label="Menu">
             <Menu size={20} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — full-screen overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -85,26 +96,73 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-background"
+            className="fixed inset-0 z-50 bg-background flex flex-col"
           >
-            <div className="flex items-center justify-between h-16 px-4">
-              <img src={logo} alt="Art In" className="h-20 w-auto" />
-              <button onClick={() => setMobileOpen(false)} className="p-2">
-                <X size={24} />
+            {/* Header */}
+            <div className="flex items-center justify-between h-14 px-3 border-b border-border/30">
+              <img src={logo} alt="Art In" className="h-14 w-auto" />
+              <button onClick={() => setMobileOpen(false)} className="p-2 rounded-full hover:bg-secondary transition-colors">
+                <X size={22} />
               </button>
             </div>
-            <div className="flex flex-col items-center gap-8 pt-16">
-              {navLinks.map(link => (
-                <Link
+
+            {/* Nav links */}
+            <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
+              {navLinks.map((link, i) => (
+                <motion.div
                   key={link.path}
-                  to={link.path}
-                  onClick={() => setMobileOpen(false)}
-                  className="font-display text-3xl font-bold uppercase tracking-wider hover:text-accent transition-colors"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.06 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    to={link.path}
+                    onClick={() => setMobileOpen(false)}
+                    className={`font-display text-3xl font-bold uppercase tracking-wider transition-colors ${
+                      location.pathname === link.path ? 'text-accent' : 'text-foreground hover:text-accent'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               ))}
             </div>
+
+            {/* Bottom actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              className="border-t border-border/30 px-6 py-5 space-y-4"
+            >
+              <div className="flex items-center justify-center gap-6">
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <User size={20} />
+                  <span className="text-[10px] uppercase tracking-wider font-medium">Account</span>
+                </Link>
+                <Link to="/shop" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <Search size={20} />
+                  <span className="text-[10px] uppercase tracking-wider font-medium">Search</span>
+                </Link>
+                <Link to="/wishlist" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <Heart size={20} />
+                  <span className="text-[10px] uppercase tracking-wider font-medium">Wishlist</span>
+                </Link>
+                <button onClick={() => { setMobileOpen(false); setIsOpen(true); }} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                  <ShoppingBag size={20} />
+                  <span className="text-[10px] uppercase tracking-wider font-medium">Cart</span>
+                </button>
+              </div>
+              <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                <a href="tel:01600052600" className="flex items-center gap-1 hover:text-foreground transition-colors">
+                  <Phone size={12} /> 01600052600
+                </a>
+                <span>•</span>
+                <a href="mailto:artinclo83@gmail.com" className="flex items-center gap-1 hover:text-foreground transition-colors">
+                  <Mail size={12} /> Email Us
+                </a>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

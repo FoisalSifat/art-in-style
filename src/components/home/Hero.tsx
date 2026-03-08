@@ -6,7 +6,7 @@ import heroImg from '@/assets/hero-main.jpg';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
         <img src={heroImg} alt="Art In Fashion" className="w-full h-full object-cover" />
@@ -20,7 +20,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-accent font-medium tracking-[0.3em] uppercase text-sm mb-4"
+            className="text-accent font-medium tracking-[0.2em] sm:tracking-[0.3em] uppercase text-xs sm:text-sm mb-3 sm:mb-4"
           >
             Premium Artistic Streetwear
           </motion.p>
@@ -29,7 +29,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="font-display text-6xl md:text-8xl lg:text-9xl font-black leading-[0.85] tracking-tight"
+            className="font-display text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black leading-[0.85] tracking-tight"
           >
             Wear
             <br />
@@ -40,7 +40,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="text-muted-foreground text-lg md:text-xl mt-6 max-w-md leading-relaxed"
+            className="text-muted-foreground text-base sm:text-lg md:text-xl mt-4 sm:mt-6 max-w-md leading-relaxed"
           >
             Where bold artistry meets premium comfort. Each piece is a canvas, every drop is a statement.
           </motion.p>
@@ -49,26 +49,26 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
-            className="flex flex-wrap gap-4 mt-8"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8"
           >
-            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold text-base px-8 py-6 rounded-full">
+            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold text-sm sm:text-base px-6 sm:px-8 py-5 sm:py-6 rounded-full">
               <Link to="/shop">
                 Shop Now <ArrowRight size={18} className="ml-1" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="font-display font-bold text-base px-8 py-6 rounded-full border-foreground/20 hover:bg-foreground/10">
+            <Button asChild variant="outline" className="font-display font-bold text-sm sm:text-base px-6 sm:px-8 py-5 sm:py-6 rounded-full border-foreground/20 hover:bg-foreground/10">
               <Link to="/shop">Explore Collection</Link>
             </Button>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — hidden on mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
