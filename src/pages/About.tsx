@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
-import lifestyle1 from '@/assets/lifestyle-1.jpg';
+
 import lifestyle2 from '@/assets/lifestyle-2.jpg';
 import founderImg from '@/assets/founder.jpeg';
 
