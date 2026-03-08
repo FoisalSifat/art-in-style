@@ -31,7 +31,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
             loading="lazy"
           />
           {product.badge && (
-            <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
+            <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
               {product.badge}
             </span>
           )}
@@ -39,37 +39,37 @@ export default function ProductCard({ product, index = 0 }: Props) {
         </div>
       </Link>
 
-      {/* Quick actions */}
-      <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+      {/* Quick actions — always visible on mobile, hover on desktop */}
+      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex flex-col gap-1.5 sm:gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-y-2 sm:group-hover:translate-y-0">
         <button
           onClick={() => toggleWishlist(product.id)}
-          className={`p-2 rounded-full glass transition-colors ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
+          className={`p-1.5 sm:p-2 rounded-full glass transition-colors ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
           aria-label="Add to wishlist"
         >
-          <Heart size={16} fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
+          <Heart size={14} className="sm:w-4 sm:h-4" fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
         </button>
         <button
           onClick={() => addItem(product, product.sizes[1] || product.sizes[0], product.colors[0])}
-          className="p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors"
+          className="p-1.5 sm:p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors"
           aria-label="Quick add"
         >
-          <ShoppingBag size={16} />
+          <ShoppingBag size={14} className="sm:w-4 sm:h-4" />
         </button>
       </div>
 
-      <div className="mt-3 space-y-1">
-        <h3 className="font-display font-semibold text-sm">{product.name}</h3>
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-sm">৳{product.price}</span>
+      <div className="mt-2 sm:mt-3 space-y-0.5 sm:space-y-1">
+        <h3 className="font-display font-semibold text-xs sm:text-sm truncate">{product.name}</h3>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="font-bold text-xs sm:text-sm">৳{product.price}</span>
           {product.originalPrice && (
-            <span className="text-xs text-muted-foreground line-through">৳{product.originalPrice}</span>
+            <span className="text-[10px] sm:text-xs text-muted-foreground line-through">৳{product.originalPrice}</span>
           )}
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 sm:gap-1">
           {[...Array(5)].map((_, i) => (
-            <span key={i} className={`text-xs ${i < Math.floor(product.rating) ? 'text-accent' : 'text-muted-foreground/30'}`}>★</span>
+            <span key={i} className={`text-[10px] sm:text-xs ${i < Math.floor(product.rating) ? 'text-accent' : 'text-muted-foreground/30'}`}>★</span>
           ))}
-          <span className="text-xs text-muted-foreground ml-1">({product.reviews})</span>
+          <span className="text-[10px] sm:text-xs text-muted-foreground ml-0.5 sm:ml-1">({product.reviews})</span>
         </div>
       </div>
     </motion.div>

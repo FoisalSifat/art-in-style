@@ -41,13 +41,13 @@ export default function ProductDetail() {
   };
 
   return (
-    <section className="pt-24 pb-16 min-h-screen">
+    <section className="pt-20 sm:pt-24 pb-16 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
-        <Link to="/shop" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
+        <Link to="/shop" className="inline-flex items-center gap-1 text-xs sm:text-sm text-muted-foreground hover:text-foreground mb-4 sm:mb-8 transition-colors">
           <ChevronLeft size={16} /> Back to Shop
         </Link>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-16">
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -65,7 +65,7 @@ export default function ProductDetail() {
               />
             </div>
             {product.badge && (
-              <span className="absolute top-4 left-4 px-3 py-1 text-xs font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
+              <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
                 {product.badge}
               </span>
             )}
@@ -75,39 +75,39 @@ export default function ProductDetail() {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6"
           >
             <div>
-              <p className="text-sm text-accent font-medium uppercase tracking-wider">{product.category}</p>
-              <h1 className="font-display text-3xl md:text-4xl font-black mt-1">{product.name}</h1>
-              <div className="flex items-center gap-3 mt-3">
-                <div className="flex items-center gap-1">
+              <p className="text-xs sm:text-sm text-accent font-medium uppercase tracking-wider">{product.category}</p>
+              <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-black mt-1">{product.name}</h1>
+              <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
+                <div className="flex items-center gap-0.5 sm:gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={14} className={i < Math.floor(product.rating) ? 'text-accent fill-accent' : 'text-muted-foreground/30'} />
+                    <Star key={i} size={12} className={`sm:w-3.5 sm:h-3.5 ${i < Math.floor(product.rating) ? 'text-accent fill-accent' : 'text-muted-foreground/30'}`} />
                   ))}
                 </div>
-                <span className="text-sm text-muted-foreground">{product.rating} ({product.reviews} reviews)</span>
+                <span className="text-xs sm:text-sm text-muted-foreground">{product.rating} ({product.reviews} reviews)</span>
               </div>
             </div>
 
-            <div className="flex items-baseline gap-3">
-              <span className="font-display text-3xl font-black">৳{product.price}</span>
+            <div className="flex items-baseline gap-2 sm:gap-3">
+              <span className="font-display text-2xl sm:text-3xl font-black">৳{product.price}</span>
               {product.originalPrice && (
-                <span className="text-lg text-muted-foreground line-through">৳{product.originalPrice}</span>
+                <span className="text-sm sm:text-lg text-muted-foreground line-through">৳{product.originalPrice}</span>
               )}
             </div>
 
-            <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">{product.description}</p>
 
             {/* Color */}
             <div>
-              <h3 className="font-display font-bold text-sm uppercase tracking-wider mb-3">Color</h3>
-              <div className="flex gap-2">
+              <h3 className="font-display font-bold text-xs sm:text-sm uppercase tracking-wider mb-2 sm:mb-3">Color</h3>
+              <div className="flex flex-wrap gap-2">
                 {product.colors.map(c => (
                   <button
                     key={c}
                     onClick={() => setSelectedColor(c)}
-                    className={`px-4 py-2 text-sm rounded-full border transition-colors ${(selectedColor || product.colors[0]) === c ? 'bg-accent text-accent-foreground border-accent' : 'border-border hover:border-foreground/30'}`}
+                    className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-full border transition-colors ${(selectedColor || product.colors[0]) === c ? 'bg-accent text-accent-foreground border-accent' : 'border-border hover:border-foreground/30'}`}
                   >
                     {c}
                   </button>
@@ -117,18 +117,18 @@ export default function ProductDetail() {
 
             {/* Size */}
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-display font-bold text-sm uppercase tracking-wider">Size</h3>
-                <button onClick={() => setSizeGuideOpen(true)} className="text-xs text-accent flex items-center gap-1 hover:underline">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <h3 className="font-display font-bold text-xs sm:text-sm uppercase tracking-wider">Size</h3>
+                <button onClick={() => setSizeGuideOpen(true)} className="text-[10px] sm:text-xs text-accent flex items-center gap-1 hover:underline">
                   <Ruler size={12} /> Size Guide
                 </button>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {product.sizes.map(s => (
                   <button
                     key={s}
                     onClick={() => setSelectedSize(s)}
-                    className={`w-12 h-12 text-sm font-medium rounded-md border transition-colors ${(selectedSize || product.sizes[0]) === s ? 'bg-accent text-accent-foreground border-accent' : 'border-border hover:border-foreground/30'}`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 text-xs sm:text-sm font-medium rounded-md border transition-colors ${(selectedSize || product.sizes[0]) === s ? 'bg-accent text-accent-foreground border-accent' : 'border-border hover:border-foreground/30'}`}
                   >
                     {s}
                   </button>
@@ -138,13 +138,13 @@ export default function ProductDetail() {
 
             {/* Quantity */}
             <div>
-              <h3 className="font-display font-bold text-sm uppercase tracking-wider mb-3">Quantity</h3>
+              <h3 className="font-display font-bold text-xs sm:text-sm uppercase tracking-wider mb-2 sm:mb-3">Quantity</h3>
               <div className="flex items-center gap-3">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary">
                   <Minus size={14} />
                 </button>
-                <span className="font-display font-bold w-8 text-center">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary">
+                <span className="font-display font-bold w-8 text-center text-sm sm:text-base">{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)} className="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary">
                   <Plus size={14} />
                 </button>
               </div>
@@ -152,14 +152,14 @@ export default function ProductDetail() {
 
             {/* Actions */}
             <div className="flex gap-3 pt-2">
-              <Button onClick={handleAddToCart} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-6 rounded-full">
-                <ShoppingBag size={18} className="mr-2" /> Add to Cart
+              <Button onClick={handleAddToCart} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base">
+                <ShoppingBag size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> Add to Cart
               </Button>
               <button
                 onClick={() => toggleWishlist(product.id)}
-                className={`w-14 h-14 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
+                className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors shrink-0 ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
               >
-                <Heart size={20} fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
+                <Heart size={18} className="sm:w-5 sm:h-5" fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
           </motion.div>
@@ -167,9 +167,9 @@ export default function ProductDetail() {
 
         {/* Related products */}
         {relatedProducts.length > 0 && (
-          <div className="mt-24">
-            <h2 className="font-display text-2xl font-black mb-8">You May Also Like</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="mt-16 sm:mt-24">
+            <h2 className="font-display text-xl sm:text-2xl font-black mb-6 sm:mb-8">You May Also Like</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {relatedProducts.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} />
               ))}
@@ -185,18 +185,19 @@ export default function ProductDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-background/70 backdrop-blur-sm p-0 sm:p-4"
             onClick={() => setSizeGuideOpen(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: '100%', opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="bg-card border border-border rounded-lg p-6 max-w-md w-full"
+              className="bg-card border border-border rounded-t-2xl sm:rounded-lg p-5 sm:p-6 w-full sm:max-w-md"
             >
-              <h3 className="font-display text-xl font-bold mb-4">Size Guide</h3>
-              <table className="w-full text-sm">
+              <div className="w-10 h-1 bg-muted-foreground/20 rounded-full mx-auto mb-4 sm:hidden" />
+              <h3 className="font-display text-lg sm:text-xl font-bold mb-4">Size Guide</h3>
+              <table className="w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="border-b border-border">
                     <th className="text-left py-2 font-display">Size</th>

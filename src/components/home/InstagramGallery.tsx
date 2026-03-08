@@ -5,19 +5,19 @@ export default function InstagramGallery() {
   const images = products.slice(0, 6).map(p => p.image);
 
   return (
-    <section className="py-24">
+    <section className="py-16 sm:py-24">
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">@artin.official</p>
-          <h2 className="font-display text-3xl md:text-4xl font-black">Follow The Art</h2>
+          <p className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3">@artin.official</p>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black">Follow The Art</h2>
         </motion.div>
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1.5 sm:gap-2">
           {images.map((img, i) => (
             <motion.div
               key={i}

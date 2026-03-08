@@ -68,11 +68,11 @@ export default function Shop() {
   );
 
   return (
-    <section className="pt-24 pb-16 min-h-screen">
+    <section className="pt-20 sm:pt-24 pb-16 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <h1 className="font-display text-4xl md:text-6xl font-black">Shop</h1>
-          <p className="text-muted-foreground mt-2">Explore our collection of wearable art</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 sm:mb-12">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-black">Shop</h1>
+          <p className="text-muted-foreground text-sm sm:text-base mt-1 sm:mt-2">Explore our collection of wearable art</p>
         </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-8">
