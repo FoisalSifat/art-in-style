@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Facebook, Instagram, Flame, Truck, Package, Shield } from 'lucide-react';
 
-import founderImg from '@/assets/founder.jpeg';
 import artinTemplate from '@/assets/artin-template.jpeg';
+import brandLifestyle from '@/assets/brand-lifestyle.jpeg';
 
 export default function About() {
   return (
@@ -10,14 +10,14 @@ export default function About() {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto text-center mb-16">
-          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">Our Story</p>
+          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">Who We Are</p>
           <h1 className="font-display text-5xl md:text-7xl font-black mb-6">About Art In</h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Born from the belief that fashion should be fearless, Art In transforms everyday wear into wearable galleries. We're not just a brand — we're a movement.
+            Where art meets the street. Art In is more than apparel — it's a canvas for self-expression, built on bold design and uncompromising quality.
           </p>
         </motion.div>
 
-        {/* Founder Section */}
+        {/* Brand Lifestyle Section */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -25,14 +25,14 @@ export default function About() {
           transition={{ duration: 0.7 }}
           className="mb-24"
         >
-          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3 text-center">The Visionary</p>
-          <h2 className="font-display text-4xl md:text-5xl font-black text-center mb-12">Meet the Founder</h2>
+          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3 text-center">The Brand</p>
+          <h2 className="font-display text-4xl md:text-5xl font-black text-center mb-12">Art You Can Wear</h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-            {/* Founder Image */}
+            {/* Brand Lifestyle Image */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="relative group"
@@ -40,19 +40,14 @@ export default function About() {
               <div className="absolute -inset-3 bg-gradient-to-br from-accent/20 to-accent/5 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500" />
               <div className="relative overflow-hidden rounded-2xl">
                 <img
-                  src={founderImg}
-                  alt="Asifur Rahman Tuhin — Founder & CEO of Art In"
-                  className="w-full aspect-[3/4] object-cover object-top"
+                  src={brandLifestyle}
+                  alt="Art In — Premium Streetwear Collection"
+                  className="w-full aspect-[3/4] object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <p className="font-display text-2xl font-black text-foreground">Asifur Rahman Tuhin</p>
-                  <p className="text-accent text-sm font-medium tracking-widest uppercase">Founder & CEO</p>
-                </div>
               </div>
             </motion.div>
 
-            {/* Founder Info Card */}
+            {/* Brand Story Text */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -61,45 +56,24 @@ export default function About() {
               className="space-y-6"
             >
               <div>
-                <h3 className="font-display text-2xl font-black mb-3">Born to Be Different</h3>
+                <h3 className="font-display text-2xl font-black mb-3">Creativity Without Limits</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  With an unrelenting passion for art and fashion, Asifur Rahman Tuhin founded Art In with a singular vision — to create a brand where creativity knows no boundaries. What started as a dream in Dhaka has grown into a movement that celebrates individuality and bold self-expression.
+                  Every Art In piece tells a story — from iconic landmarks to bold graphic art, our designs are inspired by culture, travel, and fearless creativity. Crafted on premium 220 GSM cotton, each tee is a wearable masterpiece.
                 </p>
               </div>
 
-              {/* Contact Details styled as elegant card */}
-              <div className="border border-border/50 rounded-xl p-6 bg-card/50 backdrop-blur-sm space-y-4">
-                <p className="text-xs font-medium tracking-[0.2em] uppercase text-accent mb-4">Get in Touch</p>
-                
-                <a href="tel:01600052600" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group">
-                  <span className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <Phone className="w-4 h-4 text-accent" />
-                  </span>
-                  <span className="text-sm">01600052600</span>
-                </a>
+              <div>
+                <h3 className="font-display text-2xl font-black mb-3">Made for the Bold</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  We don't follow trends — we set them. Art In is for those who dare to stand out, who see fashion as a form of self-expression. From the streets of Dhaka to everywhere beyond, our mission is to make art accessible through fashion.
+                </p>
+              </div>
 
-                <a href="mailto:artinclo83@gmail.com" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group">
-                  <span className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <Mail className="w-4 h-4 text-accent" />
-                  </span>
-                  <span className="text-sm">artinclo83@gmail.com</span>
-                </a>
-
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <span className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-accent" />
-                  </span>
-                  <span className="text-sm">DarusSalam, Mirpur, Dhaka - 1216</span>
-                </div>
-
-                <div className="flex items-center gap-3 pt-2 border-t border-border/30">
-                  <a href="https://facebook.com/ArtIn" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
-                    <Facebook className="w-4 h-4 text-accent" />
-                  </a>
-                  <a href="https://instagram.com/artin.clo" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
-                    <Instagram className="w-4 h-4 text-accent" />
-                  </a>
-                </div>
+              <div className="border-l-2 border-accent/50 pl-4">
+                <p className="text-foreground italic font-medium">
+                  "Wear your imagination. That's the Art In way."
+                </p>
+                <p className="text-accent text-sm mt-1 font-medium tracking-widest uppercase">— Art In</p>
               </div>
             </motion.div>
           </div>
