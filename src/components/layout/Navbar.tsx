@@ -5,7 +5,7 @@ import { ShoppingBag, Heart, Menu, X, Sun, Moon, Search, User } from 'lucide-rea
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useTheme } from '@/context/ThemeContext';
-import logo from '@/assets/logo.jpeg';
+import logo from '@/assets/logo.png';
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -26,7 +26,7 @@ export default function Navbar() {
       <nav className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src={logo} alt="Art In - Born To Be Different" className="h-10 w-auto" />
+          <img src={logo} alt="Art In - Born To Be Different" className="h-14 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -88,7 +88,7 @@ export default function Navbar() {
             className="fixed inset-0 z-50 bg-background"
           >
             <div className="flex items-center justify-between h-16 px-4">
-              <img src={logo} alt="Art In" className="h-10 w-auto" />
+              <img src={logo} alt="Art In" className="h-14 w-auto" />
               <button onClick={() => setMobileOpen(false)} className="p-2">
                 <X size={24} />
               </button>
