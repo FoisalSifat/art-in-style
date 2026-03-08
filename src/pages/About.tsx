@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, Flame, Truck, Package, Shield } from 'lucide-react';
 
-import lifestyle2 from '@/assets/lifestyle-2.jpg';
 import founderImg from '@/assets/founder.jpeg';
+import artinTemplate from '@/assets/artin-template.jpeg';
 
 export default function About() {
   return (
@@ -105,15 +105,66 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* Sustainability */}
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="order-2 md:order-1">
-            <h2 className="font-display text-3xl font-black mb-4">Sustainability Matters</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">We're committed to ethical production. Our supply chain is transparent, our materials are responsibly sourced, and we're working towards carbon-neutral shipping by 2027.</p>
-            <p className="text-muted-foreground leading-relaxed">Every purchase supports independent artists and contributes to our art scholarship program for young creatives.</p>
-          </motion.div>
-          <motion.img initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} src={lifestyle2} alt="Art In Team" className="rounded-lg w-full aspect-[4/5] object-cover order-1 md:order-2" />
-        </div>
+        {/* What We Offer — inspired by the template image */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3 text-center">What We Offer</p>
+          <h2 className="font-display text-4xl md:text-5xl font-black text-center mb-12">Why Art In?</h2>
+
+          <div className="grid md:grid-cols-2 gap-10 items-center max-w-5xl mx-auto">
+            {/* Template Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="overflow-hidden rounded-2xl"
+            >
+              <img
+                src={artinTemplate}
+                alt="Art In Collection — Premium Streetwear"
+                className="w-full object-cover rounded-2xl"
+              />
+            </motion.div>
+
+            {/* USP Cards */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-5"
+            >
+              {[
+                { icon: Shield, title: 'Best Quality Guaranteed', desc: 'Every piece is crafted with premium 220 GSM cotton and printed using industry-leading techniques for vivid, long-lasting designs.' },
+                { icon: Package, title: 'Cash on Delivery', desc: 'COD available all over Bangladesh. Pay when your order arrives at your doorstep — no hassle, no risk.' },
+                { icon: Truck, title: 'Fast Home Delivery', desc: 'Swift and reliable delivery across Bangladesh. Your favourite streetwear, straight to your door.' },
+                { icon: Flame, title: 'Premium Streetwear', desc: 'Bold designs that make a statement. From graphic tees to statement hoodies — wear your art.' },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.1 * i }}
+                  className="flex gap-4 items-start p-4 rounded-xl border border-border/40 bg-card/30 hover:bg-card/60 transition-colors"
+                >
+                  <span className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <item.icon className="w-5 h-5 text-accent" />
+                  </span>
+                  <div>
+                    <h4 className="font-display font-bold text-foreground mb-1">{item.title}</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
