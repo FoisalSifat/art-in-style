@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
-import lifestyle1 from '@/assets/lifestyle-1.jpg';
+
 import lifestyle2 from '@/assets/lifestyle-2.jpg';
 import founderImg from '@/assets/founder.jpeg';
 
@@ -16,16 +16,6 @@ export default function About() {
             Born from the belief that fashion should be fearless, Art In transforms everyday wear into wearable galleries. We're not just a brand — we're a movement.
           </p>
         </motion.div>
-
-        {/* Art meets street */}
-        <div className="grid md:grid-cols-2 gap-8 items-center mb-24">
-          <motion.img initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} src={lifestyle1} alt="Art In" className="rounded-lg w-full aspect-[4/5] object-cover" />
-          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <h2 className="font-display text-3xl font-black mb-4">Where Art Meets Street</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">Every Art In piece is a collaboration between emerging artists and our design team. We source premium 220 GSM cotton and use advanced printing techniques to ensure every design pops with vivid detail.</p>
-            <p className="text-muted-foreground leading-relaxed">Our mission is simple: make art accessible, wearable, and unapologetically bold. From the streets of Dhaka to cities worldwide, Art In is for the creative, the confident, and the unconventional.</p>
-          </motion.div>
-        </div>
 
         {/* Founder Section */}
         <motion.div
@@ -52,8 +42,7 @@ export default function About() {
                 <img
                   src={founderImg}
                   alt="Asifur Rahman Tuhin — Founder & CEO of Art In"
-                  className="w-full aspect-[3/4] object-cover object-top rotate-0"
-                  style={{ objectPosition: '50% 20%' }}
+                  className="w-full aspect-[3/4] object-cover object-top -rotate-90"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
