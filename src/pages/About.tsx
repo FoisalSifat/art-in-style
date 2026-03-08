@@ -42,7 +42,7 @@ export default function About() {
                 <img
                   src={founderImg}
                   alt="Asifur Rahman Tuhin — Founder & CEO of Art In"
-                  className="w-full aspect-[3/4] object-cover object-top rotate-180"
+                  className="w-full aspect-[3/4] object-cover object-top [transform:rotate(260deg)]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
