@@ -1,0 +1,37 @@
+import { motion } from 'framer-motion';
+import { products } from '@/data/products';
+
+export default function InstagramGallery() {
+  const images = products.slice(0, 6).map(p => p.image);
+
+  return (
+    <section className="py-24">
+      <div className="container mx-auto px-4 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">@artin.official</p>
+          <h2 className="font-display text-3xl md:text-4xl font-black">Follow The Art</h2>
+        </motion.div>
+
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+          {images.map((img, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="aspect-square overflow-hidden rounded-lg group cursor-pointer"
+            >
+              <img src={img} alt={`Instagram ${i + 1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
