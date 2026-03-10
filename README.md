@@ -1,73 +1,53 @@
-# Welcome to your Lovable project
+ART IN – E-Commerce Platform
 
-## Project info
+ART IN is a modern e-commerce web application designed to provide a smooth and engaging online shopping experience. The platform allows users to browse products, explore categories, and purchase items through a clean and responsive interface.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+This project focuses on performance, user experience, and scalable architecture suitable for modern online stores.
 
-## How can I edit this code?
+Overview
 
-There are several ways of editing your application.
+ART IN is built to simulate a real-world e-commerce platform where users can:
 
-**Use Lovable**
+Browse products
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+View product details
 
-Changes made via Lovable will be committed automatically to this repo.
+Add items to cart
 
-**Use your preferred IDE**
+Manage shopping cart
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Experience a responsive and modern UI
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The goal of this project is to demonstrate practical implementation of modern web development technologies in building an online store.
 
-Follow these steps:
+Features
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Modern responsive UI
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Product listing and categories
 
-# Step 3: Install the necessary dependencies.
-npm i
+Product details page
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Shopping cart functionality
 
-**Edit a file directly in GitHub**
+Clean and intuitive user interface
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Fast performance using modern frontend tools
 
-**Use GitHub Codespaces**
+Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Frontend
 
-## What technologies are used for this project?
+React
 
-This project is built with:
+Vite
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Tailwind CSS
 
-## How can I deploy this project?
+DaisyUI
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Development Tools
 
-## Can I connect a custom domain to my Lovable project?
+Node.js
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+npm
