@@ -9,9 +9,10 @@ export default function Hero() {
     <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
-        <img src={heroImg} alt="Art In Fashion" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
+        <img src={heroImg} alt="Art In Fashion" className="w-full h-full object-cover object-top sm:object-center" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-background/40" />
+        <div className="absolute inset-0 bg-background/15" />
       </div>
 
       <div className="relative container mx-auto px-4 lg:px-8">
