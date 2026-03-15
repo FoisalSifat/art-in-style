@@ -1,19 +1,48 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import heroImg from '@/assets/hero-main.jpg';
+import heroImg1 from '@/assets/hero-main.jpg';
+import heroImg2 from '@/assets/hero-2.jpg';
+
+const slides = [
+  { src: heroImg1, alt: 'Art In Fashion - Collection 1' },
+  { src: heroImg2, alt: 'Art In Fashion - Collection 2' },
+];
 
 export default function Hero() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img src={heroImg} alt="Art In Fashion" className="w-full h-full object-cover object-top sm:object-center" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-background/40" />
-        <div className="absolute inset-0 bg-background/15" />
-      </div>
+      {/* Background slider */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.97 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="absolute inset-0"
+        >
+          <img
+            src={slides[current].src}
+            alt={slides[current].alt}
+            className="w-full h-full object-cover object-top sm:object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-background/40" />
+          <div className="absolute inset-0 bg-background/15" />
+        </motion.div>
+      </AnimatePresence>
 
       <div className="relative container mx-auto px-4 lg:px-8">
         <div className="max-w-2xl">
@@ -62,6 +91,19 @@ export default function Hero() {
             </Button>
           </motion.div>
         </div>
+      </div>
+
+      {/* Slide indicators */}
+      <div className="absolute bottom-16 sm:bottom-12 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-1 rounded-full transition-all duration-500 ${
+              i === current ? 'w-8 bg-accent' : 'w-4 bg-foreground/30'
+            }`}
+          />
+        ))}
       </div>
 
       {/* Scroll indicator — hidden on mobile */}
