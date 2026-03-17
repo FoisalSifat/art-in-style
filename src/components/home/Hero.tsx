@@ -7,8 +7,8 @@ import heroImg1 from '@/assets/hero-main.jpg';
 import heroImg2 from '@/assets/hero-2.jpg';
 
 const slides = [
-  { src: heroImg1, alt: 'Art In Fashion - Collection 1' },
-  { src: heroImg2, alt: 'Art In Fashion - Collection 2' },
+  { src: heroImg1, alt: 'Art In Fashion - Collection 1', imageClass: 'object-[center_12%]' },
+  { src: heroImg2, alt: 'Art In Fashion - Collection 2', imageClass: 'object-[center_10%]' },
 ];
 
 export default function Hero() {
@@ -22,21 +22,21 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20">
       {/* Background slider */}
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
-          initial={{ opacity: 0, scale: 1.08 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.97 }}
+          initial={{ opacity: 0, scale: 1.08, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 24 }}
+          exit={{ opacity: 0, scale: 0.97, y: 24 }}
           transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="absolute inset-0"
         >
           <img
             src={slides[current].src}
             alt={slides[current].alt}
-            className="w-full h-full object-cover object-bottom"
+            className={`w-full h-full object-cover ${slides[current].imageClass}`}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-background/40" />
