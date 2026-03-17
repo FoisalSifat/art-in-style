@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { SlidersHorizontal, X } from 'lucide-react';
-import { products, categories, sizes as sizeOptions, colorOptions } from '@/data/products';
+import { products as staticProducts, categories, sizes as sizeOptions, colorOptions, Product } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 type SortOption = 'newest' | 'price-low' | 'price-high' | 'best-selling';
 
@@ -13,9 +14,37 @@ export default function Shop() {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [sort, setSort] = useState<SortOption>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    supabase.from('admin_products').select('*').then(({ data }) => {
+      if (data) {
+        setDbProducts(data.map(p => ({
+          id: `db-${p.id}`,
+          name: p.name,
+          price: p.price,
+          originalPrice: p.original_price ?? undefined,
+          image: p.image_url,
+          images: [p.image_url],
+          category: p.category,
+          colors: p.colors,
+          sizes: p.sizes,
+          rating: 5,
+          reviews: 0,
+          description: p.description,
+          badge: p.badge ?? undefined,
+          isBestSeller: p.is_best_seller ?? false,
+          isFeatured: p.is_featured ?? false,
+          isNew: p.is_new ?? false,
+        })));
+      }
+    });
+  }, []);
+
+  const allProducts = useMemo(() => [...staticProducts, ...dbProducts], [dbProducts]);
 
   const filtered = useMemo(() => {
-    let result = [...products];
+    let result = [...allProducts];
     if (category !== 'All') result = result.filter(p => p.category === category);
     if (selectedSizes.length > 0) result = result.filter(p => p.sizes.some(s => selectedSizes.includes(s)));
     if (selectedColors.length > 0) result = result.filter(p => p.colors.some(c => selectedColors.includes(c)));
@@ -27,7 +56,7 @@ export default function Shop() {
       default: break;
     }
     return result;
-  }, [category, selectedSizes, selectedColors, sort]);
+  }, [category, selectedSizes, selectedColors, sort, allProducts]);
 
   const toggleSize = (s: string) => setSelectedSizes(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
   const toggleColor = (c: string) => setSelectedColors(prev => prev.includes(c) ? prev.filter(x => x !== c) : [...prev, c]);

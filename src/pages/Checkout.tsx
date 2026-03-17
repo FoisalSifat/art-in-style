@@ -1,13 +1,17 @@
 import { motion } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function Checkout() {
-  const { items, totalPrice, discount } = useCart();
+  const { items, totalPrice, discount, clearCart } = useCart();
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', city: '', zip: '' });
+  const [payment, setPayment] = useState('Cash on Delivery');
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   if (items.length === 0) {
     return (
@@ -22,10 +26,44 @@ export default function Checkout() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const subtotal = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+
+    const orderItems = items.map(i => ({
+      name: i.product.name,
+      price: i.product.price,
+      quantity: i.quantity,
+      size: i.size,
+      color: i.color,
+      image: i.product.image,
+    }));
+
+    const { error } = await supabase.from('orders').insert({
+      customer_name: form.name,
+      customer_email: form.email,
+      customer_phone: form.phone,
+      customer_address: form.address,
+      customer_city: form.city,
+      customer_zip: form.zip || null,
+      payment_method: payment,
+      items: orderItems,
+      subtotal,
+      discount,
+      total: Math.round(totalPrice),
+    });
+
+    if (error) {
+      toast.error('Failed to place order. Please try again.');
+      setSubmitting(false);
+      return;
+    }
+
     toast.success('Order placed! Redirecting to confirmation...');
-    window.location.href = '/order-success';
+    clearCart();
+    navigate('/order-success');
   };
 
   return (
@@ -71,14 +109,14 @@ export default function Checkout() {
             <div className="space-y-2">
               {['Cash on Delivery', 'bKash', 'Nagad', 'Card Payment'].map(m => (
                 <label key={m} className="flex items-center gap-3 p-2.5 sm:p-3 border border-border rounded-lg cursor-pointer hover:bg-card">
-                  <input type="radio" name="payment" value={m} defaultChecked={m === 'Cash on Delivery'} className="accent-[hsl(var(--accent))]" />
+                  <input type="radio" name="payment" value={m} checked={payment === m} onChange={() => setPayment(m)} className="accent-[hsl(var(--accent))]" />
                   <span className="text-xs sm:text-sm font-medium">{m}</span>
                 </label>
               ))}
             </div>
 
-            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full mt-4 sm:mt-6 text-sm sm:text-base">
-              Place Order — ৳{Math.round(totalPrice)}
+            <Button type="submit" disabled={submitting} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full mt-4 sm:mt-6 text-sm sm:text-base">
+              {submitting ? 'Placing Order...' : `Place Order — ৳${Math.round(totalPrice)}`}
             </Button>
           </form>
         </div>
