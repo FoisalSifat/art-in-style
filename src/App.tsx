@@ -51,6 +51,7 @@ const App = () => (
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-success" element={<OrderSuccess />} />
+                  <Route path="/artin-admin-panel" element={<AdminDashboard />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
