@@ -7,8 +7,8 @@ import heroImg1 from '@/assets/hero-main.jpg';
 import heroImg2 from '@/assets/hero-2.jpg';
 
 const slides = [
-  { src: heroImg1, alt: 'Art In Fashion - Collection 1' },
-  { src: heroImg2, alt: 'Art In Fashion - Collection 2' },
+  { src: heroImg1, alt: 'Art In Fashion - Collection 1', imageClass: 'object-[center_12%]' },
+  { src: heroImg2, alt: 'Art In Fashion - Collection 2', imageClass: 'object-[center_10%]' },
 ];
 
 export default function Hero() {
