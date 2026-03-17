@@ -115,8 +115,8 @@ export default function Checkout() {
               ))}
             </div>
 
-            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full mt-4 sm:mt-6 text-sm sm:text-base">
-              Place Order — ৳{Math.round(totalPrice)}
+            <Button type="submit" disabled={submitting} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full mt-4 sm:mt-6 text-sm sm:text-base">
+              {submitting ? 'Placing Order...' : `Place Order — ৳${Math.round(totalPrice)}`}
             </Button>
           </form>
         </div>
