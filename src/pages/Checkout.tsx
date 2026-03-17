@@ -109,7 +109,7 @@ export default function Checkout() {
             <div className="space-y-2">
               {['Cash on Delivery', 'bKash', 'Nagad', 'Card Payment'].map(m => (
                 <label key={m} className="flex items-center gap-3 p-2.5 sm:p-3 border border-border rounded-lg cursor-pointer hover:bg-card">
-                  <input type="radio" name="payment" value={m} defaultChecked={m === 'Cash on Delivery'} className="accent-[hsl(var(--accent))]" />
+                  <input type="radio" name="payment" value={m} checked={payment === m} onChange={() => setPayment(m)} className="accent-[hsl(var(--accent))]" />
                   <span className="text-xs sm:text-sm font-medium">{m}</span>
                 </label>
               ))}
