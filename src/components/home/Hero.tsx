@@ -36,7 +36,7 @@ export default function Hero() {
           <img
             src={slides[current].src}
             alt={slides[current].alt}
-            className="w-full h-full object-cover object-[center_15%]"
+            className="w-full h-full object-cover object-bottom"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-background/40" />
