@@ -40,6 +40,7 @@ export default function Footer() {
         </div>
         <div className="border-t border-border mt-8 sm:mt-12 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-muted-foreground">
           © 2026 Art In. All rights reserved.
+          <Link to="/artin-admin-panel" className="ml-2 text-muted-foreground/20 hover:text-muted-foreground/40 transition-colors text-[9px]" aria-label="Admin">⚙</Link>
         </div>
       </div>
     </footer>
