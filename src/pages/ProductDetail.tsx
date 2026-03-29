@@ -1,16 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ShoppingBag, Minus, Plus, Star, ChevronLeft, Ruler } from 'lucide-react';
-import { products } from '@/data/products';
+import { products, Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/components/ProductCard';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const product = products.find(p => p.id === id);
+  const [dbProduct, setDbProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (id?.startsWith('db-')) {
+      setLoading(true);
+      const dbId = id.replace('db-', '');
+      supabase.from('admin_products').select('*').eq('id', dbId).single().then(({ data }) => {
+        if (data) {
+          setDbProduct({
+            id: `db-${data.id}`,
+            name: data.name,
+            price: data.price,
+            originalPrice: data.original_price ?? undefined,
+            image: data.image_url,
+            images: [data.image_url],
+            category: data.category,
+            colors: data.colors,
+            sizes: data.sizes,
+            rating: 5,
+            reviews: 0,
+            description: data.description,
+            badge: data.badge ?? undefined,
+            isBestSeller: data.is_best_seller ?? false,
+            isFeatured: data.is_featured ?? false,
+            isNew: data.is_new ?? false,
+          });
+        }
+        setLoading(false);
+      });
+    }
+  }, [id]);
+
+  const product = id?.startsWith('db-') ? dbProduct : products.find(p => p.id === id);
   const { addItem } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
   const [selectedSize, setSelectedSize] = useState('');
