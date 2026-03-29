@@ -53,6 +53,14 @@ export default function ProductDetail() {
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [imageZoomed, setImageZoomed] = useState(false);
 
+  if (loading) {
+    return (
+      <div className="pt-24 min-h-screen flex items-center justify-center">
+        <div className="text-center text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="pt-24 min-h-screen flex items-center justify-center">
@@ -64,7 +72,8 @@ export default function ProductDetail() {
     );
   }
 
-  const relatedProducts = products.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
+  const allProducts = [...products];
+  const relatedProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
 
   const handleAddToCart = () => {
     const size = selectedSize || product.sizes[0];
