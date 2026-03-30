@@ -23,6 +23,7 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
+import Wishlist from "./pages/Wishlist";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-success" element={<OrderSuccess />} />
                   <Route path="/artin-admin-panel" element={<AdminDashboard />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
