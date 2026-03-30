@@ -21,23 +21,21 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background md:glass border-b border-border/50 md:border-0">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm md:glass border-b border-border/50 md:border-0">
       <nav className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0">
-          <img src={logo} alt="Art In - Born To Be Different" className="h-14 sm:h-20 w-auto" />
+          <img src={logo} alt="Art In" className="h-10 sm:h-20 w-auto brightness-0 invert dark:brightness-100 dark:invert-0" />
         </Link>
 
         {/* Desktop nav */}
@@ -56,7 +54,7 @@ export default function Navbar() {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <button onClick={toggleTheme} className="p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Toggle theme">
             {theme === 'dark' ? <Sun size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />}
           </button>
@@ -83,12 +81,12 @@ export default function Navbar() {
             )}
           </button>
           <button onClick={() => setMobileOpen(true)} className="p-1.5 sm:p-2 md:hidden" aria-label="Menu">
-            <Menu size={20} />
+            <Menu size={22} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile menu — full-screen overlay */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -98,15 +96,13 @@ export default function Navbar() {
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed inset-0 z-50 bg-background flex flex-col"
           >
-            {/* Header */}
             <div className="flex items-center justify-between h-14 px-3 border-b border-border/30">
-              <img src={logo} alt="Art In" className="h-14 w-auto" />
+              <img src={logo} alt="Art In" className="h-10 w-auto brightness-0 invert dark:brightness-100 dark:invert-0" />
               <button onClick={() => setMobileOpen(false)} className="p-2 rounded-full hover:bg-secondary transition-colors">
                 <X size={22} />
               </button>
             </div>
 
-            {/* Nav links */}
             <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
               {navLinks.map((link, i) => (
                 <motion.div
@@ -128,7 +124,6 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Bottom actions */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
