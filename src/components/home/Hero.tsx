@@ -39,8 +39,8 @@ export default function Hero() {
             className={`w-full h-full object-cover ${slides[current].imageClass}`}
           />
           {/* Lighter gradient on mobile, heavier on desktop for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent sm:from-background sm:via-background/75 sm:to-background/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent sm:from-background sm:via-background/10 sm:to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-transparent sm:from-background sm:via-background/75 sm:to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent sm:from-background/80 sm:via-background/10 sm:to-background/40" />
         </motion.div>
       </AnimatePresence>
 
