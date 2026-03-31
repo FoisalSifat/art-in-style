@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTheme } from '@/context/ThemeContext';
 import heroImg1 from '@/assets/hero-main.jpg';
 import heroImg2 from '@/assets/hero-2.jpg';
 
@@ -13,6 +14,8 @@ const slides = [
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,11 +39,22 @@ export default function Hero() {
           <img
             src={slides[current].src}
             alt={slides[current].alt}
-            className={`w-full h-full object-cover ${slides[current].imageClass}`}
+            className={`w-full h-full object-cover transition-[filter] duration-700 ${slides[current].imageClass} ${
+              isLight ? 'brightness-[0.92] contrast-[1.08] saturate-[1.05]' : 'brightness-[0.72] contrast-[1.05]'
+            }`}
           />
-          {/* Lighter gradient on mobile, heavier on desktop for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-transparent sm:from-background sm:via-background/75 sm:to-background/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent sm:from-background/80 sm:via-background/10 sm:to-background/40" />
+          {isLight ? (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/28 to-transparent sm:from-background/58 sm:via-background/16 sm:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/32 via-transparent to-background/10 sm:from-background/24 sm:via-transparent sm:to-background/6" />
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-background/12" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-transparent sm:from-background sm:via-background/75 sm:to-background/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent sm:from-background/80 sm:via-background/10 sm:to-background/40" />
+            </>
+          )}
         </motion.div>
       </AnimatePresence>
 
@@ -124,3 +138,4 @@ export default function Hero() {
     </section>
   );
 }
+
