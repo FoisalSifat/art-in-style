@@ -40,6 +40,8 @@ export default function Footer() {
         </div>
         <div className="border-t border-border mt-8 sm:mt-12 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-muted-foreground">
           © 2026 Art In. All rights reserved.
+          <br className="sm:hidden" />
+          <span className="sm:ml-1">Developed by <span className="font-semibold text-foreground/70">Foisal Hasan Sifat</span></span>
           <Link to="/artin-admin-panel" className="ml-2 text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors text-[11px] cursor-pointer" aria-label="Admin">⚙</Link>
         </div>
       </div>
