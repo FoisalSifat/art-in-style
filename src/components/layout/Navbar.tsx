@@ -35,7 +35,7 @@ export default function Navbar() {
       <nav className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0">
-          <img src={logo} alt="Art In" className="h-10 sm:h-20 w-auto brightness-0 dark:brightness-100 dark:invert-0" />
+          <img src={logo} alt="Art In" className="h-10 sm:h-20 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -97,7 +97,7 @@ export default function Navbar() {
             className="fixed inset-0 z-50 bg-background flex flex-col"
           >
             <div className="flex items-center justify-between h-14 px-3 border-b border-border/30">
-              <img src={logo} alt="Art In" className="h-10 w-auto brightness-0 dark:brightness-100 dark:invert-0" />
+              <img src={logo} alt="Art In" className="h-10 w-auto" />
               <button onClick={() => setMobileOpen(false)} className="p-2 rounded-full hover:bg-secondary transition-colors">
                 <X size={22} />
               </button>
