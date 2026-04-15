@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-10 sm:py-16 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
           <div className="col-span-2 md:col-span-1">
-            <img src={logo} alt="Art In - Born To Be Different" className="h-16 sm:h-[6.25rem] w-auto mb-3 sm:mb-5 brightness-0 dark:brightness-100 dark:invert-0" />
+            <img src={logo} alt="Art In - Born To Be Different" className="h-16 sm:h-[6.25rem] w-auto mb-3 sm:mb-5" />
             <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">Where art meets fashion. Premium artistic t-shirts for those who dare to stand out.</p>
           </div>
           <div>
