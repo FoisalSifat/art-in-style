@@ -6,7 +6,7 @@ export default function Marquee() {
     <div className="py-3 sm:py-4 border-y border-border overflow-hidden">
       <motion.div className="flex whitespace-nowrap animate-marquee">
         {[...Array(4)].map((_, i) => (
-          <span key={i} className="font-display text-base sm:text-xl md:text-2xl font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-muted-foreground/30 mx-2 sm:mx-4">
+          <span key={i} className="font-display text-base sm:text-xl md:text-2xl font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-muted-foreground/50 dark:text-muted-foreground/30 mx-2 sm:mx-4">
             {text}
           </span>
         ))}
