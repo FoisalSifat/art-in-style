@@ -13,7 +13,7 @@ export default function InstagramGallery() {
           viewport={{ once: true }}
           className="text-center mb-8 sm:mb-12"
         >
-          <a href="https://www.instagram.com/artin.clo/" target="_blank" rel="noopener noreferrer" className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3 inline-block hover:underline">@artin.clo</a>
+          <a href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3 inline-block hover:underline">@artin.clo</a>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black">Follow The Art</h2>
         </motion.div>
 
@@ -21,7 +21,7 @@ export default function InstagramGallery() {
           {images.map((img, i) => (
             <motion.a
               key={i}
-              href="https://www.instagram.com/artin.clo/"
+              href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}

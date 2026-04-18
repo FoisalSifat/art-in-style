@@ -32,7 +32,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <h4 className="font-display font-semibold text-xs sm:text-sm uppercase tracking-wider mb-3 sm:mb-4">Follow Us</h4>
             <div className="flex gap-3 sm:gap-4">
-              <a href="https://www.instagram.com/artin.clo/" target="_blank" rel="noopener noreferrer" className="p-2 border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Instagram"><Instagram size={16} className="sm:w-[18px] sm:h-[18px]" /></a>
+              <a href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="p-2 border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Instagram"><Instagram size={16} className="sm:w-[18px] sm:h-[18px]" /></a>
             </div>
           </div>
         </div>
