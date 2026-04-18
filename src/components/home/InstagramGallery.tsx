@@ -13,7 +13,7 @@ export default function InstagramGallery() {
           viewport={{ once: true }}
           className="text-center mb-8 sm:mb-12"
         >
-          <p className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3">@artin.official</p>
+          <a href="https://www.instagram.com/artin.clo/" target="_blank" rel="noopener noreferrer" className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3 inline-block hover:underline">@artin.clo</a>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black">Follow The Art</h2>
         </motion.div>
 
