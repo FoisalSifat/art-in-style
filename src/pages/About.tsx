@@ -96,7 +96,7 @@ export default function About() {
                   <a href="https://facebook.com/ArtIn" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
                     <Facebook className="w-4 h-4 text-accent" />
                   </a>
-                  <a href="https://www.instagram.com/artin.clo/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
+                  <a href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
                     <Instagram className="w-4 h-4 text-accent" />
                   </a>
                 </div>
