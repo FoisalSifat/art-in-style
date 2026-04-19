@@ -47,6 +47,10 @@ export default function Hero() {
           <img
             src={slides[current].src}
             alt={slides[current].alt}
+            loading="eager"
+            decoding="async"
+            // @ts-expect-error fetchpriority is valid HTML
+            fetchpriority="high"
             className={`w-full h-full object-cover transition-[filter] duration-700 ${slides[current].imageClass} ${
               isLight ? 'brightness-[0.92] contrast-[1.08] saturate-[1.05]' : 'brightness-[0.72] contrast-[1.05]'
             }`}
