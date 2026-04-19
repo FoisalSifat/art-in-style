@@ -12,6 +12,14 @@ const slides = [
   { src: heroImg2, alt: 'Art In Fashion - Collection 2', imageClass: 'object-[center_10%]' },
 ];
 
+// Preload second slide immediately so swap is instant
+if (typeof window !== 'undefined') {
+  slides.forEach((s) => {
+    const img = new Image();
+    img.src = s.src;
+  });
+}
+
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const { theme } = useTheme();
