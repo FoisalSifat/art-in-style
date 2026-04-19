@@ -12,6 +12,14 @@ const slides = [
   { src: heroImg2, alt: 'Art In Fashion - Collection 2', imageClass: 'object-[center_10%]' },
 ];
 
+// Preload second slide immediately so swap is instant
+if (typeof window !== 'undefined') {
+  slides.forEach((s) => {
+    const img = new Image();
+    img.src = s.src;
+  });
+}
+
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const { theme } = useTheme();
@@ -39,6 +47,10 @@ export default function Hero() {
           <img
             src={slides[current].src}
             alt={slides[current].alt}
+            loading="eager"
+            decoding="async"
+            // @ts-expect-error fetchpriority is valid HTML
+            fetchpriority="high"
             className={`w-full h-full object-cover transition-[filter] duration-700 ${slides[current].imageClass} ${
               isLight ? 'brightness-[0.92] contrast-[1.08] saturate-[1.05]' : 'brightness-[0.72] contrast-[1.05]'
             }`}
