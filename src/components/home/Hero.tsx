@@ -33,7 +33,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[92vh] sm:min-h-screen flex items-end sm:items-center justify-center overflow-hidden pt-14 sm:pt-20 pb-20 sm:pb-0">
+    <section className="relative min-h-[92vh] sm:min-h-screen flex items-end sm:items-center justify-center overflow-hidden pt-14 sm:pt-20 pb-28 sm:pb-0">
       {/* Background slider */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -120,7 +120,7 @@ export default function Hero() {
       </div>
 
       {/* Slide indicators */}
-      <div className="absolute bottom-24 sm:bottom-12 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+      <div className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
             key={i}
