@@ -13,13 +13,30 @@ interface Props {
 export default function ProductCard({ product, index = 0 }: Props) {
   const { addItem } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
+  // Cap stagger so cards lower on the grid don't feel sluggish on mobile
+  const delay = Math.min(index, 6) * 0.06;
+  const eager = index < 4;
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!product.sizes?.length || !product.colors?.length) return;
+    const defaultSize = product.sizes.find(s => s === 'L') || product.sizes[0];
+    addItem(product, defaultSize, product.colors[0]);
+  };
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product.id);
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.4, delay }}
       className="group relative"
     >
       <Link to={`/product/${product.id}`} className="block">
@@ -28,7 +45,8 @@ export default function ProductCard({ product, index = 0 }: Props) {
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            loading="lazy"
+            loading={eager ? 'eager' : 'lazy'}
+            decoding="async"
           />
           {product.badge && (
             <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
@@ -42,14 +60,14 @@ export default function ProductCard({ product, index = 0 }: Props) {
       {/* Quick actions — always visible on mobile, hover on desktop */}
       <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex flex-col gap-1.5 sm:gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-y-2 sm:group-hover:translate-y-0">
         <button
-          onClick={() => toggleWishlist(product.id)}
+          onClick={handleWishlist}
           className={`p-1.5 sm:p-2 rounded-full glass transition-colors ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
           aria-label="Add to wishlist"
         >
           <Heart size={14} className="sm:w-4 sm:h-4" fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
         </button>
         <button
-          onClick={() => addItem(product, product.sizes[1] || product.sizes[0], product.colors[0])}
+          onClick={handleQuickAdd}
           className="p-1.5 sm:p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors"
           aria-label="Quick add"
         >
