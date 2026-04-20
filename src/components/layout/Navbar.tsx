@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Heart, Menu, X, Sun, Moon, Store, User, Phone, Mail } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, X, Sun, Moon, Store, User, Phone, Mail, MessageCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -61,8 +61,8 @@ export default function Navbar() {
           <Link to="/login" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Account">
             <User size={18} />
           </Link>
-          <Link to="/shop" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Shop">
-            <Store size={18} />
+          <Link to="/contact" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Contact">
+            <MessageCircle size={18} />
           </Link>
           <Link to="/wishlist" className="relative p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Wishlist">
             <Heart size={16} className="sm:w-[18px] sm:h-[18px]" />
