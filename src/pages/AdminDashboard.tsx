@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, Upload, LogOut, Lock, X, Image as ImageIcon } from 'lucide-react';
+import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,6 +16,7 @@ type Tab = 'analytics' | 'products' | 'orders';
 export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [tab, setTab] = useState<Tab>('analytics');
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -129,7 +130,23 @@ export default function AdminDashboard() {
             <h1 className="font-display text-2xl font-black text-center mb-1">Admin Access</h1>
             <p className="text-muted-foreground text-sm text-center mb-6">Enter password to continue</p>
             <form onSubmit={handleLogin} className="space-y-4">
-              <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="text-center" />
+              <div className="relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="text-center pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(s => !s)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
               <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold rounded-full">
                 Unlock Dashboard
               </Button>
