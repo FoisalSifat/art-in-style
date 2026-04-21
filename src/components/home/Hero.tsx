@@ -33,7 +33,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[92vh] sm:min-h-screen flex items-end sm:items-center justify-center overflow-hidden pt-14 sm:pt-20 pb-28 sm:pb-0">
+    <section className="relative min-h-[92svh] sm:min-h-[88vh] md:min-h-[90vh] lg:min-h-screen max-h-[1080px] flex items-end sm:items-center justify-center overflow-hidden pt-14 sm:pt-20 pb-28 sm:pb-0">
       {/* Background slider */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -84,7 +84,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black leading-[0.85] tracking-tight"
+            className="font-display text-[2.5rem] xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.85] tracking-tight"
           >
             Wear
             <br />
@@ -104,14 +104,14 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
-            className="flex flex-row gap-2 sm:gap-4 mt-5 sm:mt-8"
+            className="flex flex-row flex-wrap gap-2 sm:gap-4 mt-5 sm:mt-8"
           >
-            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold text-xs sm:text-base px-5 sm:px-8 py-4 sm:py-6 rounded-full">
+            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold text-xs sm:text-base px-4 sm:px-8 py-4 sm:py-6 rounded-full">
               <Link to="/shop">
                 Shop Now <ArrowRight size={16} className="ml-1" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="font-display font-bold text-xs sm:text-base px-5 sm:px-8 py-4 sm:py-6 rounded-full border-foreground/30 hover:bg-foreground/10">
+            <Button asChild variant="outline" className="font-display font-bold text-xs sm:text-base px-4 sm:px-8 py-4 sm:py-6 rounded-full border-foreground/30 hover:bg-foreground/10">
               <Link to="/shop">Explore</Link>
             </Button>
           </motion.div>
