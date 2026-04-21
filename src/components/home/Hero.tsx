@@ -52,14 +52,13 @@ export default function Hero() {
             // @ts-expect-error fetchpriority is valid HTML
             fetchpriority="high"
             className={`w-full h-full object-cover transition-[filter] duration-700 ${slides[current].imageClass} ${
-              isLight ? 'brightness-[0.92] contrast-[1.08] saturate-[1.05]' : 'brightness-[0.72] contrast-[1.05]'
+              isLight ? 'brightness-[0.78] contrast-[1.05] saturate-[1.05]' : 'brightness-[0.72] contrast-[1.05]'
             }`}
           />
           {isLight ? (
             <>
-              <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/28 to-transparent sm:from-background/58 sm:via-background/16 sm:to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/32 via-transparent to-background/10 sm:from-background/24 sm:via-transparent sm:to-background/6" />
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-background/12" />
+              <div className="absolute inset-0 bg-gradient-to-r from-background/92 via-background/55 to-background/10 sm:from-background/80 sm:via-background/35 sm:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent sm:from-background/50 sm:via-transparent sm:to-background/10" />
             </>
           ) : (
             <>
