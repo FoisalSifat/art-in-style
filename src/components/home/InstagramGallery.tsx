@@ -17,7 +17,7 @@ export default function InstagramGallery() {
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black">Follow The Art</h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-1.5 sm:gap-2">
           {images.map((img, i) => (
             <motion.a
               key={i}

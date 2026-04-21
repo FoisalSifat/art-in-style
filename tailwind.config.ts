@@ -19,6 +19,10 @@ export default {
       },
     },
     extend: {
+      screens: {
+        xs: "375px",
+        "3xl": "1800px",
+      },
       fontFamily: {
         display: ['Outfit', 'sans-serif'],
         body: ['Space Grotesk', 'sans-serif'],
