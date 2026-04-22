@@ -34,6 +34,7 @@ async function uploadSiteImage(file: File): Promise<string | null> {
 }
 
 async function saveSection(key: string, content: object) {
+  const payload = content as never;
   const { data: existing } = await supabase
     .from('site_content')
     .select('id')
@@ -41,9 +42,9 @@ async function saveSection(key: string, content: object) {
     .maybeSingle();
 
   if (existing) {
-    return supabase.from('site_content').update({ content }).eq('id', existing.id);
+    return supabase.from('site_content').update({ content: payload }).eq('id', existing.id);
   }
-  return supabase.from('site_content').insert({ section_key: key, content });
+  return supabase.from('site_content').insert({ section_key: key, content: payload });
 }
 
 export default function SiteContentEditor() {
@@ -381,7 +382,8 @@ function FeaturedEditor() {
     const newVal = !currentValue;
 
     if (existing) {
-      await supabase.from('product_overrides').update({ [field]: newVal }).eq('product_id', productId);
+      const patch = { [field]: newVal } as never;
+      await supabase.from('product_overrides').update(patch).eq('product_id', productId);
     } else {
       const product = products.find((p) => p.id === productId);
       await supabase.from('product_overrides').insert({
