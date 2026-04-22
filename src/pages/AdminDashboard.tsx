@@ -379,6 +379,9 @@ export default function AdminDashboard() {
               </motion.div>
             )}
 
+            {/* Landing Page CMS Tab */}
+            {tab === 'content' && <SiteContentEditor />}
+
             {/* Orders Tab */}
             {tab === 'orders' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
