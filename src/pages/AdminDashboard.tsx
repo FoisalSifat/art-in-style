@@ -1,17 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon } from 'lucide-react';
+import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import SiteContentEditor from '@/components/admin/SiteContentEditor';
 
 const ADMIN_PASSWORD = 'artin2024';
 
 type AdminProduct = Tables<'admin_products'>;
 type Order = Tables<'orders'>;
-type Tab = 'analytics' | 'products' | 'orders';
+type Tab = 'analytics' | 'products' | 'orders' | 'content';
 
 export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -160,6 +161,7 @@ export default function AdminDashboard() {
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={18} /> },
     { id: 'products', label: 'Products', icon: <Package size={18} /> },
+    { id: 'content', label: 'Landing Page', icon: <Layout size={18} /> },
     { id: 'orders', label: 'Orders', icon: <ShoppingCart size={18} /> },
   ];
 
