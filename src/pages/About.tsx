@@ -3,17 +3,20 @@ import { Mail, Phone, MapPin, Facebook, Instagram, Flame, Truck, Package, Shield
 
 import founderImg from '@/assets/founder.jpeg';
 import artinTemplate from '@/assets/artin-template.jpeg';
+import { useSiteContent } from '@/hooks/useSiteContent';
+import { ABOUT_DEFAULT } from '@/lib/siteContentDefaults';
 
 export default function About() {
+  const { content: about } = useSiteContent('about', ABOUT_DEFAULT);
   return (
     <section className="pt-24 pb-16 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto text-center mb-16">
-          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">Our Story</p>
-          <h1 className="font-display text-5xl md:text-7xl font-black mb-6">About Art In</h1>
+          <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">{about.eyebrow}</p>
+          <h1 className="font-display text-5xl md:text-7xl font-black mb-6">{about.title}</h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Born from the belief that fashion should be fearless, Art In transforms everyday wear into wearable galleries. We're not just a brand — we're a movement.
+            {about.subtitle}
           </p>
         </motion.div>
 
