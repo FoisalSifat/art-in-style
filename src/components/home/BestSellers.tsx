@@ -1,9 +1,18 @@
 import { motion } from 'framer-motion';
-import { products } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
+import { useAllProducts } from '@/hooks/useAllProducts';
+import { useProductOverrides, getOverrideMap } from '@/hooks/useProductOverrides';
 
 export default function BestSellers() {
-  const bestSellers = products.filter(p => p.isBestSeller);
+  const { products } = useAllProducts();
+  const { overrides } = useProductOverrides();
+  const map = getOverrideMap(overrides);
+
+  const bestSellers = products
+    .map((p) => ({ p, o: map.get(p.id) }))
+    .filter(({ p, o }) => (o ? o.is_best_seller : p.isBestSeller))
+    .sort((a, b) => (a.o?.display_order ?? 0) - (b.o?.display_order ?? 0))
+    .map(({ p }) => p);
 
   return (
     <section className="py-16 sm:py-24 bg-secondary/50">
