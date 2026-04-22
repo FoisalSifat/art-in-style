@@ -1,9 +1,19 @@
 import { motion } from 'framer-motion';
-import { products } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
+import { useAllProducts } from '@/hooks/useAllProducts';
+import { useProductOverrides, getOverrideMap } from '@/hooks/useProductOverrides';
 
 export default function FeaturedCollection() {
-  const featured = products.filter(p => p.isFeatured).slice(0, 8);
+  const { products } = useAllProducts();
+  const { overrides } = useProductOverrides();
+  const map = getOverrideMap(overrides);
+
+  const featured = products
+    .map((p) => ({ p, o: map.get(p.id) }))
+    .filter(({ p, o }) => (o ? o.is_featured : p.isFeatured))
+    .sort((a, b) => (a.o?.display_order ?? 0) - (b.o?.display_order ?? 0))
+    .map(({ p }) => p)
+    .slice(0, 8);
 
   return (
     <section className="py-16 sm:py-24">
