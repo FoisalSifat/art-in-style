@@ -125,6 +125,54 @@ export type Database = {
         }
         Relationships: []
       }
+      product_overrides: {
+        Row: {
+          display_order: number
+          id: string
+          is_best_seller: boolean
+          is_featured: boolean
+          product_id: string
+          updated_at: string
+        }
+        Insert: {
+          display_order?: number
+          id?: string
+          is_best_seller?: boolean
+          is_featured?: boolean
+          product_id: string
+          updated_at?: string
+        }
+        Update: {
+          display_order?: number
+          id?: string
+          is_best_seller?: boolean
+          is_featured?: boolean
+          product_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          content: Json
+          id: string
+          section_key: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          id?: string
+          section_key: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          section_key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
