@@ -23,6 +23,7 @@ export type Database = {
           description: string
           id: string
           image_url: string
+          images: Json
           is_best_seller: boolean | null
           is_featured: boolean | null
           is_new: boolean | null
@@ -41,6 +42,7 @@ export type Database = {
           description?: string
           id?: string
           image_url?: string
+          images?: Json
           is_best_seller?: boolean | null
           is_featured?: boolean | null
           is_new?: boolean | null
@@ -59,6 +61,7 @@ export type Database = {
           description?: string
           id?: string
           image_url?: string
+          images?: Json
           is_best_seller?: boolean | null
           is_featured?: boolean | null
           is_new?: boolean | null
