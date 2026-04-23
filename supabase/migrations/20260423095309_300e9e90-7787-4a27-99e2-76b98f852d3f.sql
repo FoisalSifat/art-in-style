@@ -1,0 +1,1 @@
+ALTER TABLE public.admin_products ADD COLUMN IF NOT EXISTS images JSONB NOT NULL DEFAULT '[]'::jsonb;

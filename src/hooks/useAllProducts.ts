@@ -7,24 +7,29 @@ const listeners = new Set<(d: Product[]) => void>();
 
 async function load(): Promise<Product[]> {
   const { data } = await supabase.from('admin_products').select('*');
-  const dbProducts: Product[] = (data || []).map((p) => ({
-    id: `db-${p.id}`,
-    name: p.name,
-    price: p.price,
-    originalPrice: p.original_price ?? undefined,
-    image: p.image_url,
-    images: [p.image_url],
-    category: p.category,
-    colors: p.colors,
-    sizes: p.sizes,
-    rating: 5,
-    reviews: 0,
-    description: p.description,
-    badge: p.badge ?? undefined,
-    isBestSeller: p.is_best_seller ?? false,
-    isFeatured: p.is_featured ?? false,
-    isNew: p.is_new ?? false,
-  }));
+  const dbProducts: Product[] = (data || []).map((p) => {
+    const gallery = Array.isArray((p as any).images) && (p as any).images.length > 0
+      ? ((p as any).images as string[])
+      : (p.image_url ? [p.image_url] : []);
+    return {
+      id: `db-${p.id}`,
+      name: p.name,
+      price: p.price,
+      originalPrice: p.original_price ?? undefined,
+      image: gallery[0] || p.image_url,
+      images: gallery,
+      category: p.category,
+      colors: p.colors,
+      sizes: p.sizes,
+      rating: 5,
+      reviews: 0,
+      description: p.description,
+      badge: p.badge ?? undefined,
+      isBestSeller: p.is_best_seller ?? false,
+      isFeatured: p.is_featured ?? false,
+      isNew: p.is_new ?? false,
+    };
+  });
   const merged = [...staticProducts, ...dbProducts];
   cache.data = merged;
   listeners.forEach((l) => l(merged));
