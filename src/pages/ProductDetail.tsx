@@ -20,13 +20,16 @@ export default function ProductDetail() {
       const dbId = id.replace('db-', '');
       supabase.from('admin_products').select('*').eq('id', dbId).single().then(({ data }) => {
         if (data) {
+          const gallery = Array.isArray((data as any).images) && (data as any).images.length > 0
+            ? ((data as any).images as string[])
+            : (data.image_url ? [data.image_url] : []);
           setDbProduct({
             id: `db-${data.id}`,
             name: data.name,
             price: data.price,
             originalPrice: data.original_price ?? undefined,
-            image: data.image_url,
-            images: [data.image_url],
+            image: gallery[0] || data.image_url,
+            images: gallery,
             category: data.category,
             colors: data.colors,
             sizes: data.sizes,

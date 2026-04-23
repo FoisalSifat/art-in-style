@@ -29,8 +29,8 @@ export default function AdminDashboard() {
     name: '', description: '', price: '', quantity: '', category: 'Graphic Tees',
     sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('');
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   // Order detail
@@ -60,11 +60,16 @@ export default function AdminDashboard() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setImageFiles(prev => [...prev, ...files]);
+    setImagePreviews(prev => [...prev, ...files.map(f => URL.createObjectURL(f))]);
+    e.target.value = '';
+  };
+
+  const removeImageAt = (index: number) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleAddProduct = async (e: React.FormEvent) => {
@@ -72,14 +77,14 @@ export default function AdminDashboard() {
     if (!form.name || !form.price) { toast.error('Name and price are required'); return; }
     setSubmitting(true);
 
-    let imageUrl = '';
-    if (imageFile) {
-      const ext = imageFile.name.split('.').pop();
-      const path = `${Date.now()}.${ext}`;
-      const { error: uploadError } = await supabase.storage.from('product-images').upload(path, imageFile);
+    const uploadedUrls: string[] = [];
+    for (const file of imageFiles) {
+      const ext = file.name.split('.').pop();
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('product-images').upload(path, file);
       if (uploadError) { toast.error('Image upload failed'); setSubmitting(false); return; }
       const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path);
-      imageUrl = urlData.publicUrl;
+      uploadedUrls.push(urlData.publicUrl);
     }
 
     const { error } = await supabase.from('admin_products').insert({
@@ -91,14 +96,15 @@ export default function AdminDashboard() {
       sizes: form.sizes,
       colors: form.colors,
       badge: form.badge || null,
-      image_url: imageUrl,
+      image_url: uploadedUrls[0] || '',
+      images: uploadedUrls,
     });
 
     if (error) { toast.error('Failed to add product'); }
     else {
       toast.success('Product added!');
       setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '' });
-      setImageFile(null); setImagePreview(''); setShowForm(false);
+      setImageFiles([]); setImagePreviews([]); setShowForm(false);
       fetchData();
     }
     setSubmitting(false);
@@ -278,23 +284,27 @@ export default function AdminDashboard() {
                       onSubmit={handleAddProduct} className="bg-card border border-border rounded-xl p-6 space-y-4 overflow-hidden">
                       <h3 className="font-display font-bold">New Product</h3>
 
-                      {/* Image upload */}
+                      {/* Image upload (multiple) */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Product Image</label>
-                        <div className="flex items-start gap-4">
-                          {imagePreview ? (
-                            <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-border">
-                              <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                              <button type="button" onClick={() => { setImageFile(null); setImagePreview(''); }}
-                                className="absolute top-1 right-1 p-0.5 bg-background/80 rounded-full"><X size={12} /></button>
+                        <label className="block text-sm font-medium mb-2">
+                          Product Images <span className="text-muted-foreground font-normal">(first image is the cover; you can add multiple)</span>
+                        </label>
+                        <div className="flex flex-wrap items-start gap-3">
+                          {imagePreviews.map((src, i) => (
+                            <div key={src} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border group">
+                              <img src={src} alt={`Preview ${i + 1}`} className="w-full h-full object-cover" />
+                              {i === 0 && (
+                                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-accent text-accent-foreground text-[9px] font-bold uppercase">Cover</span>
+                              )}
+                              <button type="button" onClick={() => removeImageAt(i)}
+                                className="absolute top-1 right-1 p-0.5 bg-background/90 rounded-full hover:bg-destructive hover:text-destructive-foreground transition-colors"><X size={12} /></button>
                             </div>
-                          ) : (
-                            <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-accent transition-colors">
-                              <Upload size={20} className="text-muted-foreground mb-1" />
-                              <span className="text-[10px] text-muted-foreground">Upload</span>
-                              <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
-                            </label>
-                          )}
+                          ))}
+                          <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-accent transition-colors">
+                            <Upload size={20} className="text-muted-foreground mb-1" />
+                            <span className="text-[10px] text-muted-foreground">{imagePreviews.length ? 'Add more' : 'Upload'}</span>
+                            <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
+                          </label>
                         </div>
                       </div>
 
