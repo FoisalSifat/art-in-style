@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/ProductCard';
+import ProductCardSkeleton from '@/components/ProductCardSkeleton';
 import { useAllProducts } from '@/hooks/useAllProducts';
 import { useProductOverrides, getOverrideMap } from '@/hooks/useProductOverrides';
 
 export default function BestSellers() {
-  const { products } = useAllProducts();
-  const { overrides } = useProductOverrides();
+  const { products, loading: productsLoading } = useAllProducts();
+  const { overrides, loading: overridesLoading } = useProductOverrides();
+  const loading = productsLoading || overridesLoading;
   const map = getOverrideMap(overrides);
 
   const bestSellers = products
@@ -28,9 +30,11 @@ export default function BestSellers() {
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
-          {bestSellers.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
-          ))}
+          {loading
+            ? Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
+            : bestSellers.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))}
         </div>
       </div>
     </section>

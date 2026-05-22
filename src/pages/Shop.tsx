@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { products as staticProducts, categories, sizes as sizeOptions, colorOptions, Product } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
+import ProductCardSkeleton from '@/components/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -15,6 +16,7 @@ export default function Shop() {
   const [sort, setSort] = useState<SortOption>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [dbLoading, setDbLoading] = useState(true);
 
   useEffect(() => {
     supabase.from('admin_products').select('*').then(({ data }) => {
@@ -38,6 +40,7 @@ export default function Shop() {
           isNew: p.is_new ?? false,
         })));
       }
+      setDbLoading(false);
     });
   }, []);
 
@@ -202,12 +205,14 @@ export default function Shop() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6 mt-4 lg:mt-0">
-              {filtered.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
-              ))}
+              {dbLoading
+                ? Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
+                : filtered.map((product, i) => (
+                    <ProductCard key={product.id} product={product} index={i} />
+                  ))}
             </div>
 
-            {filtered.length === 0 && (
+            {!dbLoading && filtered.length === 0 && (
               <div className="text-center py-16 text-muted-foreground">
                 <p className="font-display text-xl font-bold">No products found</p>
                 <p className="mt-2 text-sm">Try adjusting your filters</p>
