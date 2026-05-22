@@ -6,6 +6,7 @@ import { products, Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import ProductCard from '@/components/ProductCard';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -58,9 +59,38 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="pt-24 min-h-screen flex items-center justify-center">
-        <div className="text-center text-muted-foreground">Loading...</div>
-      </div>
+      <section className="pt-20 sm:pt-24 pb-16 min-h-screen">
+        <div className="container mx-auto px-4 lg:px-8">
+          <Skeleton className="h-4 w-28 mb-4 sm:mb-8" />
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-16">
+            <Skeleton className="aspect-square w-full rounded-lg" />
+            <div className="space-y-4 sm:space-y-6">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-8 sm:h-10 w-3/4" />
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-8 w-32" />
+              <Skeleton className="h-20 w-full" />
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-16" />
+                <div className="flex gap-2">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-9 w-16 rounded-full" />
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-16" />
+                <div className="flex gap-2">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Skeleton key={i} className="h-10 w-10 sm:h-12 sm:w-12 rounded-md" />
+                  ))}
+                </div>
+              </div>
+              <Skeleton className="h-12 sm:h-14 w-full rounded-full" />
+            </div>
+          </div>
+        </div>
+      </section>
     );
   }
 
