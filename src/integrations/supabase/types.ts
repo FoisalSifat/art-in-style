@@ -88,6 +88,7 @@ export type Database = {
           items: Json
           payment_method: string
           status: string
+          stock_deducted: boolean
           subtotal: number
           total: number
           updated_at: string
@@ -105,6 +106,7 @@ export type Database = {
           items?: Json
           payment_method?: string
           status?: string
+          stock_deducted?: boolean
           subtotal?: number
           total?: number
           updated_at?: string
@@ -122,6 +124,7 @@ export type Database = {
           items?: Json
           payment_method?: string
           status?: string
+          stock_deducted?: boolean
           subtotal?: number
           total?: number
           updated_at?: string
