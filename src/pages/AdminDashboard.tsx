@@ -99,12 +99,15 @@ export default function AdminDashboard() {
       badge: form.badge || null,
       image_url: uploadedUrls[0] || '',
       images: uploadedUrls,
+      is_featured: form.is_featured,
+      is_best_seller: form.is_best_seller,
+      is_new: form.is_new,
     });
 
     if (error) { toast.error('Failed to add product'); }
     else {
       toast.success('Product added!');
-      setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '' });
+      setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '', is_featured: false, is_best_seller: false, is_new: false });
       setImageFiles([]); setImagePreviews([]); setShowForm(false);
       fetchData();
     }
