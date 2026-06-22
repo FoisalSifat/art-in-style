@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [form, setForm] = useState({
     name: '', description: '', price: '', quantity: '', category: 'Graphic Tees',
     sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
+    is_featured: false, is_best_seller: false, is_new: false,
   });
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
