@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [form, setForm] = useState({
     name: '', description: '', price: '', quantity: '', category: 'Graphic Tees',
     sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
+    is_featured: false, is_best_seller: false, is_new: false,
   });
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -98,12 +99,15 @@ export default function AdminDashboard() {
       badge: form.badge || null,
       image_url: uploadedUrls[0] || '',
       images: uploadedUrls,
+      is_featured: form.is_featured,
+      is_best_seller: form.is_best_seller,
+      is_new: form.is_new,
     });
 
     if (error) { toast.error('Failed to add product'); }
     else {
       toast.success('Product added!');
-      setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '' });
+      setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '', is_featured: false, is_best_seller: false, is_new: false });
       setImageFiles([]); setImagePreviews([]); setShowForm(false);
       fetchData();
     }
@@ -342,6 +346,30 @@ export default function AdminDashboard() {
                         <Input value={form.badge} onChange={e => setForm({ ...form, badge: e.target.value })} placeholder="e.g. New, Best Seller, Limited" />
                       </div>
 
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Show on landing page</label>
+                        <div className="flex flex-wrap gap-4">
+                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" checked={form.is_featured}
+                              onChange={e => setForm({ ...form, is_featured: e.target.checked })}
+                              className="w-4 h-4 accent-accent" />
+                            Featured Collection
+                          </label>
+                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" checked={form.is_best_seller}
+                              onChange={e => setForm({ ...form, is_best_seller: e.target.checked })}
+                              className="w-4 h-4 accent-accent" />
+                            Best Sellers
+                          </label>
+                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" checked={form.is_new}
+                              onChange={e => setForm({ ...form, is_new: e.target.checked })}
+                              className="w-4 h-4 accent-accent" />
+                            Mark as New
+                          </label>
+                        </div>
+                      </div>
+
                       <Button type="submit" disabled={submitting} className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display font-bold">
                         {submitting ? 'Adding...' : 'Add Product'}
                       </Button>
@@ -369,9 +397,12 @@ export default function AdminDashboard() {
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <h4 className="font-display font-bold text-sm truncate">{p.name}</h4>
                             {p.badge && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-accent/10 text-accent rounded-full">{p.badge}</span>}
+                            {p.is_featured && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-primary/10 text-primary rounded-full">Featured</span>}
+                            {p.is_best_seller && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-destructive/10 text-destructive rounded-full">Best Seller</span>}
+                            {p.is_new && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-green-500/10 text-green-600 rounded-full">New</span>}
                           </div>
                           <p className="text-xs text-muted-foreground mt-0.5">{p.category} · Qty: {p.quantity}</p>
                           <p className="text-xs text-muted-foreground truncate">{p.description}</p>
