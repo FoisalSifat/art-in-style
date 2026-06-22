@@ -50,10 +50,18 @@ export default function ProductCard({ product, index = 0 }: Props) {
             loading={eager ? 'eager' : 'lazy'}
             decoding="async"
           />
-          {product.badge && (
+          {product.badge && !outOfStock && (
             <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
               {product.badge}
             </span>
+          )}
+          {outOfStock && (
+            <>
+              <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px]" />
+              <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-destructive text-destructive-foreground rounded-full">
+                Stock Out
+              </span>
+            </>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
