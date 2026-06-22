@@ -33,6 +33,7 @@ export default function Checkout() {
     setSubmitting(true);
 
     const orderItems = items.map(i => ({
+      product_id: i.product.id,
       name: i.product.name,
       price: i.product.price,
       quantity: i.quantity,
