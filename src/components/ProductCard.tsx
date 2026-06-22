@@ -78,7 +78,8 @@ export default function ProductCard({ product, index = 0 }: Props) {
         </button>
         <button
           onClick={handleQuickAdd}
-          className="p-1.5 sm:p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors"
+          disabled={outOfStock}
+          className="p-1.5 sm:p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           aria-label="Quick add"
         >
           <ShoppingBag size={14} className="sm:w-4 sm:h-4" />
