@@ -28,6 +28,7 @@ async function load(): Promise<Product[]> {
       isBestSeller: p.is_best_seller ?? false,
       isFeatured: p.is_featured ?? false,
       isNew: p.is_new ?? false,
+      stock: typeof p.quantity === 'number' ? p.quantity : undefined,
     };
   });
   const merged = [...staticProducts, ...dbProducts];
