@@ -16,10 +16,12 @@ export default function ProductCard({ product, index = 0 }: Props) {
   // Cap stagger so cards lower on the grid don't feel sluggish on mobile
   const delay = Math.min(index, 6) * 0.06;
   const eager = index < 4;
+  const outOfStock = product.stock !== undefined && product.stock <= 0;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (outOfStock) return;
     if (!product.sizes?.length || !product.colors?.length) return;
     const defaultSize = product.sizes.find(s => s === 'L') || product.sizes[0];
     addItem(product, defaultSize, product.colors[0]);
