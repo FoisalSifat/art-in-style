@@ -346,6 +346,30 @@ export default function AdminDashboard() {
                         <Input value={form.badge} onChange={e => setForm({ ...form, badge: e.target.value })} placeholder="e.g. New, Best Seller, Limited" />
                       </div>
 
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Show on landing page</label>
+                        <div className="flex flex-wrap gap-4">
+                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" checked={form.is_featured}
+                              onChange={e => setForm({ ...form, is_featured: e.target.checked })}
+                              className="w-4 h-4 accent-accent" />
+                            Featured Collection
+                          </label>
+                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" checked={form.is_best_seller}
+                              onChange={e => setForm({ ...form, is_best_seller: e.target.checked })}
+                              className="w-4 h-4 accent-accent" />
+                            Best Sellers
+                          </label>
+                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" checked={form.is_new}
+                              onChange={e => setForm({ ...form, is_new: e.target.checked })}
+                              className="w-4 h-4 accent-accent" />
+                            Mark as New
+                          </label>
+                        </div>
+                      </div>
+
                       <Button type="submit" disabled={submitting} className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display font-bold">
                         {submitting ? 'Adding...' : 'Add Product'}
                       </Button>
