@@ -67,9 +67,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       removeItem(productId, size, color);
       return;
     }
-    setItems(prev => prev.map(i =>
-      i.product.id === productId && i.size === size && i.color === color ? { ...i, quantity: qty } : i
-    ));
+    setItems(prev => prev.map(i => {
+      if (!(i.product.id === productId && i.size === size && i.color === color)) return i;
+      const stock = i.product.stock;
+      if (stock !== undefined && qty > stock) {
+        toast.error(`Only ${stock} in stock`);
+        return { ...i, quantity: stock };
+      }
+      return { ...i, quantity: qty };
+    }));
   }, [removeItem]);
 
   const clearCart = useCallback(() => setItems([]), []);
