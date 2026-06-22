@@ -34,8 +34,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [discount, setDiscount] = useState(0);
 
   const addItem = useCallback((product: Product, size: string, color: string) => {
+    const stock = product.stock;
+    if (stock !== undefined && stock <= 0) {
+      toast.error(`${product.name} is out of stock`);
+      return;
+    }
     setItems(prev => {
       const existing = prev.find(i => i.product.id === product.id && i.size === size && i.color === color);
+      const currentQty = existing?.quantity ?? 0;
+      if (stock !== undefined && currentQty + 1 > stock) {
+        toast.error(`Only ${stock} in stock`);
+        return prev;
+      }
       if (existing) {
         return prev.map(i =>
           i.product.id === product.id && i.size === size && i.color === color
