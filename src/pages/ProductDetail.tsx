@@ -41,6 +41,7 @@ export default function ProductDetail() {
             isBestSeller: data.is_best_seller ?? false,
             isFeatured: data.is_featured ?? false,
             isNew: data.is_new ?? false,
+            stock: typeof data.quantity === 'number' ? data.quantity : undefined,
           });
         }
         setLoading(false);
@@ -107,8 +108,12 @@ export default function ProductDetail() {
 
   const allProducts = [...products];
   const relatedProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
+  const stock = product.stock;
+  const outOfStock = stock !== undefined && stock <= 0;
+  const maxQty = stock ?? Infinity;
 
   const handleAddToCart = () => {
+    if (outOfStock) return;
     const size = selectedSize || product.sizes[0];
     const color = selectedColor || product.colors[0];
     for (let i = 0; i < quantity; i++) {
@@ -214,13 +219,20 @@ export default function ProductDetail() {
 
             {/* Quantity */}
             <div>
-              <h3 className="font-display font-bold text-xs sm:text-sm uppercase tracking-wider mb-2 sm:mb-3">Quantity</h3>
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <h3 className="font-display font-bold text-xs sm:text-sm uppercase tracking-wider">Quantity</h3>
+                {stock !== undefined && (
+                  <span className={`text-[10px] sm:text-xs font-medium ${outOfStock ? 'text-destructive' : stock <= 5 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+                    {outOfStock ? 'Out of stock' : `${stock} in stock`}
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-3">
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary">
                   <Minus size={14} />
                 </button>
                 <span className="font-display font-bold w-8 text-center text-sm sm:text-base">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary">
+                <button onClick={() => setQuantity(Math.min(maxQty, quantity + 1))} disabled={quantity >= maxQty} className="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-border flex items-center justify-center hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed">
                   <Plus size={14} />
                 </button>
               </div>
@@ -228,8 +240,8 @@ export default function ProductDetail() {
 
             {/* Actions */}
             <div className="flex gap-3 pt-2">
-              <Button onClick={handleAddToCart} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base">
-                <ShoppingBag size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> Add to Cart
+              <Button onClick={handleAddToCart} disabled={outOfStock} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base disabled:opacity-50">
+                <ShoppingBag size={16} className="mr-2 sm:w-[18px] sm:h-[18px] " /> {outOfStock ? 'Stock Out' : 'Add to Cart'}
               </Button>
               <button
                 onClick={() => toggleWishlist(product.id)}

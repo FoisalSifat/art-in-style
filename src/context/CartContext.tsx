@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Product } from '@/data/products';
 
 export interface CartItem {
@@ -33,8 +34,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [discount, setDiscount] = useState(0);
 
   const addItem = useCallback((product: Product, size: string, color: string) => {
+    const stock = product.stock;
+    if (stock !== undefined && stock <= 0) {
+      toast.error(`${product.name} is out of stock`);
+      return;
+    }
     setItems(prev => {
       const existing = prev.find(i => i.product.id === product.id && i.size === size && i.color === color);
+      const currentQty = existing?.quantity ?? 0;
+      if (stock !== undefined && currentQty + 1 > stock) {
+        toast.error(`Only ${stock} in stock`);
+        return prev;
+      }
       if (existing) {
         return prev.map(i =>
           i.product.id === product.id && i.size === size && i.color === color
@@ -56,9 +67,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       removeItem(productId, size, color);
       return;
     }
-    setItems(prev => prev.map(i =>
-      i.product.id === productId && i.size === size && i.color === color ? { ...i, quantity: qty } : i
-    ));
+    setItems(prev => prev.map(i => {
+      if (!(i.product.id === productId && i.size === size && i.color === color)) return i;
+      const stock = i.product.stock;
+      if (stock !== undefined && qty > stock) {
+        toast.error(`Only ${stock} in stock`);
+        return { ...i, quantity: stock };
+      }
+      return { ...i, quantity: qty };
+    }));
   }, [removeItem]);
 
   const clearCart = useCallback(() => setItems([]), []);

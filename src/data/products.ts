@@ -24,6 +24,7 @@ export interface Product {
   isBestSeller?: boolean;
   isFeatured?: boolean;
   isNew?: boolean;
+  stock?: number;
 }
 
 export const products: Product[] = [

@@ -16,10 +16,12 @@ export default function ProductCard({ product, index = 0 }: Props) {
   // Cap stagger so cards lower on the grid don't feel sluggish on mobile
   const delay = Math.min(index, 6) * 0.06;
   const eager = index < 4;
+  const outOfStock = product.stock !== undefined && product.stock <= 0;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (outOfStock) return;
     if (!product.sizes?.length || !product.colors?.length) return;
     const defaultSize = product.sizes.find(s => s === 'L') || product.sizes[0];
     addItem(product, defaultSize, product.colors[0]);
@@ -48,10 +50,18 @@ export default function ProductCard({ product, index = 0 }: Props) {
             loading={eager ? 'eager' : 'lazy'}
             decoding="async"
           />
-          {product.badge && (
+          {product.badge && !outOfStock && (
             <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
               {product.badge}
             </span>
+          )}
+          {outOfStock && (
+            <>
+              <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px]" />
+              <span className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-destructive text-destructive-foreground rounded-full">
+                Stock Out
+              </span>
+            </>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
@@ -68,7 +78,8 @@ export default function ProductCard({ product, index = 0 }: Props) {
         </button>
         <button
           onClick={handleQuickAdd}
-          className="p-1.5 sm:p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors"
+          disabled={outOfStock}
+          className="p-1.5 sm:p-2 rounded-full glass hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           aria-label="Quick add"
         >
           <ShoppingBag size={14} className="sm:w-4 sm:h-4" />
