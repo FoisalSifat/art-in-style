@@ -397,9 +397,12 @@ export default function AdminDashboard() {
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <h4 className="font-display font-bold text-sm truncate">{p.name}</h4>
                             {p.badge && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-accent/10 text-accent rounded-full">{p.badge}</span>}
+                            {p.is_featured && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-primary/10 text-primary rounded-full">Featured</span>}
+                            {p.is_best_seller && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-destructive/10 text-destructive rounded-full">Best Seller</span>}
+                            {p.is_new && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-green-500/10 text-green-600 rounded-full">New</span>}
                           </div>
                           <p className="text-xs text-muted-foreground mt-0.5">{p.category} · Qty: {p.quantity}</p>
                           <p className="text-xs text-muted-foreground truncate">{p.description}</p>
