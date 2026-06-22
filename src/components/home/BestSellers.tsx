@@ -30,11 +30,17 @@ export default function BestSellers() {
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
-          {loading
-            ? Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
-            : bestSellers.map((product, i) => (
+          {bestSellers.length > 0
+            ? bestSellers.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
-              ))}
+              ))
+            : loading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className={i >= 4 ? 'hidden md:block' : ''}>
+                  <ProductCardSkeleton />
+                </div>
+              ))
+            : null}
         </div>
       </div>
     </section>
