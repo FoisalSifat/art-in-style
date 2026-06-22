@@ -41,6 +41,7 @@ export default function ProductDetail() {
             isBestSeller: data.is_best_seller ?? false,
             isFeatured: data.is_featured ?? false,
             isNew: data.is_new ?? false,
+            stock: typeof data.quantity === 'number' ? data.quantity : undefined,
           });
         }
         setLoading(false);
