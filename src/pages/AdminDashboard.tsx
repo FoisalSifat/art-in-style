@@ -120,6 +120,50 @@ export default function AdminDashboard() {
   };
 
   const handleUpdateOrderStatus = async (id: string, status: string) => {
+    const order = orders.find(o => o.id === id);
+    if (!order) return;
+
+    // Deduct stock once, when moving from 'pending' to any active status
+    const shouldDeduct = !order.stock_deducted && status !== 'pending' && status !== 'cancelled';
+
+    if (shouldDeduct) {
+      const items = (order.items as any[]) || [];
+      // Aggregate quantities per db product id
+      const dbDeductions = new Map<string, number>();
+      for (const it of items) {
+        const pid: string | undefined = it.product_id;
+        if (pid && pid.startsWith('db-')) {
+          const realId = pid.replace('db-', '');
+          dbDeductions.set(realId, (dbDeductions.get(realId) || 0) + (it.quantity || 0));
+        }
+      }
+
+      if (dbDeductions.size > 0) {
+        const ids = Array.from(dbDeductions.keys());
+        const { data: prodRows } = await supabase.from('admin_products').select('id, name, quantity').in('id', ids);
+        // Validate stock
+        for (const row of prodRows || []) {
+          const need = dbDeductions.get(row.id) || 0;
+          if ((row.quantity || 0) < need) {
+            toast.error(`Insufficient stock for "${row.name}" (have ${row.quantity}, need ${need})`);
+            return;
+          }
+        }
+        // Apply deductions
+        for (const row of prodRows || []) {
+          const need = dbDeductions.get(row.id) || 0;
+          const newQty = Math.max(0, (row.quantity || 0) - need);
+          await supabase.from('admin_products').update({ quantity: newQty }).eq('id', row.id);
+        }
+      }
+
+      const { error } = await supabase.from('orders').update({ status, stock_deducted: true }).eq('id', id);
+      if (error) { toast.error('Failed to update order'); return; }
+      toast.success(`Order confirmed — stock updated`);
+      fetchData();
+      return;
+    }
+
     const { error } = await supabase.from('orders').update({ status }).eq('id', id);
     if (!error) { toast.success(`Order marked as ${status}`); fetchData(); }
   };
