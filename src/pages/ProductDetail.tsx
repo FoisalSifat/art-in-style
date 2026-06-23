@@ -115,9 +115,6 @@ export default function ProductDetail() {
 
   const allProducts = [...products];
   const relatedProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
-  const stock = product.stock;
-  const outOfStock = stock !== undefined && stock <= 0;
-  const maxQty = stock ?? Infinity;
 
   const activeSize = selectedSize || product.sizes[0];
   const stock = product.sizeStock && activeSize in product.sizeStock
