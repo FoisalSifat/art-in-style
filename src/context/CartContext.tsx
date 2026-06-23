@@ -33,17 +33,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
 
+  const getStockFor = (product: Product, size: string) => {
+    if (product.sizeStock && size in product.sizeStock) return product.sizeStock[size];
+    return product.stock;
+  };
+
   const addItem = useCallback((product: Product, size: string, color: string) => {
-    const stock = product.stock;
+    const stock = getStockFor(product, size);
     if (stock !== undefined && stock <= 0) {
-      toast.error(`${product.name} is out of stock`);
+      toast.error(`${product.name}${product.sizeStock ? ` (${size})` : ''} is out of stock`);
       return;
     }
     setItems(prev => {
       const existing = prev.find(i => i.product.id === product.id && i.size === size && i.color === color);
       const currentQty = existing?.quantity ?? 0;
       if (stock !== undefined && currentQty + 1 > stock) {
-        toast.error(`Only ${stock} in stock`);
+        toast.error(`Only ${stock} in stock${product.sizeStock ? ` for size ${size}` : ''}`);
         return prev;
       }
       if (existing) {
@@ -69,9 +74,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setItems(prev => prev.map(i => {
       if (!(i.product.id === productId && i.size === size && i.color === color)) return i;
-      const stock = i.product.stock;
+      const stock = getStockFor(i.product, i.size);
       if (stock !== undefined && qty > stock) {
-        toast.error(`Only ${stock} in stock`);
+        toast.error(`Only ${stock} in stock${i.product.sizeStock ? ` for size ${i.size}` : ''}`);
         return { ...i, quantity: stock };
       }
       return { ...i, quantity: qty };

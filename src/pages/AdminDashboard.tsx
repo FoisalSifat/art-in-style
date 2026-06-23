@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout } from 'lucide-react';
+import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,14 +25,72 @@ export default function AdminDashboard() {
 
   // Product form
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({
-    name: '', description: '', price: '', quantity: '', category: 'Graphic Tees',
+    name: '', description: '', price: '', category: 'Graphic Tees',
     sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
     is_featured: false, is_best_seller: false, is_new: false,
+    sizeQuantities: { M: 0, L: 0, XL: 0 } as Record<string, number>,
   });
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+
+  const ALL_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+
+  const toggleSize = (s: string) => {
+    setForm(f => {
+      const has = f.sizes.includes(s);
+      const newSizes = has ? f.sizes.filter(x => x !== s) : [...f.sizes, s];
+      const newQty = { ...f.sizeQuantities };
+      if (has) delete newQty[s];
+      else if (!(s in newQty)) newQty[s] = 0;
+      return { ...f, sizes: newSizes, sizeQuantities: newQty };
+    });
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: '', description: '', price: '', category: 'Graphic Tees',
+      sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
+      is_featured: false, is_best_seller: false, is_new: false,
+      sizeQuantities: { M: 0, L: 0, XL: 0 },
+    });
+    setImageFiles([]);
+    setImagePreviews([]);
+    setExistingImages([]);
+    setEditingId(null);
+  };
+
+  const startEdit = (p: AdminProduct) => {
+    const rawSq = (p as any).size_quantities;
+    const sq: Record<string, number> = rawSq && typeof rawSq === 'object' && !Array.isArray(rawSq)
+      ? Object.fromEntries(Object.entries(rawSq).map(([k, v]) => [k, Number(v) || 0]))
+      : {};
+    // Ensure every selected size has an entry
+    for (const s of p.sizes) if (!(s in sq)) sq[s] = 0;
+    setForm({
+      name: p.name,
+      description: p.description || '',
+      price: String(p.price),
+      category: p.category,
+      sizes: p.sizes && p.sizes.length ? p.sizes : ['M'],
+      colors: p.colors && p.colors.length ? p.colors : ['Black'],
+      badge: p.badge || '',
+      is_featured: !!p.is_featured,
+      is_best_seller: !!p.is_best_seller,
+      is_new: !!p.is_new,
+      sizeQuantities: sq,
+    });
+    const imgs = Array.isArray((p as any).images) ? ((p as any).images as string[]) : (p.image_url ? [p.image_url] : []);
+    setExistingImages(imgs);
+    setImageFiles([]);
+    setImagePreviews([]);
+    setEditingId(p.id);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Order detail
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -88,30 +146,51 @@ export default function AdminDashboard() {
       uploadedUrls.push(urlData.publicUrl);
     }
 
-    const { error } = await supabase.from('admin_products').insert({
+    // Build size_quantities only for selected sizes
+    const sizeQuantities: Record<string, number> = {};
+    for (const s of form.sizes) {
+      sizeQuantities[s] = Math.max(0, Number(form.sizeQuantities[s]) || 0);
+    }
+    const totalQuantity = Object.values(sizeQuantities).reduce((a, b) => a + b, 0);
+
+    const allImages = [...existingImages, ...uploadedUrls];
+
+    const payload = {
       name: form.name,
       description: form.description,
       price: parseInt(form.price),
-      quantity: parseInt(form.quantity) || 0,
+      quantity: totalQuantity,
       category: form.category,
       sizes: form.sizes,
       colors: form.colors,
       badge: form.badge || null,
-      image_url: uploadedUrls[0] || '',
-      images: uploadedUrls,
+      image_url: allImages[0] || '',
+      images: allImages,
       is_featured: form.is_featured,
       is_best_seller: form.is_best_seller,
       is_new: form.is_new,
-    });
+      size_quantities: sizeQuantities,
+    } as any;
 
-    if (error) { toast.error('Failed to add product'); }
+    let error;
+    if (editingId) {
+      ({ error } = await supabase.from('admin_products').update(payload).eq('id', editingId));
+    } else {
+      ({ error } = await supabase.from('admin_products').insert(payload));
+    }
+
+    if (error) { toast.error(editingId ? 'Failed to update product' : 'Failed to add product'); }
     else {
-      toast.success('Product added!');
-      setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '', is_featured: false, is_best_seller: false, is_new: false });
-      setImageFiles([]); setImagePreviews([]); setShowForm(false);
+      toast.success(editingId ? 'Product updated!' : 'Product added!');
+      resetForm();
+      setShowForm(false);
       fetchData();
     }
     setSubmitting(false);
+  };
+
+  const removeExistingImageAt = (index: number) => {
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -128,23 +207,47 @@ export default function AdminDashboard() {
 
     if (shouldDeduct) {
       const items = (order.items as any[]) || [];
-      // Aggregate quantities per db product id
+      // Aggregate quantities per db product id + per size
       const dbDeductions = new Map<string, number>();
+      const dbSizeDeductions = new Map<string, Map<string, number>>();
       for (const it of items) {
         const pid: string | undefined = it.product_id;
         if (pid && pid.startsWith('db-')) {
           const realId = pid.replace('db-', '');
-          dbDeductions.set(realId, (dbDeductions.get(realId) || 0) + (it.quantity || 0));
+          const qty = it.quantity || 0;
+          dbDeductions.set(realId, (dbDeductions.get(realId) || 0) + qty);
+          const sz: string | undefined = it.size;
+          if (sz) {
+            if (!dbSizeDeductions.has(realId)) dbSizeDeductions.set(realId, new Map());
+            const m = dbSizeDeductions.get(realId)!;
+            m.set(sz, (m.get(sz) || 0) + qty);
+          }
         }
       }
 
       if (dbDeductions.size > 0) {
         const ids = Array.from(dbDeductions.keys());
-        const { data: prodRows } = await supabase.from('admin_products').select('id, name, quantity').in('id', ids);
-        // Validate stock
+        const { data: prodRows } = await supabase.from('admin_products').select('id, name, quantity, size_quantities').in('id', ids);
+        // Validate stock — per size when size_quantities exists, else total
         for (const row of prodRows || []) {
           const need = dbDeductions.get(row.id) || 0;
-          if ((row.quantity || 0) < need) {
+          const sq = (row as any).size_quantities as Record<string, number> | null;
+          const hasSizeMap = sq && typeof sq === 'object' && !Array.isArray(sq) && Object.keys(sq).length > 0;
+          if (hasSizeMap) {
+            const sizeNeeds = dbSizeDeductions.get(row.id);
+            if (sizeNeeds) {
+              for (const [sz, n] of sizeNeeds) {
+                const have = Number(sq?.[sz] || 0);
+                if (have < n) {
+                  toast.error(`Insufficient stock for "${row.name}" size ${sz} (have ${have}, need ${n})`);
+                  return;
+                }
+              }
+            } else if ((row.quantity || 0) < need) {
+              toast.error(`Insufficient stock for "${row.name}" (have ${row.quantity}, need ${need})`);
+              return;
+            }
+          } else if ((row.quantity || 0) < need) {
             toast.error(`Insufficient stock for "${row.name}" (have ${row.quantity}, need ${need})`);
             return;
           }
@@ -152,8 +255,21 @@ export default function AdminDashboard() {
         // Apply deductions
         for (const row of prodRows || []) {
           const need = dbDeductions.get(row.id) || 0;
-          const newQty = Math.max(0, (row.quantity || 0) - need);
-          await supabase.from('admin_products').update({ quantity: newQty }).eq('id', row.id);
+          const sq = (row as any).size_quantities as Record<string, number> | null;
+          const hasSizeMap = sq && typeof sq === 'object' && !Array.isArray(sq) && Object.keys(sq).length > 0;
+          let updatePayload: any = { quantity: Math.max(0, (row.quantity || 0) - need) };
+          if (hasSizeMap) {
+            const newSq: Record<string, number> = { ...sq };
+            const sizeNeeds = dbSizeDeductions.get(row.id);
+            if (sizeNeeds) {
+              for (const [sz, n] of sizeNeeds) {
+                newSq[sz] = Math.max(0, Number(newSq[sz] || 0) - n);
+              }
+            }
+            const newTotal = Object.values(newSq).reduce((a, b) => a + Number(b || 0), 0);
+            updatePayload = { quantity: newTotal, size_quantities: newSq };
+          }
+          await supabase.from('admin_products').update(updatePayload).eq('id', row.id);
         }
       }
 
@@ -320,17 +436,17 @@ export default function AdminDashboard() {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="font-display text-lg font-bold">Products ({products.length})</h2>
-                  <Button onClick={() => setShowForm(!showForm)} className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display">
+                  <Button onClick={() => { if (showForm) { resetForm(); setShowForm(false); } else { resetForm(); setShowForm(true); } }} className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display">
                     {showForm ? <><X size={16} /> Cancel</> : <><Plus size={16} /> Add Product</>}
                   </Button>
                 </div>
 
-                {/* Add Product Form */}
+                {/* Add/Edit Product Form */}
                 <AnimatePresence>
                   {showForm && (
                     <motion.form initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
                       onSubmit={handleAddProduct} className="bg-card border border-border rounded-xl p-6 space-y-4 overflow-hidden">
-                      <h3 className="font-display font-bold">New Product</h3>
+                      <h3 className="font-display font-bold">{editingId ? 'Edit Product' : 'New Product'}</h3>
 
                       {/* Image upload (multiple) */}
                       <div>
@@ -338,10 +454,20 @@ export default function AdminDashboard() {
                           Product Images <span className="text-muted-foreground font-normal">(first image is the cover; you can add multiple)</span>
                         </label>
                         <div className="flex flex-wrap items-start gap-3">
+                          {existingImages.map((src, i) => (
+                            <div key={`existing-${src}-${i}`} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border group">
+                              <img src={src} alt={`Existing ${i + 1}`} className="w-full h-full object-cover" />
+                              {i === 0 && imagePreviews.length === 0 && (
+                                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-accent text-accent-foreground text-[9px] font-bold uppercase">Cover</span>
+                              )}
+                              <button type="button" onClick={() => removeExistingImageAt(i)}
+                                className="absolute top-1 right-1 p-0.5 bg-background/90 rounded-full hover:bg-destructive hover:text-destructive-foreground transition-colors"><X size={12} /></button>
+                            </div>
+                          ))}
                           {imagePreviews.map((src, i) => (
                             <div key={src} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border group">
                               <img src={src} alt={`Preview ${i + 1}`} className="w-full h-full object-cover" />
-                              {i === 0 && (
+                              {existingImages.length === 0 && i === 0 && (
                                 <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-accent text-accent-foreground text-[9px] font-bold uppercase">Cover</span>
                               )}
                               <button type="button" onClick={() => removeImageAt(i)}
@@ -350,7 +476,7 @@ export default function AdminDashboard() {
                           ))}
                           <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-accent transition-colors">
                             <Upload size={20} className="text-muted-foreground mb-1" />
-                            <span className="text-[10px] text-muted-foreground">{imagePreviews.length ? 'Add more' : 'Upload'}</span>
+                            <span className="text-[10px] text-muted-foreground">{(imagePreviews.length || existingImages.length) ? 'Add more' : 'Upload'}</span>
                             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
                           </label>
                         </div>
@@ -368,14 +494,43 @@ export default function AdminDashboard() {
                             {['Graphic Tees', 'Oversized', 'Art Series', 'Typography'].map(c => <option key={c}>{c}</option>)}
                           </select>
                         </div>
-                        <div>
+                        <div className="sm:col-span-2">
                           <label className="block text-sm font-medium mb-1">Price (BDT) *</label>
                           <Input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="1290" required />
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Quantity</label>
-                          <Input type="number" value={form.quantity} onChange={e => setForm({ ...form, quantity: e.target.value })} placeholder="50" />
+                      </div>
+
+                      {/* Sizes + per-size quantity */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          Sizes & Stock <span className="text-muted-foreground font-normal">(tick sizes you sell, enter quantity per size)</span>
+                        </label>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {ALL_SIZES.map(s => {
+                            const active = form.sizes.includes(s);
+                            return (
+                              <button type="button" key={s} onClick={() => toggleSize(s)}
+                                className={`px-3 py-1.5 text-xs font-bold uppercase rounded-full border transition-colors ${active ? 'bg-accent text-accent-foreground border-accent' : 'border-border text-muted-foreground hover:border-foreground/30'}`}>
+                                {s}
+                              </button>
+                            );
+                          })}
                         </div>
+                        {form.sizes.length > 0 && (
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 p-3 bg-muted/40 rounded-lg">
+                            {form.sizes.map(s => (
+                              <div key={s}>
+                                <label className="block text-xs font-bold uppercase mb-1 text-muted-foreground">Size {s}</label>
+                                <Input type="number" min={0} value={form.sizeQuantities[s] ?? 0}
+                                  onChange={e => setForm(f => ({ ...f, sizeQuantities: { ...f.sizeQuantities, [s]: Math.max(0, parseInt(e.target.value) || 0) } }))}
+                                  placeholder="0" />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Total stock: <span className="font-bold text-foreground">{form.sizes.reduce((s, k) => s + (Number(form.sizeQuantities[k]) || 0), 0)}</span>
+                        </p>
                       </div>
 
                       <div>
@@ -414,9 +569,16 @@ export default function AdminDashboard() {
                         </div>
                       </div>
 
-                      <Button type="submit" disabled={submitting} className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display font-bold">
-                        {submitting ? 'Adding...' : 'Add Product'}
-                      </Button>
+                      <div className="flex gap-2 flex-wrap">
+                        <Button type="submit" disabled={submitting} className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display font-bold">
+                          {submitting ? (editingId ? 'Updating...' : 'Adding...') : (editingId ? 'Update Product' : 'Add Product')}
+                        </Button>
+                        {editingId && (
+                          <Button type="button" variant="outline" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-full font-display">
+                            Cancel Edit
+                          </Button>
+                        )}
+                      </div>
                     </motion.form>
                   )}
                 </AnimatePresence>
@@ -430,9 +592,13 @@ export default function AdminDashboard() {
                   </div>
                 ) : (
                   <div className="grid gap-3">
-                    {products.map(p => (
+                    {products.map(p => {
+                      const sq = (p as any).size_quantities as Record<string, number> | null;
+                      const hasSizeMap = sq && typeof sq === 'object' && !Array.isArray(sq) && Object.keys(sq).length > 0;
+                      return (
                       <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                        className="flex items-center gap-4 bg-card border border-border rounded-xl p-4">
+                        onClick={() => startEdit(p)}
+                        className="flex items-center gap-4 bg-card border border-border rounded-xl p-4 cursor-pointer hover:border-accent/50 transition-colors">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.name} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
                         ) : (
@@ -448,17 +614,32 @@ export default function AdminDashboard() {
                             {p.is_best_seller && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-destructive/10 text-destructive rounded-full">Best Seller</span>}
                             {p.is_new && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-green-500/10 text-green-600 rounded-full">New</span>}
                           </div>
-                          <p className="text-xs text-muted-foreground mt-0.5">{p.category} · Qty: {p.quantity}</p>
-                          <p className="text-xs text-muted-foreground truncate">{p.description}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{p.category} · Total Qty: {p.quantity}</p>
+                          {hasSizeMap && (
+                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                              {Object.entries(sq!).map(([s, q]) => (
+                                <span key={s} className={`inline-block mr-2 ${Number(q) === 0 ? 'text-destructive' : ''}`}>
+                                  {s}: <span className="font-semibold">{q}</span>
+                                </span>
+                              ))}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground truncate mt-0.5">{p.description}</p>
                         </div>
-                        <div className="text-right flex-shrink-0">
+                        <div className="text-right flex-shrink-0 flex flex-col items-end gap-2">
                           <p className="font-bold text-sm">৳{p.price}</p>
-                          <button onClick={() => handleDeleteProduct(p.id)} className="text-destructive hover:text-destructive/80 mt-1">
-                            <Trash2 size={14} />
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button onClick={(e) => { e.stopPropagation(); startEdit(p); }} className="text-muted-foreground hover:text-accent transition-colors" aria-label="Edit">
+                              <Pencil size={14} />
+                            </button>
+                            <button onClick={(e) => { e.stopPropagation(); if (confirm(`Delete "${p.name}"?`)) handleDeleteProduct(p.id); }} className="text-destructive hover:text-destructive/80" aria-label="Delete">
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
                         </div>
                       </motion.div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </motion.div>
