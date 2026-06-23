@@ -31,6 +31,7 @@ export type Database = {
           original_price: number | null
           price: number
           quantity: number
+          size_quantities: Json
           sizes: string[]
           updated_at: string
         }
@@ -50,6 +51,7 @@ export type Database = {
           original_price?: number | null
           price: number
           quantity?: number
+          size_quantities?: Json
           sizes?: string[]
           updated_at?: string
         }
@@ -69,6 +71,7 @@ export type Database = {
           original_price?: number | null
           price?: number
           quantity?: number
+          size_quantities?: Json
           sizes?: string[]
           updated_at?: string
         }

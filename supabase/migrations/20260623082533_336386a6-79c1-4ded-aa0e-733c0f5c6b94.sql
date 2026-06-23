@@ -1,0 +1,1 @@
+ALTER TABLE public.admin_products ADD COLUMN IF NOT EXISTS size_quantities jsonb NOT NULL DEFAULT '{}'::jsonb;
