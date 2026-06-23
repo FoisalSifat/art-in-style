@@ -436,17 +436,17 @@ export default function AdminDashboard() {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="font-display text-lg font-bold">Products ({products.length})</h2>
-                  <Button onClick={() => setShowForm(!showForm)} className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display">
+                  <Button onClick={() => { if (showForm) { resetForm(); setShowForm(false); } else { resetForm(); setShowForm(true); } }} className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display">
                     {showForm ? <><X size={16} /> Cancel</> : <><Plus size={16} /> Add Product</>}
                   </Button>
                 </div>
 
-                {/* Add Product Form */}
+                {/* Add/Edit Product Form */}
                 <AnimatePresence>
                   {showForm && (
                     <motion.form initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
                       onSubmit={handleAddProduct} className="bg-card border border-border rounded-xl p-6 space-y-4 overflow-hidden">
-                      <h3 className="font-display font-bold">New Product</h3>
+                      <h3 className="font-display font-bold">{editingId ? 'Edit Product' : 'New Product'}</h3>
 
                       {/* Image upload (multiple) */}
                       <div>
@@ -454,10 +454,20 @@ export default function AdminDashboard() {
                           Product Images <span className="text-muted-foreground font-normal">(first image is the cover; you can add multiple)</span>
                         </label>
                         <div className="flex flex-wrap items-start gap-3">
+                          {existingImages.map((src, i) => (
+                            <div key={`existing-${src}-${i}`} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border group">
+                              <img src={src} alt={`Existing ${i + 1}`} className="w-full h-full object-cover" />
+                              {i === 0 && imagePreviews.length === 0 && (
+                                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-accent text-accent-foreground text-[9px] font-bold uppercase">Cover</span>
+                              )}
+                              <button type="button" onClick={() => removeExistingImageAt(i)}
+                                className="absolute top-1 right-1 p-0.5 bg-background/90 rounded-full hover:bg-destructive hover:text-destructive-foreground transition-colors"><X size={12} /></button>
+                            </div>
+                          ))}
                           {imagePreviews.map((src, i) => (
                             <div key={src} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border group">
                               <img src={src} alt={`Preview ${i + 1}`} className="w-full h-full object-cover" />
-                              {i === 0 && (
+                              {existingImages.length === 0 && i === 0 && (
                                 <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-accent text-accent-foreground text-[9px] font-bold uppercase">Cover</span>
                               )}
                               <button type="button" onClick={() => removeImageAt(i)}
@@ -466,7 +476,7 @@ export default function AdminDashboard() {
                           ))}
                           <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-accent transition-colors">
                             <Upload size={20} className="text-muted-foreground mb-1" />
-                            <span className="text-[10px] text-muted-foreground">{imagePreviews.length ? 'Add more' : 'Upload'}</span>
+                            <span className="text-[10px] text-muted-foreground">{(imagePreviews.length || existingImages.length) ? 'Add more' : 'Upload'}</span>
                             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
                           </label>
                         </div>
@@ -484,14 +494,43 @@ export default function AdminDashboard() {
                             {['Graphic Tees', 'Oversized', 'Art Series', 'Typography'].map(c => <option key={c}>{c}</option>)}
                           </select>
                         </div>
-                        <div>
+                        <div className="sm:col-span-2">
                           <label className="block text-sm font-medium mb-1">Price (BDT) *</label>
                           <Input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="1290" required />
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Quantity</label>
-                          <Input type="number" value={form.quantity} onChange={e => setForm({ ...form, quantity: e.target.value })} placeholder="50" />
+                      </div>
+
+                      {/* Sizes + per-size quantity */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          Sizes & Stock <span className="text-muted-foreground font-normal">(tick sizes you sell, enter quantity per size)</span>
+                        </label>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {ALL_SIZES.map(s => {
+                            const active = form.sizes.includes(s);
+                            return (
+                              <button type="button" key={s} onClick={() => toggleSize(s)}
+                                className={`px-3 py-1.5 text-xs font-bold uppercase rounded-full border transition-colors ${active ? 'bg-accent text-accent-foreground border-accent' : 'border-border text-muted-foreground hover:border-foreground/30'}`}>
+                                {s}
+                              </button>
+                            );
+                          })}
                         </div>
+                        {form.sizes.length > 0 && (
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 p-3 bg-muted/40 rounded-lg">
+                            {form.sizes.map(s => (
+                              <div key={s}>
+                                <label className="block text-xs font-bold uppercase mb-1 text-muted-foreground">Size {s}</label>
+                                <Input type="number" min={0} value={form.sizeQuantities[s] ?? 0}
+                                  onChange={e => setForm(f => ({ ...f, sizeQuantities: { ...f.sizeQuantities, [s]: Math.max(0, parseInt(e.target.value) || 0) } }))}
+                                  placeholder="0" />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Total stock: <span className="font-bold text-foreground">{form.sizes.reduce((s, k) => s + (Number(form.sizeQuantities[k]) || 0), 0)}</span>
+                        </p>
                       </div>
 
                       <div>
@@ -530,9 +569,16 @@ export default function AdminDashboard() {
                         </div>
                       </div>
 
-                      <Button type="submit" disabled={submitting} className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display font-bold">
-                        {submitting ? 'Adding...' : 'Add Product'}
-                      </Button>
+                      <div className="flex gap-2 flex-wrap">
+                        <Button type="submit" disabled={submitting} className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-display font-bold">
+                          {submitting ? (editingId ? 'Updating...' : 'Adding...') : (editingId ? 'Update Product' : 'Add Product')}
+                        </Button>
+                        {editingId && (
+                          <Button type="button" variant="outline" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-full font-display">
+                            Cancel Edit
+                          </Button>
+                        )}
+                      </div>
                     </motion.form>
                   )}
                 </AnimatePresence>
