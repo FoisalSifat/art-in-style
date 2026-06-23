@@ -207,23 +207,47 @@ export default function AdminDashboard() {
 
     if (shouldDeduct) {
       const items = (order.items as any[]) || [];
-      // Aggregate quantities per db product id
+      // Aggregate quantities per db product id + per size
       const dbDeductions = new Map<string, number>();
+      const dbSizeDeductions = new Map<string, Map<string, number>>();
       for (const it of items) {
         const pid: string | undefined = it.product_id;
         if (pid && pid.startsWith('db-')) {
           const realId = pid.replace('db-', '');
-          dbDeductions.set(realId, (dbDeductions.get(realId) || 0) + (it.quantity || 0));
+          const qty = it.quantity || 0;
+          dbDeductions.set(realId, (dbDeductions.get(realId) || 0) + qty);
+          const sz: string | undefined = it.size;
+          if (sz) {
+            if (!dbSizeDeductions.has(realId)) dbSizeDeductions.set(realId, new Map());
+            const m = dbSizeDeductions.get(realId)!;
+            m.set(sz, (m.get(sz) || 0) + qty);
+          }
         }
       }
 
       if (dbDeductions.size > 0) {
         const ids = Array.from(dbDeductions.keys());
-        const { data: prodRows } = await supabase.from('admin_products').select('id, name, quantity').in('id', ids);
-        // Validate stock
+        const { data: prodRows } = await supabase.from('admin_products').select('id, name, quantity, size_quantities').in('id', ids);
+        // Validate stock — per size when size_quantities exists, else total
         for (const row of prodRows || []) {
           const need = dbDeductions.get(row.id) || 0;
-          if ((row.quantity || 0) < need) {
+          const sq = (row as any).size_quantities as Record<string, number> | null;
+          const hasSizeMap = sq && typeof sq === 'object' && !Array.isArray(sq) && Object.keys(sq).length > 0;
+          if (hasSizeMap) {
+            const sizeNeeds = dbSizeDeductions.get(row.id);
+            if (sizeNeeds) {
+              for (const [sz, n] of sizeNeeds) {
+                const have = Number(sq?.[sz] || 0);
+                if (have < n) {
+                  toast.error(`Insufficient stock for "${row.name}" size ${sz} (have ${have}, need ${n})`);
+                  return;
+                }
+              }
+            } else if ((row.quantity || 0) < need) {
+              toast.error(`Insufficient stock for "${row.name}" (have ${row.quantity}, need ${need})`);
+              return;
+            }
+          } else if ((row.quantity || 0) < need) {
             toast.error(`Insufficient stock for "${row.name}" (have ${row.quantity}, need ${need})`);
             return;
           }
@@ -231,8 +255,21 @@ export default function AdminDashboard() {
         // Apply deductions
         for (const row of prodRows || []) {
           const need = dbDeductions.get(row.id) || 0;
-          const newQty = Math.max(0, (row.quantity || 0) - need);
-          await supabase.from('admin_products').update({ quantity: newQty }).eq('id', row.id);
+          const sq = (row as any).size_quantities as Record<string, number> | null;
+          const hasSizeMap = sq && typeof sq === 'object' && !Array.isArray(sq) && Object.keys(sq).length > 0;
+          let updatePayload: any = { quantity: Math.max(0, (row.quantity || 0) - need) };
+          if (hasSizeMap) {
+            const newSq: Record<string, number> = { ...sq };
+            const sizeNeeds = dbSizeDeductions.get(row.id);
+            if (sizeNeeds) {
+              for (const [sz, n] of sizeNeeds) {
+                newSq[sz] = Math.max(0, Number(newSq[sz] || 0) - n);
+              }
+            }
+            const newTotal = Object.values(newSq).reduce((a, b) => a + Number(b || 0), 0);
+            updatePayload = { quantity: newTotal, size_quantities: newSq };
+          }
+          await supabase.from('admin_products').update(updatePayload).eq('id', row.id);
         }
       }
 
