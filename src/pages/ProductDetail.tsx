@@ -24,6 +24,12 @@ export default function ProductDetail() {
           const gallery = Array.isArray((data as any).images) && (data as any).images.length > 0
             ? ((data as any).images as string[])
             : (data.image_url ? [data.image_url] : []);
+          const rawSizeQty = (data as any).size_quantities;
+          const sizeStock: Record<string, number> | undefined =
+            rawSizeQty && typeof rawSizeQty === 'object' && !Array.isArray(rawSizeQty) && Object.keys(rawSizeQty).length > 0
+              ? Object.fromEntries(Object.entries(rawSizeQty).map(([k, v]) => [k, Number(v) || 0]))
+              : undefined;
+          const totalFromSizes = sizeStock ? Object.values(sizeStock).reduce((a, b) => a + b, 0) : undefined;
           setDbProduct({
             id: `db-${data.id}`,
             name: data.name,
@@ -41,7 +47,8 @@ export default function ProductDetail() {
             isBestSeller: data.is_best_seller ?? false,
             isFeatured: data.is_featured ?? false,
             isNew: data.is_new ?? false,
-            stock: typeof data.quantity === 'number' ? data.quantity : undefined,
+            stock: totalFromSizes ?? (typeof data.quantity === 'number' ? data.quantity : undefined),
+            sizeStock,
           });
         }
         setLoading(false);
