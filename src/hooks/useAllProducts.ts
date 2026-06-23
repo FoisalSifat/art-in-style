@@ -11,6 +11,12 @@ async function load(): Promise<Product[]> {
     const gallery = Array.isArray((p as any).images) && (p as any).images.length > 0
       ? ((p as any).images as string[])
       : (p.image_url ? [p.image_url] : []);
+    const rawSizeQty = (p as any).size_quantities;
+    const sizeStock: Record<string, number> | undefined =
+      rawSizeQty && typeof rawSizeQty === 'object' && !Array.isArray(rawSizeQty) && Object.keys(rawSizeQty).length > 0
+        ? Object.fromEntries(Object.entries(rawSizeQty).map(([k, v]) => [k, Number(v) || 0]))
+        : undefined;
+    const totalFromSizes = sizeStock ? Object.values(sizeStock).reduce((a, b) => a + b, 0) : undefined;
     return {
       id: `db-${p.id}`,
       name: p.name,
@@ -28,7 +34,8 @@ async function load(): Promise<Product[]> {
       isBestSeller: p.is_best_seller ?? false,
       isFeatured: p.is_featured ?? false,
       isNew: p.is_new ?? false,
-      stock: typeof p.quantity === 'number' ? p.quantity : undefined,
+      stock: totalFromSizes ?? (typeof p.quantity === 'number' ? p.quantity : undefined),
+      sizeStock,
     };
   });
   const merged = [...staticProducts, ...dbProducts];
