@@ -119,9 +119,16 @@ export default function ProductDetail() {
   const outOfStock = stock !== undefined && stock <= 0;
   const maxQty = stock ?? Infinity;
 
+  const activeSize = selectedSize || product.sizes[0];
+  const stock = product.sizeStock && activeSize in product.sizeStock
+    ? product.sizeStock[activeSize]
+    : product.stock;
+  const outOfStock = stock !== undefined && stock <= 0;
+  const maxQty = stock ?? Infinity;
+
   const handleAddToCart = () => {
     if (outOfStock) return;
-    const size = selectedSize || product.sizes[0];
+    const size = activeSize;
     const color = selectedColor || product.colors[0];
     for (let i = 0; i < quantity; i++) {
       addItem(product, size, color);
