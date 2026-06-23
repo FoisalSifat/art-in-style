@@ -592,9 +592,13 @@ export default function AdminDashboard() {
                   </div>
                 ) : (
                   <div className="grid gap-3">
-                    {products.map(p => (
+                    {products.map(p => {
+                      const sq = (p as any).size_quantities as Record<string, number> | null;
+                      const hasSizeMap = sq && typeof sq === 'object' && !Array.isArray(sq) && Object.keys(sq).length > 0;
+                      return (
                       <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                        className="flex items-center gap-4 bg-card border border-border rounded-xl p-4">
+                        onClick={() => startEdit(p)}
+                        className="flex items-center gap-4 bg-card border border-border rounded-xl p-4 cursor-pointer hover:border-accent/50 transition-colors">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.name} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
                         ) : (
@@ -610,17 +614,32 @@ export default function AdminDashboard() {
                             {p.is_best_seller && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-destructive/10 text-destructive rounded-full">Best Seller</span>}
                             {p.is_new && <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-green-500/10 text-green-600 rounded-full">New</span>}
                           </div>
-                          <p className="text-xs text-muted-foreground mt-0.5">{p.category} · Qty: {p.quantity}</p>
-                          <p className="text-xs text-muted-foreground truncate">{p.description}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{p.category} · Total Qty: {p.quantity}</p>
+                          {hasSizeMap && (
+                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                              {Object.entries(sq!).map(([s, q]) => (
+                                <span key={s} className={`inline-block mr-2 ${Number(q) === 0 ? 'text-destructive' : ''}`}>
+                                  {s}: <span className="font-semibold">{q}</span>
+                                </span>
+                              ))}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground truncate mt-0.5">{p.description}</p>
                         </div>
-                        <div className="text-right flex-shrink-0">
+                        <div className="text-right flex-shrink-0 flex flex-col items-end gap-2">
                           <p className="font-bold text-sm">৳{p.price}</p>
-                          <button onClick={() => handleDeleteProduct(p.id)} className="text-destructive hover:text-destructive/80 mt-1">
-                            <Trash2 size={14} />
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button onClick={(e) => { e.stopPropagation(); startEdit(p); }} className="text-muted-foreground hover:text-accent transition-colors" aria-label="Edit">
+                              <Pencil size={14} />
+                            </button>
+                            <button onClick={(e) => { e.stopPropagation(); if (confirm(`Delete "${p.name}"?`)) handleDeleteProduct(p.id); }} className="text-destructive hover:text-destructive/80" aria-label="Delete">
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
                         </div>
                       </motion.div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </motion.div>
