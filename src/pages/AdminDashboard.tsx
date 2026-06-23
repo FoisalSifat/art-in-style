@@ -146,30 +146,51 @@ export default function AdminDashboard() {
       uploadedUrls.push(urlData.publicUrl);
     }
 
-    const { error } = await supabase.from('admin_products').insert({
+    // Build size_quantities only for selected sizes
+    const sizeQuantities: Record<string, number> = {};
+    for (const s of form.sizes) {
+      sizeQuantities[s] = Math.max(0, Number(form.sizeQuantities[s]) || 0);
+    }
+    const totalQuantity = Object.values(sizeQuantities).reduce((a, b) => a + b, 0);
+
+    const allImages = [...existingImages, ...uploadedUrls];
+
+    const payload = {
       name: form.name,
       description: form.description,
       price: parseInt(form.price),
-      quantity: parseInt(form.quantity) || 0,
+      quantity: totalQuantity,
       category: form.category,
       sizes: form.sizes,
       colors: form.colors,
       badge: form.badge || null,
-      image_url: uploadedUrls[0] || '',
-      images: uploadedUrls,
+      image_url: allImages[0] || '',
+      images: allImages,
       is_featured: form.is_featured,
       is_best_seller: form.is_best_seller,
       is_new: form.is_new,
-    });
+      size_quantities: sizeQuantities,
+    } as any;
 
-    if (error) { toast.error('Failed to add product'); }
+    let error;
+    if (editingId) {
+      ({ error } = await supabase.from('admin_products').update(payload).eq('id', editingId));
+    } else {
+      ({ error } = await supabase.from('admin_products').insert(payload));
+    }
+
+    if (error) { toast.error(editingId ? 'Failed to update product' : 'Failed to add product'); }
     else {
-      toast.success('Product added!');
-      setForm({ name: '', description: '', price: '', quantity: '', category: 'Graphic Tees', sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '', is_featured: false, is_best_seller: false, is_new: false });
-      setImageFiles([]); setImagePreviews([]); setShowForm(false);
+      toast.success(editingId ? 'Product updated!' : 'Product added!');
+      resetForm();
+      setShowForm(false);
       fetchData();
     }
     setSubmitting(false);
+  };
+
+  const removeExistingImageAt = (index: number) => {
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleDeleteProduct = async (id: string) => {
