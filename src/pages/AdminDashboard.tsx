@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout } from 'lucide-react';
+import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
