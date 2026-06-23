@@ -25,14 +25,72 @@ export default function AdminDashboard() {
 
   // Product form
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({
-    name: '', description: '', price: '', quantity: '', category: 'Graphic Tees',
+    name: '', description: '', price: '', category: 'Graphic Tees',
     sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
     is_featured: false, is_best_seller: false, is_new: false,
+    sizeQuantities: { M: 0, L: 0, XL: 0 } as Record<string, number>,
   });
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+
+  const ALL_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+
+  const toggleSize = (s: string) => {
+    setForm(f => {
+      const has = f.sizes.includes(s);
+      const newSizes = has ? f.sizes.filter(x => x !== s) : [...f.sizes, s];
+      const newQty = { ...f.sizeQuantities };
+      if (has) delete newQty[s];
+      else if (!(s in newQty)) newQty[s] = 0;
+      return { ...f, sizes: newSizes, sizeQuantities: newQty };
+    });
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: '', description: '', price: '', category: 'Graphic Tees',
+      sizes: ['M', 'L', 'XL'], colors: ['Black'], badge: '',
+      is_featured: false, is_best_seller: false, is_new: false,
+      sizeQuantities: { M: 0, L: 0, XL: 0 },
+    });
+    setImageFiles([]);
+    setImagePreviews([]);
+    setExistingImages([]);
+    setEditingId(null);
+  };
+
+  const startEdit = (p: AdminProduct) => {
+    const rawSq = (p as any).size_quantities;
+    const sq: Record<string, number> = rawSq && typeof rawSq === 'object' && !Array.isArray(rawSq)
+      ? Object.fromEntries(Object.entries(rawSq).map(([k, v]) => [k, Number(v) || 0]))
+      : {};
+    // Ensure every selected size has an entry
+    for (const s of p.sizes) if (!(s in sq)) sq[s] = 0;
+    setForm({
+      name: p.name,
+      description: p.description || '',
+      price: String(p.price),
+      category: p.category,
+      sizes: p.sizes && p.sizes.length ? p.sizes : ['M'],
+      colors: p.colors && p.colors.length ? p.colors : ['Black'],
+      badge: p.badge || '',
+      is_featured: !!p.is_featured,
+      is_best_seller: !!p.is_best_seller,
+      is_new: !!p.is_new,
+      sizeQuantities: sq,
+    });
+    const imgs = Array.isArray((p as any).images) ? ((p as any).images as string[]) : (p.image_url ? [p.image_url] : []);
+    setExistingImages(imgs);
+    setImageFiles([]);
+    setImagePreviews([]);
+    setEditingId(p.id);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Order detail
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
