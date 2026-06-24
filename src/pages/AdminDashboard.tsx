@@ -489,20 +489,38 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <label className="block text-sm font-medium mb-1">Category</label>
-                          <Input
-                            list="admin-category-list"
-                            value={form.category}
-                            onChange={e => setForm({ ...form, category: e.target.value })}
-                            placeholder="Type or pick a category"
-                            required
-                          />
-                          <datalist id="admin-category-list">
-                            {Array.from(new Set([
+                          {(() => {
+                            const categories = Array.from(new Set([
                               'Graphic Tees', 'Oversized', 'Art Series', 'Typography',
                               ...products.map(p => p.category).filter(Boolean),
-                            ])).map(c => <option key={c} value={c} />)}
-                          </datalist>
-                          <p className="text-xs text-muted-foreground mt-1">Existing categories appear in the dropdown. Type a new one to create.</p>
+                            ]));
+                            const isNew = form.category === '__new__';
+                            const selectValue = isNew || categories.includes(form.category) ? form.category : '__new__';
+                            return (
+                              <div className="space-y-2">
+                                <select
+                                  value={selectValue}
+                                  onChange={e => {
+                                    const v = e.target.value;
+                                    setForm({ ...form, category: v === '__new__' ? '' : v });
+                                  }}
+                                  className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                                >
+                                  {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                                  <option value="__new__">+ Add new category…</option>
+                                </select>
+                                {(selectValue === '__new__') && (
+                                  <Input
+                                    autoFocus
+                                    value={form.category}
+                                    onChange={e => setForm({ ...form, category: e.target.value })}
+                                    placeholder="Type new category name"
+                                    required
+                                  />
+                                )}
+                              </div>
+                            );
+                          })()}
                         </div>
                         <div className="sm:col-span-2">
                           <label className="block text-sm font-medium mb-1">Price (BDT) *</label>
