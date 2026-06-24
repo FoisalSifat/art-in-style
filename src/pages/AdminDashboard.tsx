@@ -496,7 +496,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="sm:col-span-2">
                           <label className="block text-sm font-medium mb-1">Price (BDT) *</label>
-                          <Input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="1290" required />
+                          <Input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="1290" required className="no-spin" />
                         </div>
                       </div>
 
