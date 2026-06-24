@@ -490,12 +490,21 @@ export default function AdminDashboard() {
                         <div>
                           <label className="block text-sm font-medium mb-1">Category</label>
                           {(() => {
-                            const categories = Array.from(new Set([
+                            const seen = new Map<string, string>();
+                            for (const c of [
                               'Graphic Tees', 'Oversized', 'Art Series', 'Typography',
                               ...products.map(p => p.category).filter(Boolean),
-                            ]));
-                            const isNew = form.category === '__new__';
-                            const selectValue = isNew || categories.includes(form.category) ? form.category : '__new__';
+                            ]) {
+                              const key = c.trim().toLowerCase();
+                              if (key && !seen.has(key)) seen.set(key, c.trim());
+                            }
+                            const categories = Array.from(seen.values());
+                            const matchExisting = (val: string) =>
+                              categories.find(c => c.toLowerCase() === val.trim().toLowerCase());
+                            const existing = matchExisting(form.category);
+                            const isNewMode = form.category === '' || (form.category !== '' && !existing);
+                            const selectValue = existing ? existing : '__new__';
+                            const typedExists = isNewMode && form.category.trim() !== '' && !!existing;
                             return (
                               <div className="space-y-2">
                                 <select
@@ -509,14 +518,22 @@ export default function AdminDashboard() {
                                   {categories.map(c => <option key={c} value={c}>{c}</option>)}
                                   <option value="__new__">+ Add new category…</option>
                                 </select>
-                                {(selectValue === '__new__') && (
-                                  <Input
-                                    autoFocus
-                                    value={form.category}
-                                    onChange={e => setForm({ ...form, category: e.target.value })}
-                                    placeholder="Type new category name"
-                                    required
-                                  />
+                                {isNewMode && (
+                                  <>
+                                    <Input
+                                      autoFocus
+                                      value={form.category}
+                                      onChange={e => setForm({ ...form, category: e.target.value })}
+                                      placeholder="Type new category name"
+                                      required
+                                      aria-invalid={typedExists}
+                                    />
+                                    {typedExists && (
+                                      <p className="text-xs text-destructive">
+                                        "{existing}" already exists — it will be used instead of creating a duplicate.
+                                      </p>
+                                    )}
+                                  </>
                                 )}
                               </div>
                             );
