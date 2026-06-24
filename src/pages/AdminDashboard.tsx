@@ -160,7 +160,15 @@ export default function AdminDashboard() {
       description: form.description,
       price: parseInt(form.price),
       quantity: totalQuantity,
-      category: form.category,
+      category: (() => {
+        const typed = (form.category || '').trim();
+        if (!typed) return typed;
+        const existing = Array.from(new Set([
+          'Graphic Tees', 'Oversized', 'Art Series', 'Typography',
+          ...products.map(p => p.category).filter(Boolean),
+        ])).find(c => c.toLowerCase() === typed.toLowerCase());
+        return existing || typed;
+      })(),
       sizes: form.sizes,
       colors: form.colors,
       badge: form.badge || null,
