@@ -489,10 +489,20 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <label className="block text-sm font-medium mb-1">Category</label>
-                          <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}
-                            className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
-                            {['Graphic Tees', 'Oversized', 'Art Series', 'Typography'].map(c => <option key={c}>{c}</option>)}
-                          </select>
+                          <Input
+                            list="admin-category-list"
+                            value={form.category}
+                            onChange={e => setForm({ ...form, category: e.target.value })}
+                            placeholder="Type or pick a category"
+                            required
+                          />
+                          <datalist id="admin-category-list">
+                            {Array.from(new Set([
+                              'Graphic Tees', 'Oversized', 'Art Series', 'Typography',
+                              ...products.map(p => p.category).filter(Boolean),
+                            ])).map(c => <option key={c} value={c} />)}
+                          </datalist>
+                          <p className="text-xs text-muted-foreground mt-1">Existing categories appear in the dropdown. Type a new one to create.</p>
                         </div>
                         <div className="sm:col-span-2">
                           <label className="block text-sm font-medium mb-1">Price (BDT) *</label>
