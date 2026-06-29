@@ -64,6 +64,9 @@ export default function AdminDashboard() {
     setImageFiles([]);
     setImagePreviews([]);
     setExistingImages([]);
+    setColorImageUrls({});
+    setColorImageFiles({});
+    setNewColorInput('');
     setEditingId(null);
   };
 
