@@ -619,6 +619,112 @@ export default function AdminDashboard() {
                         </p>
                       </div>
 
+                      {/* Colors + per-color images (when 2+ colors) */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          Colors <span className="text-muted-foreground font-normal">(add 2 or more to enable per-color images)</span>
+                        </label>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {form.colors.map(c => (
+                            <span key={c} className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 text-xs font-bold uppercase rounded-full bg-accent/10 text-accent border border-accent/30">
+                              {c}
+                              <button type="button" aria-label={`Remove ${c}`}
+                                onClick={() => {
+                                  setForm(f => ({ ...f, colors: f.colors.filter(x => x !== c) }));
+                                  setColorImageFiles(prev => { const n = { ...prev }; delete n[c]; return n; });
+                                  setColorImageUrls(prev => { const n = { ...prev }; delete n[c]; return n; });
+                                }}
+                                className="p-0.5 rounded-full hover:bg-destructive/15 hover:text-destructive transition-colors">
+                                <X size={11} />
+                              </button>
+                            </span>
+                          ))}
+                          <div className="flex items-center gap-2">
+                            <Input
+                              value={newColorInput}
+                              onChange={e => setNewColorInput(e.target.value)}
+                              onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  const v = newColorInput.trim();
+                                  if (!v) return;
+                                  if (form.colors.some(c => c.toLowerCase() === v.toLowerCase())) {
+                                    toast.error('Color already added');
+                                    return;
+                                  }
+                                  setForm(f => ({ ...f, colors: [...f.colors, v] }));
+                                  setNewColorInput('');
+                                }
+                              }}
+                              placeholder="Add color (press Enter)"
+                              className="h-8 w-44 text-xs"
+                            />
+                            <Button type="button" variant="outline" size="sm"
+                              onClick={() => {
+                                const v = newColorInput.trim();
+                                if (!v) return;
+                                if (form.colors.some(c => c.toLowerCase() === v.toLowerCase())) {
+                                  toast.error('Color already added');
+                                  return;
+                                }
+                                setForm(f => ({ ...f, colors: [...f.colors, v] }));
+                                setNewColorInput('');
+                              }}
+                              className="h-8 rounded-full">
+                              <Plus size={12} className="mr-1" /> Add
+                            </Button>
+                          </div>
+                        </div>
+
+                        {form.colors.length >= 2 && (
+                          <div className="p-3 bg-muted/40 rounded-lg space-y-3">
+                            <p className="text-xs text-muted-foreground">
+                              Upload one image per color. When a customer selects this color on the product page, the image will switch automatically. Colors without an image will use the main cover image.
+                            </p>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                              {form.colors.map(c => {
+                                const file = colorImageFiles[c];
+                                const preview = file ? URL.createObjectURL(file) : (colorImageUrls[c] || '');
+                                return (
+                                  <div key={c} className="flex flex-col items-center gap-1.5">
+                                    <label className="relative w-24 h-24 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-accent transition-colors overflow-hidden bg-background">
+                                      {preview ? (
+                                        <>
+                                          <img src={preview} alt={c} className="w-full h-full object-cover" />
+                                          <button type="button"
+                                            onClick={(e) => {
+                                              e.preventDefault();
+                                              setColorImageFiles(prev => { const n = { ...prev }; delete n[c]; return n; });
+                                              setColorImageUrls(prev => { const n = { ...prev }; delete n[c]; return n; });
+                                            }}
+                                            className="absolute top-1 right-1 p-0.5 bg-background/90 rounded-full hover:bg-destructive hover:text-destructive-foreground transition-colors">
+                                            <X size={12} />
+                                          </button>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Upload size={18} className="text-muted-foreground mb-1" />
+                                          <span className="text-[10px] text-muted-foreground">Upload</span>
+                                        </>
+                                      )}
+                                      <input type="file" accept="image/*" className="hidden"
+                                        onChange={e => {
+                                          const f = e.target.files?.[0];
+                                          if (f) setColorImageFiles(prev => ({ ...prev, [c]: f }));
+                                          e.target.value = '';
+                                        }} />
+                                    </label>
+                                    <span className="text-[11px] font-medium truncate max-w-[6rem]">{c}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+
+
                       <div>
                         <label className="block text-sm font-medium mb-1">Description</label>
                         <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })}
