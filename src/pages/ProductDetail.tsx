@@ -160,11 +160,17 @@ export default function ProductDetail() {
               className={`aspect-square overflow-hidden rounded-lg bg-card cursor-zoom-in ${imageZoomed ? 'cursor-zoom-out' : ''}`}
               onClick={() => setImageZoomed(!imageZoomed)}
             >
-              <img
-                src={product.image}
-                alt={product.name}
-                className={`w-full h-full object-cover transition-transform duration-500 ${imageZoomed ? 'scale-150' : ''}`}
-              />
+              {(() => {
+                const activeColor = selectedColor || product.colors[0];
+                const displayImage = (product.colorImages && activeColor && product.colorImages[activeColor]) || product.image;
+                return (
+                  <img
+                    src={displayImage}
+                    alt={product.name}
+                    className={`w-full h-full object-cover transition-transform duration-500 ${imageZoomed ? 'scale-150' : ''}`}
+                  />
+                );
+              })()}
             </div>
             {product.badge && (
               <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-accent text-accent-foreground rounded-full">
