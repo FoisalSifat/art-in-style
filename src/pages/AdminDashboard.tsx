@@ -35,6 +35,10 @@ export default function AdminDashboard() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>([]);
+  // Per-color images: persisted URLs + newly picked files (preview via object URL)
+  const [colorImageUrls, setColorImageUrls] = useState<Record<string, string>>({});
+  const [colorImageFiles, setColorImageFiles] = useState<Record<string, File>>({});
+  const [newColorInput, setNewColorInput] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const ALL_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
