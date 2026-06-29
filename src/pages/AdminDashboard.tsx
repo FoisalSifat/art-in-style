@@ -160,6 +160,24 @@ export default function AdminDashboard() {
       uploadedUrls.push(urlData.publicUrl);
     }
 
+    // Upload per-color images (only when 2+ colors). Build final color → URL map.
+    const colorImagesMap: Record<string, string> = {};
+    if (form.colors.length >= 2) {
+      for (const color of form.colors) {
+        const file = colorImageFiles[color];
+        if (file) {
+          const ext = file.name.split('.').pop();
+          const path = `color-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+          const { error: upErr } = await supabase.storage.from('product-images').upload(path, file);
+          if (upErr) { toast.error(`Image upload failed for color ${color}`); setSubmitting(false); return; }
+          const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path);
+          colorImagesMap[color] = urlData.publicUrl;
+        } else if (colorImageUrls[color]) {
+          colorImagesMap[color] = colorImageUrls[color];
+        }
+      }
+    }
+
     // Build size_quantities only for selected sizes
     const sizeQuantities: Record<string, number> = {};
     for (const s of form.sizes) {
@@ -192,6 +210,7 @@ export default function AdminDashboard() {
       is_best_seller: form.is_best_seller,
       is_new: form.is_new,
       size_quantities: sizeQuantities,
+      color_images: colorImagesMap,
     } as any;
 
     let error;
