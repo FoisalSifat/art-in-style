@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, ShoppingBag, Minus, Plus, Star, ChevronLeft, Ruler } from 'lucide-react';
+import { Heart, ShoppingBag, Minus, Plus, ChevronLeft, Ruler } from 'lucide-react';
 import { products, Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
