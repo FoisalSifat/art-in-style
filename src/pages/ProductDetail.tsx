@@ -172,14 +172,6 @@ export default function ProductDetail() {
             <div>
               <p className="text-xs sm:text-sm text-accent font-medium uppercase tracking-wider">{product.category}</p>
               <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-black mt-1">{product.name}</h1>
-              <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
-                <div className="flex items-center gap-0.5 sm:gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={12} className={`sm:w-3.5 sm:h-3.5 ${i < Math.floor(product.rating) ? 'text-accent fill-accent' : 'text-muted-foreground/30'}`} />
-                  ))}
-                </div>
-                <span className="text-xs sm:text-sm text-muted-foreground">{product.rating} ({product.reviews} reviews)</span>
-              </div>
             </div>
 
             <div className="flex items-baseline gap-2 sm:gap-3">
