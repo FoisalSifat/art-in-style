@@ -30,6 +30,15 @@ export default function ProductDetail() {
               ? Object.fromEntries(Object.entries(rawSizeQty).map(([k, v]) => [k, Number(v) || 0]))
               : undefined;
           const totalFromSizes = sizeStock ? Object.values(sizeStock).reduce((a, b) => a + b, 0) : undefined;
+          const rawCi = (data as any).color_images;
+          const colorImages: Record<string, string> | undefined =
+            rawCi && typeof rawCi === 'object' && !Array.isArray(rawCi) && Object.keys(rawCi).length > 0
+              ? Object.fromEntries(
+                  Object.entries(rawCi)
+                    .map(([k, v]) => [k, String(v || '')])
+                    .filter(([, v]) => v)
+                )
+              : undefined;
           setDbProduct({
             id: `db-${data.id}`,
             name: data.name,
@@ -49,6 +58,7 @@ export default function ProductDetail() {
             isNew: data.is_new ?? false,
             stock: totalFromSizes ?? (typeof data.quantity === 'number' ? data.quantity : undefined),
             sizeStock,
+            colorImages,
           });
         }
         setLoading(false);
