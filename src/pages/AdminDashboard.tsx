@@ -94,6 +94,13 @@ export default function AdminDashboard() {
     setExistingImages(imgs);
     setImageFiles([]);
     setImagePreviews([]);
+    const rawCi = (p as any).color_images;
+    const ci: Record<string, string> = rawCi && typeof rawCi === 'object' && !Array.isArray(rawCi)
+      ? Object.fromEntries(Object.entries(rawCi).map(([k, v]) => [k, String(v || '')]))
+      : {};
+    setColorImageUrls(ci);
+    setColorImageFiles({});
+    setNewColorInput('');
     setEditingId(p.id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
