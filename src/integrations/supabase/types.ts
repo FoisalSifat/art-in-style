@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           badge: string | null
           category: string
+          color_images: Json
           colors: string[]
           created_at: string
           description: string
@@ -38,6 +39,7 @@ export type Database = {
         Insert: {
           badge?: string | null
           category?: string
+          color_images?: Json
           colors?: string[]
           created_at?: string
           description?: string
@@ -58,6 +60,7 @@ export type Database = {
         Update: {
           badge?: string | null
           category?: string
+          color_images?: Json
           colors?: string[]
           created_at?: string
           description?: string
