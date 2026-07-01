@@ -116,7 +116,7 @@ export default function Hero() {
               </Link>
             </Button>
             <Button asChild variant="outline" className="font-display font-bold text-xs sm:text-base px-4 sm:px-8 py-4 sm:py-6 rounded-full border-foreground/30 hover:bg-foreground/10">
-              <Link to="/shop">{content.secondaryCtaLabel}</Link>
+              <Link to="/about">{content.secondaryCtaLabel}</Link>
             </Button>
           </motion.div>
         </div>
