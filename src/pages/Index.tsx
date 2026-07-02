@@ -4,7 +4,6 @@ import FeaturedCollection from '@/components/home/FeaturedCollection';
 import BrandStory from '@/components/home/BrandStory';
 import BestSellers from '@/components/home/BestSellers';
 import WhyChooseUs from '@/components/home/WhyChooseUs';
-import Newsletter from '@/components/home/Newsletter';
 import InstagramGallery from '@/components/home/InstagramGallery';
 
 const Index = () => {
@@ -16,7 +15,6 @@ const Index = () => {
       <BrandStory />
       <BestSellers />
       <WhyChooseUs />
-      <Newsletter />
       <InstagramGallery />
     </>
   );
