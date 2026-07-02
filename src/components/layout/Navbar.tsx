@@ -59,9 +59,6 @@ export default function Navbar() {
             <button onClick={toggleTheme} className="p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Toggle theme">
               {theme === 'dark' ? <Sun size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />}
             </button>
-            <Link to="/login" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Account">
-              <User size={18} />
-            </Link>
             <Link to="/contact" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Contact">
               <MessageCircle size={18} />
             </Link>
