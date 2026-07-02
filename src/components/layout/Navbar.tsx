@@ -131,10 +131,6 @@ export default function Navbar() {
               className="border-t border-border/30 px-6 py-5 space-y-4 shrink-0"
             >
               <div className="flex items-center justify-center gap-6">
-                <Link to="/login" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
-                  <User size={20} />
-                  <span className="text-[10px] uppercase tracking-wider font-medium">Account</span>
-                </Link>
                 <Link to="/shop" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
                   <Store size={20} />
                   <span className="text-[10px] uppercase tracking-wider font-medium">Shop</span>
