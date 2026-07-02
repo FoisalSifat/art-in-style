@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Heart, Menu, X, Sun, Moon, Store, User, Phone, Mail, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, X, Sun, Moon, Store, Phone, Mail, MessageCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -59,9 +59,6 @@ export default function Navbar() {
             <button onClick={toggleTheme} className="p-1.5 sm:p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Toggle theme">
               {theme === 'dark' ? <Sun size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />}
             </button>
-            <Link to="/login" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Account">
-              <User size={18} />
-            </Link>
             <Link to="/contact" className="hidden sm:flex p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Contact">
               <MessageCircle size={18} />
             </Link>
@@ -134,10 +131,6 @@ export default function Navbar() {
               className="border-t border-border/30 px-6 py-5 space-y-4 shrink-0"
             >
               <div className="flex items-center justify-center gap-6">
-                <Link to="/login" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
-                  <User size={20} />
-                  <span className="text-[10px] uppercase tracking-wider font-medium">Account</span>
-                </Link>
                 <Link to="/shop" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
                   <Store size={20} />
                   <span className="text-[10px] uppercase tracking-wider font-medium">Shop</span>

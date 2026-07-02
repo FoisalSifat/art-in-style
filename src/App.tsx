@@ -15,7 +15,6 @@ import ProductDetail from "./pages/ProductDetail";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
-import Login from "./pages/Login";
 import Shipping from "./pages/Shipping";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -46,7 +45,6 @@ const App = () => (
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/faq" element={<FAQ />} />
-                  <Route path="/login" element={<Login />} />
                   <Route path="/shipping" element={<Shipping />} />
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
