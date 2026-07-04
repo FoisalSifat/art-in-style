@@ -325,6 +325,18 @@ export default function AdminDashboard() {
     if (!error) { toast.success(`Order marked as ${status}`); fetchData(); }
   };
 
+  const handleDeleteOrder = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this order?')) return;
+    const { error } = await supabase.from('orders').delete().eq('id', id);
+    if (error) {
+      toast.error('Failed to delete order');
+      return;
+    }
+    toast.success('Order deleted');
+    setSelectedOrder(null);
+    fetchData();
+  };
+
   const totalProductValue = products.reduce((s, p) => s + p.price * p.quantity, 0);
   const totalStock = products.reduce((s, p) => s + p.quantity, 0);
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
