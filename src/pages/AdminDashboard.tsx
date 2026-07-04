@@ -325,6 +325,18 @@ export default function AdminDashboard() {
     if (!error) { toast.success(`Order marked as ${status}`); fetchData(); }
   };
 
+  const handleDeleteOrder = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this order?')) return;
+    const { error } = await supabase.from('orders').delete().eq('id', id);
+    if (error) {
+      toast.error('Failed to delete order');
+      return;
+    }
+    toast.success('Order deleted');
+    setSelectedOrder(null);
+    fetchData();
+  };
+
   const totalProductValue = products.reduce((s, p) => s + p.price * p.quantity, 0);
   const totalStock = products.reduce((s, p) => s + p.quantity, 0);
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
@@ -949,6 +961,13 @@ export default function AdminDashboard() {
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Payment</p>
                   <p className="text-sm font-medium">{selectedOrder.payment_method}</p>
                 </div>
+
+                <button
+                  onClick={() => handleDeleteOrder(selectedOrder.id)}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-destructive border border-destructive/30 rounded-lg hover:bg-destructive/10 transition-colors"
+                >
+                  <Trash2 size={14} /> Delete Order
+                </button>
               </div>
             </motion.div>
           </motion.div>
