@@ -96,7 +96,7 @@ export default function About() {
                 </div>
 
                 <div className="flex items-center gap-3 pt-2 border-t border-border/30">
-                  <a href="https://facebook.com/ArtIn" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
+                  <a href="https://www.facebook.com/profile.php?id=61580907942625" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
                     <Facebook className="w-4 h-4 text-accent" />
                   </a>
                   <a href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors">
