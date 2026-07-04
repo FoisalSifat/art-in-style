@@ -961,6 +961,13 @@ export default function AdminDashboard() {
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Payment</p>
                   <p className="text-sm font-medium">{selectedOrder.payment_method}</p>
                 </div>
+
+                <button
+                  onClick={() => handleDeleteOrder(selectedOrder.id)}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-destructive border border-destructive/30 rounded-lg hover:bg-destructive/10 transition-colors"
+                >
+                  <Trash2 size={14} /> Delete Order
+                </button>
               </div>
             </motion.div>
           </motion.div>
