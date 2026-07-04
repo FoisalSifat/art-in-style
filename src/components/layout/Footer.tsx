@@ -35,7 +35,7 @@ export default function Footer() {
               <a href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="p-2 border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Instagram">
                 <Instagram size={16} className="sm:w-[18px] sm:h-[18px]" />
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="p-2 border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Facebook">
+              <a href="https://www.facebook.com/profile.php?id=61580907942625" target="_blank" rel="noopener noreferrer" className="p-2 border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Facebook">
                 <Facebook size={16} className="sm:w-[18px] sm:h-[18px]" />
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" className="p-2 border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="TikTok">
