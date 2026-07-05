@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Heart, Menu, X, Sun, Moon, Store, Phone, Mail, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, ChevronLeft, Sun, Moon, Store, Phone, Mail, MessageCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -94,25 +94,29 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+              className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
-              initial={{ x: '100%', opacity: 0.8 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '100%', opacity: 0.8 }}
-              transition={{ type: 'tween', duration: 0.3 }}
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3, ease: 'easeOut' }}
               style={{ backgroundColor: 'hsl(var(--background))' }}
-              className="fixed top-0 right-0 z-[60] h-auto max-h-[90vh] w-3/4 max-w-[280px] m-2 sm:m-3 rounded-2xl border border-border/40 shadow-2xl flex flex-col overflow-hidden"
+              className="fixed inset-y-0 right-0 z-[60] w-3/4 max-w-[280px] rounded-l-2xl border-l border-border/40 shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between h-14 px-4 border-b border-border/30 shrink-0">
-                <span className="font-display text-sm font-bold uppercase tracking-wider">Menu</span>
-                <button onClick={() => setMobileOpen(false)} className="p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Close menu">
-                  <X size={20} />
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 -ml-2 rounded-full hover:bg-secondary transition-colors"
+                  aria-label="Close menu"
+                >
+                  <ChevronLeft size={22} className="text-foreground/70" />
                 </button>
+                <img src={logo} alt="Art In" className="h-9 w-auto" />
               </div>
 
-              <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+              <div className="flex-1 overflow-y-auto py-6 px-2">
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.path}
@@ -123,11 +127,14 @@ export default function Navbar() {
                     <Link
                       to={link.path}
                       onClick={() => setMobileOpen(false)}
-                      className={`block py-3 px-3 rounded-lg font-display text-lg font-bold uppercase tracking-wider transition-colors ${
-                        location.pathname === link.path ? 'text-accent bg-accent/10' : 'text-foreground hover:text-accent hover:bg-secondary/50'
+                      className={`group flex items-center justify-between py-4 px-4 rounded-lg font-display text-xl font-bold uppercase tracking-wider transition-colors ${
+                        location.pathname === link.path
+                          ? 'text-accent bg-accent/10'
+                          : 'text-foreground hover:bg-secondary/40 hover:text-accent'
                       }`}
                     >
                       {link.label}
+                      <ChevronLeft size={16} className={`rotate-180 transition-transform ${location.pathname === link.path ? 'text-accent' : 'text-foreground/30 group-hover:text-accent'}`} />
                     </Link>
                   </motion.div>
                 ))}
