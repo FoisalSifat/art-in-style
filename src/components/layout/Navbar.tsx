@@ -88,73 +88,82 @@ export default function Navbar() {
       {/* Mobile menu — rendered OUTSIDE header so backdrop-filter doesn't trap fixed positioning */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-            style={{ backgroundColor: 'hsl(var(--background))' }}
-            className="fixed inset-0 z-[60] flex flex-col"
-          >
-            <div className="flex items-center justify-between h-14 px-3 border-b border-border/30 shrink-0">
-              <img src={logo} alt="Art In" className="h-10 w-auto" />
-              <button onClick={() => setMobileOpen(false)} className="p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Close menu">
-                <X size={22} />
-              </button>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.path}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.06 }}
-                >
-                  <Link
-                    to={link.path}
-                    onClick={() => setMobileOpen(false)}
-                    className={`font-display text-3xl font-bold uppercase tracking-wider transition-colors ${
-                      location.pathname === link.path ? 'text-accent' : 'text-foreground hover:text-accent'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-
+          <>
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
-              className="border-t border-border/30 px-6 py-5 space-y-4 shrink-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              initial={{ x: '100%', opacity: 0.8 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0.8 }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              style={{ backgroundColor: 'hsl(var(--background))' }}
+              className="fixed top-0 right-0 z-[60] h-auto max-h-[90vh] w-3/4 max-w-[280px] m-2 sm:m-3 rounded-2xl border border-border/40 shadow-2xl flex flex-col overflow-hidden"
             >
-              <div className="flex items-center justify-center gap-6">
-                <Link to="/shop" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
-                  <Store size={20} />
-                  <span className="text-[10px] uppercase tracking-wider font-medium">Shop</span>
-                </Link>
-                <Link to="/wishlist" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
-                  <Heart size={20} />
-                  <span className="text-[10px] uppercase tracking-wider font-medium">Wishlist</span>
-                </Link>
-                <button onClick={() => { setMobileOpen(false); setIsOpen(true); }} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
-                  <ShoppingBag size={20} />
-                  <span className="text-[10px] uppercase tracking-wider font-medium">Cart</span>
+              <div className="flex items-center justify-between h-14 px-4 border-b border-border/30 shrink-0">
+                <span className="font-display text-sm font-bold uppercase tracking-wider">Menu</span>
+                <button onClick={() => setMobileOpen(false)} className="p-2 rounded-full hover:bg-secondary transition-colors" aria-label="Close menu">
+                  <X size={20} />
                 </button>
               </div>
-              <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
-                <a href="tel:01600052600" className="flex items-center gap-1 hover:text-foreground transition-colors">
-                  <Phone size={12} /> 01600052600
-                </a>
-                <span>•</span>
-                <a href="mailto:artinclo83@gmail.com" className="flex items-center gap-1 hover:text-foreground transition-colors">
-                  <Mail size={12} /> Email Us
-                </a>
+
+              <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.path}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.06 }}
+                  >
+                    <Link
+                      to={link.path}
+                      onClick={() => setMobileOpen(false)}
+                      className={`block py-3 px-3 rounded-lg font-display text-lg font-bold uppercase tracking-wider transition-colors ${
+                        location.pathname === link.path ? 'text-accent bg-accent/10' : 'text-foreground hover:text-accent hover:bg-secondary/50'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
               </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                className="border-t border-border/30 px-4 py-4 space-y-3 shrink-0 safe-area-bottom"
+              >
+                <div className="flex items-center justify-around">
+                  <Link to="/shop" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                    <Store size={18} />
+                    <span className="text-[10px] uppercase tracking-wider font-medium">Shop</span>
+                  </Link>
+                  <Link to="/wishlist" onClick={() => setMobileOpen(false)} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                    <Heart size={18} />
+                    <span className="text-[10px] uppercase tracking-wider font-medium">Wishlist</span>
+                  </Link>
+                  <button onClick={() => { setMobileOpen(false); setIsOpen(true); }} className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+                    <ShoppingBag size={18} />
+                    <span className="text-[10px] uppercase tracking-wider font-medium">Cart</span>
+                  </button>
+                </div>
+                <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
+                  <a href="tel:01600052600" className="flex items-center gap-1 hover:text-foreground transition-colors">
+                    <Phone size={12} /> 01600052600
+                  </a>
+                  <a href="mailto:artinclo83@gmail.com" className="flex items-center gap-1 hover:text-foreground transition-colors">
+                    <Mail size={12} /> Email
+                  </a>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
