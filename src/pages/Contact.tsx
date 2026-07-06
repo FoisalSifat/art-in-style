@@ -14,8 +14,19 @@ export default function Contact() {
     const message = form.message.trim().slice(0, 1000);
     if (!name || !email || !message) return;
     const text = `Hello, I'm ${name} (${email}).\n\n${message}`;
-    const waUrl = `https://wa.me/8801835099504?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    const phone = '8801835099504';
+    const encoded = encodeURIComponent(text);
+    // Use whatsapp:// scheme on mobile (opens app directly, bypasses api.whatsapp.com redirect
+    // which can be blocked in some regions). Fall back to web.whatsapp.com on desktop.
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    const waUrl = isMobile
+      ? `whatsapp://send?phone=${phone}&text=${encoded}`
+      : `https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+    if (isMobile) {
+      window.location.href = waUrl;
+    } else {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
     toast.success('Opening WhatsApp...');
     setForm({ name: '', email: '', message: '' });
   };
