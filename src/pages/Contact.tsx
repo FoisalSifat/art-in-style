@@ -14,7 +14,7 @@ export default function Contact() {
     const message = form.message.trim().slice(0, 1000);
     if (!name || !email || !message) return;
     const text = `Hello, I'm ${name} (${email}).\n\n${message}`;
-    const waUrl = `https://wa.me/8801600052600?text=${encodeURIComponent(text)}`;
+    const waUrl = `https://wa.me/8801835099504?text=${encodeURIComponent(text)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
     toast.success('Opening WhatsApp...');
     setForm({ name: '', email: '', message: '' });
