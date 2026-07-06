@@ -9,7 +9,14 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Message sent! We\'ll get back to you soon.');
+    const name = form.name.trim().slice(0, 100);
+    const email = form.email.trim().slice(0, 255);
+    const message = form.message.trim().slice(0, 1000);
+    if (!name || !email || !message) return;
+    const text = `Hello, I'm ${name} (${email}).\n\n${message}`;
+    const waUrl = `https://wa.me/8801600052600?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    toast.success('Opening WhatsApp...');
     setForm({ name: '', email: '', message: '' });
   };
 
