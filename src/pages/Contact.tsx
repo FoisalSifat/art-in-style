@@ -14,8 +14,19 @@ export default function Contact() {
     const message = form.message.trim().slice(0, 1000);
     if (!name || !email || !message) return;
     const text = `Hello, I'm ${name} (${email}).\n\n${message}`;
-    const waUrl = `https://wa.me/8801835099504?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    const phone = '8801835099504';
+    const encoded = encodeURIComponent(text);
+    // Use whatsapp:// scheme on mobile (opens app directly, bypasses api.whatsapp.com redirect
+    // which can be blocked in some regions). Fall back to web.whatsapp.com on desktop.
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    const waUrl = isMobile
+      ? `whatsapp://send?phone=${phone}&text=${encoded}`
+      : `https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+    if (isMobile) {
+      window.location.href = waUrl;
+    } else {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
     toast.success('Opening WhatsApp...');
     setForm({ name: '', email: '', message: '' });
   };
@@ -71,7 +82,7 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          <motion.form initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             <input type="text" placeholder="Your Name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required className="w-full px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
             <input type="email" placeholder="Your Email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required className="w-full px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
             <textarea placeholder="Your Message" rows={5} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} required className="w-full px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent resize-none" />
