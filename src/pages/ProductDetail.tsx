@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, ShoppingBag, Minus, Plus, ChevronLeft, Ruler } from 'lucide-react';
+import { Heart, ShoppingBag, Minus, Plus, ChevronLeft, Ruler, CreditCard } from 'lucide-react';
 import { products, Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [dbProduct, setDbProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +68,7 @@ export default function ProductDetail() {
   }, [id]);
 
   const product = id?.startsWith('db-') ? dbProduct : products.find(p => p.id === id);
-  const { addItem } = useCart();
+  const { addItem, setIsOpen } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -140,6 +141,17 @@ export default function ProductDetail() {
     for (let i = 0; i < quantity; i++) {
       addItem(product, size, color);
     }
+  };
+
+  const handleBuyNow = () => {
+    if (outOfStock) return;
+    const size = activeSize;
+    const color = selectedColor || product.colors[0];
+    for (let i = 0; i < quantity; i++) {
+      addItem(product, size, color);
+    }
+    setIsOpen(false);
+    navigate('/checkout');
   };
 
   return (
@@ -269,6 +281,14 @@ export default function ProductDetail() {
                 <Heart size={18} className="sm:w-5 sm:h-5" fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
+            <Button
+              onClick={handleBuyNow}
+              disabled={outOfStock}
+              variant="outline"
+              className="w-full font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base border-foreground/20 hover:bg-foreground hover:text-background disabled:opacity-50"
+            >
+              <CreditCard size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> Buy Now
+            </Button>
           </motion.div>
         </div>
 
