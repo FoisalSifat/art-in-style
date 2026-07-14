@@ -68,7 +68,7 @@ export default function ProductDetail() {
   }, [id]);
 
   const product = id?.startsWith('db-') ? dbProduct : products.find(p => p.id === id);
-  const { addItem } = useCart();
+  const { addItem, setIsOpen } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
