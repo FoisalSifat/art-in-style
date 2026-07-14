@@ -281,6 +281,14 @@ export default function ProductDetail() {
                 <Heart size={18} className="sm:w-5 sm:h-5" fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
+            <Button
+              onClick={handleBuyNow}
+              disabled={outOfStock}
+              variant="outline"
+              className="w-full font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base border-foreground/20 hover:bg-foreground hover:text-background disabled:opacity-50"
+            >
+              <CreditCard size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> Buy Now
+            </Button>
           </motion.div>
         </div>
 
