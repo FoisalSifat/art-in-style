@@ -143,6 +143,17 @@ export default function ProductDetail() {
     }
   };
 
+  const handleBuyNow = () => {
+    if (outOfStock) return;
+    const size = activeSize;
+    const color = selectedColor || product.colors[0];
+    for (let i = 0; i < quantity; i++) {
+      addItem(product, size, color);
+    }
+    setIsOpen(false);
+    navigate('/checkout');
+  };
+
   return (
     <section className="pt-20 sm:pt-24 pb-16 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
