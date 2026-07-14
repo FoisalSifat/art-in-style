@@ -270,25 +270,29 @@ export default function ProductDetail() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 pt-2">
-              <Button onClick={handleAddToCart} disabled={outOfStock} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base disabled:opacity-50">
-                <ShoppingBag size={16} className="mr-2 sm:w-[18px] sm:h-[18px] " /> {outOfStock ? 'Stock Out' : 'Add to Cart'}
+            <div className="flex items-stretch gap-2 sm:gap-3 pt-2">
+              <Button
+                onClick={handleAddToCart}
+                disabled={outOfStock}
+                className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-4 sm:py-5 rounded-full text-sm sm:text-base disabled:opacity-50"
+              >
+                <ShoppingBag size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> {outOfStock ? 'Stock Out' : 'Add to Cart'}
+              </Button>
+              <Button
+                onClick={handleBuyNow}
+                disabled={outOfStock}
+                variant="outline"
+                className="flex-1 font-display font-bold py-4 sm:py-5 rounded-full text-sm sm:text-base border-foreground/20 hover:bg-foreground hover:text-background disabled:opacity-50"
+              >
+                <CreditCard size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> Buy Now
               </Button>
               <button
                 onClick={() => toggleWishlist(product.id)}
-                className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors shrink-0 ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
+                className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors shrink-0 self-center ${isWishlisted(product.id) ? 'text-destructive' : ''}`}
               >
                 <Heart size={18} className="sm:w-5 sm:h-5" fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
-            <Button
-              onClick={handleBuyNow}
-              disabled={outOfStock}
-              variant="outline"
-              className="w-full font-display font-bold py-5 sm:py-6 rounded-full text-sm sm:text-base border-foreground/20 hover:bg-foreground hover:text-background disabled:opacity-50"
-            >
-              <CreditCard size={16} className="mr-2 sm:w-[18px] sm:h-[18px]" /> Buy Now
-            </Button>
           </motion.div>
         </div>
 
