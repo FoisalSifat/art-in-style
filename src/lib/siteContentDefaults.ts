@@ -1,7 +1,20 @@
-import type { HeroContent, BrandStoryContent, AboutContent } from '@/hooks/useSiteContent';
+import type { HeroContent, BrandStoryContent, AboutContent, PromoBannerContent } from '@/hooks/useSiteContent';
 import heroImg1 from '@/assets/hero-main.jpg';
 import heroImg2 from '@/assets/hero-2.jpg';
 import brandLifestyle from '@/assets/brand-lifestyle.jpeg';
+
+export const PROMO_BANNER_DEFAULT: PromoBannerContent = {
+  enabled: false,
+  eyebrow: 'Limited Time',
+  title: 'Winter Drop 2026',
+  subtitle: 'Get 20% off on all new arrivals. Free shipping across Bangladesh on orders above ৳2000.',
+  ctaLabel: 'Shop the Drop',
+  ctaHref: '/shop',
+  imageUrl: '',
+  layout: 'image-right',
+  accentText: 'USE CODE: ARTIN20',
+  endDate: '',
+};
 
 export const HERO_DEFAULT: HeroContent = {
   eyebrow: 'Premium Artistic Streetwear',
