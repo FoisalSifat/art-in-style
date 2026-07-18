@@ -5,6 +5,7 @@ import BrandStory from '@/components/home/BrandStory';
 import BestSellers from '@/components/home/BestSellers';
 import WhyChooseUs from '@/components/home/WhyChooseUs';
 import InstagramGallery from '@/components/home/InstagramGallery';
+import PromoBanner from '@/components/home/PromoBanner';
 
 const Index = () => {
   return (
@@ -12,6 +13,7 @@ const Index = () => {
       <Hero />
       <Marquee />
       <FeaturedCollection />
+      <PromoBanner />
       <BrandStory />
       <BestSellers />
       <WhyChooseUs />
