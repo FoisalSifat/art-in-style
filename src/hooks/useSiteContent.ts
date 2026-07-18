@@ -35,10 +35,24 @@ export interface AboutContent {
   subtitle: string;
 }
 
+export interface PromoBannerContent {
+  enabled: boolean;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  ctaLabel: string;
+  ctaHref: string;
+  imageUrl: string;
+  layout: 'image-right' | 'image-left' | 'overlay';
+  accentText: string;
+  endDate: string; // ISO string, empty = no countdown
+}
+
 export type SectionMap = {
   hero: HeroContent;
   brand_story: BrandStoryContent;
   about: AboutContent;
+  promo_banner: PromoBannerContent;
 };
 
 const cache = new Map<string, unknown>();
