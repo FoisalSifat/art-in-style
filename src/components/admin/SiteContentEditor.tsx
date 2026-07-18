@@ -9,17 +9,19 @@ import {
   HERO_DEFAULT,
   BRAND_STORY_DEFAULT,
   ABOUT_DEFAULT,
+  PROMO_BANNER_DEFAULT,
 } from '@/lib/siteContentDefaults';
 import type {
   HeroContent,
   BrandStoryContent,
   AboutContent,
   HeroSlide,
+  PromoBannerContent,
 } from '@/hooks/useSiteContent';
 import { useAllProducts } from '@/hooks/useAllProducts';
 import { useProductOverrides } from '@/hooks/useProductOverrides';
 
-type SubTab = 'hero' | 'brand_story' | 'about' | 'featured';
+type SubTab = 'hero' | 'promo' | 'brand_story' | 'about' | 'featured';
 
 async function uploadSiteImage(file: File): Promise<string | null> {
   const ext = file.name.split('.').pop();
