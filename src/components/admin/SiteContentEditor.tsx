@@ -241,6 +241,158 @@ function HeroEditor() {
   );
 }
 
+/* ----------------- Promo Banner Editor ----------------- */
+function PromoBannerEditor() {
+  const [data, setData] = useState<PromoBannerContent>(PROMO_BANNER_DEFAULT);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from('site_content')
+      .select('content')
+      .eq('section_key', 'promo_banner')
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.content) {
+          setData({ ...PROMO_BANNER_DEFAULT, ...(data.content as object) } as PromoBannerContent);
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  const handleImage = async (file: File) => {
+    const url = await uploadSiteImage(file);
+    if (url) setData({ ...data, imageUrl: url });
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    const { error } = await saveSection('promo_banner', data);
+    setSaving(false);
+    if (error) toast.error('Failed to save');
+    else toast.success('Promo banner saved!');
+  };
+
+  if (loading) return <Loader />;
+
+  const layouts: { id: PromoBannerContent['layout']; label: string }[] = [
+    { id: 'image-right', label: 'Image Right' },
+    { id: 'image-left', label: 'Image Left' },
+    { id: 'overlay', label: 'Full Overlay' },
+  ];
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 sm:p-6 space-y-5">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <SectionHeading
+          title="Campaign / Promo Banner"
+          sub="A dedicated space on the homepage for campaigns, sales, or events. Toggle off when not in use."
+        />
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <span className="text-xs font-medium text-muted-foreground">Enabled</span>
+          <button
+            type="button"
+            onClick={() => setData({ ...data, enabled: !data.enabled })}
+            className={`relative w-11 h-6 rounded-full transition-colors ${data.enabled ? 'bg-accent' : 'bg-muted'}`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-background shadow transition-transform ${
+                data.enabled ? 'translate-x-5' : ''
+              }`}
+            />
+          </button>
+        </label>
+      </div>
+
+      <div className="grid sm:grid-cols-[200px_1fr] gap-4 items-start">
+        <label className="block w-full aspect-[4/3] rounded-lg overflow-hidden border-2 border-dashed border-border cursor-pointer hover:border-accent transition-colors relative">
+          {data.imageUrl ? (
+            <img src={data.imageUrl} alt="Promo" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
+              <Upload size={20} />
+              <span className="text-[10px] mt-1">Upload banner image</span>
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0])}
+          />
+        </label>
+
+        <div className="space-y-3">
+          <Field label="Eyebrow badge (e.g. 'Limited Time')">
+            <Input value={data.eyebrow} onChange={(e) => setData({ ...data, eyebrow: e.target.value })} />
+          </Field>
+          <Field label="Title">
+            <Input value={data.title} onChange={(e) => setData({ ...data, title: e.target.value })} />
+          </Field>
+          <Field label="Accent text (coupon / tag line)">
+            <Input
+              value={data.accentText}
+              onChange={(e) => setData({ ...data, accentText: e.target.value })}
+              placeholder="USE CODE: ARTIN20"
+            />
+          </Field>
+        </div>
+      </div>
+
+      <Field label="Subtitle">
+        <textarea
+          value={data.subtitle}
+          onChange={(e) => setData({ ...data, subtitle: e.target.value })}
+          rows={3}
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+      </Field>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        <Field label="Button label">
+          <Input value={data.ctaLabel} onChange={(e) => setData({ ...data, ctaLabel: e.target.value })} />
+        </Field>
+        <Field label="Button link">
+          <Input value={data.ctaHref} onChange={(e) => setData({ ...data, ctaHref: e.target.value })} placeholder="/shop" />
+        </Field>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        <Field label="Layout">
+          <div className="flex flex-wrap gap-2">
+            {layouts.map((l) => (
+              <button
+                key={l.id}
+                type="button"
+                onClick={() => setData({ ...data, layout: l.id })}
+                className={`px-3 py-2 rounded-md text-xs font-medium border transition-colors ${
+                  data.layout === l.id
+                    ? 'bg-accent text-accent-foreground border-accent'
+                    : 'bg-background border-border text-muted-foreground hover:border-foreground/30'
+                }`}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
+        </Field>
+        <Field label="Countdown end date (optional)">
+          <Input
+            type="datetime-local"
+            value={data.endDate ? data.endDate.slice(0, 16) : ''}
+            onChange={(e) =>
+              setData({ ...data, endDate: e.target.value ? new Date(e.target.value).toISOString() : '' })
+            }
+          />
+        </Field>
+      </div>
+
+      <SaveButton saving={saving} onClick={handleSave} />
+    </div>
+  );
+}
+
 /* ----------------- Brand Story Editor ----------------- */
 function BrandStoryEditor() {
   const [data, setData] = useState<BrandStoryContent>(BRAND_STORY_DEFAULT);
