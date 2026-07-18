@@ -54,6 +54,7 @@ export default function SiteContentEditor() {
 
   const tabs: { id: SubTab; label: string }[] = [
     { id: 'hero', label: 'Hero / Banners' },
+    { id: 'promo', label: 'Promo Banner' },
     { id: 'brand_story', label: 'Brand Story' },
     { id: 'about', label: 'About Page' },
     { id: 'featured', label: 'Featured & Best Sellers' },
@@ -81,6 +82,7 @@ export default function SiteContentEditor() {
       </div>
 
       {sub === 'hero' && <HeroEditor />}
+      {sub === 'promo' && <PromoBannerEditor />}
       {sub === 'brand_story' && <BrandStoryEditor />}
       {sub === 'about' && <AboutEditor />}
       {sub === 'featured' && <FeaturedEditor />}
