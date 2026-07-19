@@ -26,10 +26,10 @@ function useCountdown(endDate: string) {
 function TimeBox({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="min-w-[3rem] sm:min-w-[3.5rem] px-2 py-2 sm:py-2.5 rounded-lg bg-background/10 backdrop-blur-sm border border-background/20 font-display font-bold text-xl sm:text-2xl tabular-nums">
+      <div className="min-w-[2.5rem] sm:min-w-[3rem] px-2 py-1.5 rounded-md bg-background/95 text-foreground font-display font-bold text-base sm:text-lg tabular-nums shadow-sm">
         {String(value).padStart(2, '0')}
       </div>
-      <span className="text-[10px] uppercase tracking-widest mt-1 opacity-70">{label}</span>
+      <span className="text-[9px] uppercase tracking-widest mt-1 opacity-80">{label}</span>
     </div>
   );
 }
@@ -40,111 +40,94 @@ export default function PromoBanner() {
 
   if (loading || !content.enabled) return null;
 
-  const imageFirst = content.layout === 'image-left';
-  const overlay = content.layout === 'overlay';
+  const href = content.ctaHref || '/shop';
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+    <section className="py-10 sm:py-14 md:py-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7 }}
-          className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-primary text-primary-foreground shadow-2xl"
         >
-          {overlay ? (
-            <div className="relative min-h-[380px] sm:min-h-[460px] md:min-h-[520px]">
-              {content.imageUrl && (
+          <Link
+            to={href}
+            aria-label={content.title}
+            className="group relative block overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/60"
+          >
+            {/* Image layer */}
+            <div className="relative aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] w-full bg-primary">
+              {content.imageUrl ? (
                 <img
                   src={content.imageUrl}
                   alt={content.title}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.03]"
                 />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-primary">
+                  <Sparkles className="w-20 h-20 opacity-20" />
+                </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/85 to-primary/40" />
-              <div className="relative z-10 flex flex-col justify-center h-full min-h-[380px] sm:min-h-[460px] md:min-h-[520px] p-6 sm:p-10 md:p-14 max-w-2xl">
-                <BannerContent content={content} countdown={countdown} />
-              </div>
-            </div>
-          ) : (
-            <div className={`grid md:grid-cols-2 ${imageFirst ? '' : ''}`}>
-              <div className={`p-6 sm:p-10 md:p-14 flex flex-col justify-center ${imageFirst ? 'md:order-2' : ''}`}>
-                <BannerContent content={content} countdown={countdown} />
-              </div>
-              <div className={`relative min-h-[240px] sm:min-h-[320px] md:min-h-[460px] ${imageFirst ? 'md:order-1' : ''}`}>
-                {content.imageUrl ? (
-                  <img
-                    src={content.imageUrl}
-                    alt={content.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-primary-foreground/5">
-                    <Sparkles className="w-20 h-20 opacity-20" />
+
+              {/* Readability gradient: strong on left, fading to right */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10 sm:from-black/80 sm:via-black/40 sm:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+              {/* Content */}
+              <div className="relative z-10 flex flex-col justify-center h-full p-5 sm:p-8 md:p-12 lg:p-14 max-w-[92%] sm:max-w-[70%] md:max-w-[60%] text-white">
+                {content.eyebrow && (
+                  <span className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-accent text-accent-foreground text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 sm:mb-4">
+                    <Sparkles size={12} /> {content.eyebrow}
+                  </span>
+                )}
+                <h2 className="font-display font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-2 sm:mb-3 drop-shadow-lg">
+                  {content.title}
+                </h2>
+                {content.subtitle && (
+                  <p className="text-xs sm:text-sm md:text-base opacity-90 mb-3 sm:mb-5 max-w-lg line-clamp-2 sm:line-clamp-none">
+                    {content.subtitle}
+                  </p>
+                )}
+
+                {countdown && (
+                  <div className="hidden sm:flex gap-2 mb-5">
+                    <TimeBox value={countdown.days} label="Days" />
+                    <TimeBox value={countdown.hours} label="Hrs" />
+                    <TimeBox value={countdown.mins} label="Min" />
+                    <TimeBox value={countdown.secs} label="Sec" />
                   </div>
                 )}
-                <div className="md:hidden absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent" />
+              </div>
+
+              {/* Bottom action bar */}
+              <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between gap-3 px-4 sm:px-8 md:px-12 py-3 sm:py-4 bg-gradient-to-t from-black/85 to-transparent">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  {content.ctaLabel && (
+                    <span className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-accent text-accent-foreground font-display font-bold text-xs sm:text-sm group-hover:gap-2.5 transition-all">
+                      {content.ctaLabel}
+                      <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                    </span>
+                  )}
+                  {content.accentText && (
+                    <span className="hidden xs:inline-block font-mono text-[10px] sm:text-xs px-2.5 py-1.5 rounded-md bg-white/10 border border-white/25 text-white tracking-wider truncate">
+                      {content.accentText}
+                    </span>
+                  )}
+                </div>
+
+                {countdown && (
+                  <div className="sm:hidden flex items-center gap-1 text-white font-mono text-xs tabular-nums">
+                    <span className="px-1.5 py-0.5 rounded bg-white/15">{String(countdown.days).padStart(2, '0')}d</span>
+                    <span className="px-1.5 py-0.5 rounded bg-white/15">{String(countdown.hours).padStart(2, '0')}h</span>
+                    <span className="px-1.5 py-0.5 rounded bg-white/15">{String(countdown.mins).padStart(2, '0')}m</span>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-
-          {/* Corner accent */}
-          <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-accent/20 blur-3xl" />
+          </Link>
         </motion.div>
       </div>
     </section>
-  );
-}
-
-function BannerContent({
-  content,
-  countdown,
-}: {
-  content: ReturnType<typeof useSiteContent<'promo_banner'>>['content'];
-  countdown: { days: number; hours: number; mins: number; secs: number } | null;
-}) {
-  return (
-    <>
-      {content.eyebrow && (
-        <span className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full bg-accent text-accent-foreground text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-4 sm:mb-5">
-          <Sparkles size={12} /> {content.eyebrow}
-        </span>
-      )}
-      <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.05] mb-3 sm:mb-4">
-        {content.title}
-      </h2>
-      {content.subtitle && (
-        <p className="text-sm sm:text-base md:text-lg opacity-80 mb-5 sm:mb-6 max-w-lg">
-          {content.subtitle}
-        </p>
-      )}
-
-      {countdown && (
-        <div className="flex gap-2 sm:gap-3 mb-6 sm:mb-7">
-          <TimeBox value={countdown.days} label="Days" />
-          <TimeBox value={countdown.hours} label="Hrs" />
-          <TimeBox value={countdown.mins} label="Min" />
-          <TimeBox value={countdown.secs} label="Sec" />
-        </div>
-      )}
-
-      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-        {content.ctaLabel && (
-          <Link
-            to={content.ctaHref || '/shop'}
-            className="group inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-accent text-accent-foreground font-display font-bold text-sm sm:text-base hover:scale-[1.03] transition-transform"
-          >
-            {content.ctaLabel}
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        )}
-        {content.accentText && (
-          <span className="font-mono text-xs sm:text-sm px-3 py-2 rounded-md border border-dashed border-primary-foreground/40 tracking-wider">
-            {content.accentText}
-          </span>
-        )}
-      </div>
-    </>
   );
 }
