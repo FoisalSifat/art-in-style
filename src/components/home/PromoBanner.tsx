@@ -76,7 +76,7 @@ export default function PromoBanner() {
               <div className="flex-1 min-w-0">
                 {content.eyebrow && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 text-accent text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3">
-                    <Sparkles size={12} /> {content.eyebrow}
+                    {content.eyebrow}
                   </span>
                 )}
                 <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-foreground leading-tight tracking-tight mb-2">
