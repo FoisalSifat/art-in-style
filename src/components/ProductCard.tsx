@@ -94,12 +94,6 @@ export default function ProductCard({ product, index = 0 }: Props) {
             <span className="text-[10px] sm:text-xs text-muted-foreground line-through">৳{product.originalPrice}</span>
           )}
         </div>
-        <div className="flex items-center gap-0.5 sm:gap-1">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} className={`text-[10px] sm:text-xs ${i < Math.floor(product.rating) ? 'text-accent' : 'text-muted-foreground/30'}`}>★</span>
-          ))}
-          <span className="text-[10px] sm:text-xs text-muted-foreground ml-0.5 sm:ml-1">({product.reviews})</span>
-        </div>
       </div>
     </motion.div>
   );
