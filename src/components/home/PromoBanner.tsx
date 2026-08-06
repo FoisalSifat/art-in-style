@@ -26,10 +26,10 @@ function useCountdown(endDate: string) {
 function TimeBox({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="min-w-[2.5rem] sm:min-w-[3rem] px-2 py-1.5 rounded-md bg-background/95 text-foreground font-display font-bold text-base sm:text-lg tabular-nums shadow-sm">
+      <div className="min-w-[2.25rem] sm:min-w-[2.75rem] px-1.5 sm:px-2 py-1 sm:py-1.5 rounded bg-background/95 text-foreground font-display font-bold text-sm sm:text-base tabular-nums shadow-sm">
         {String(value).padStart(2, '0')}
       </div>
-      <span className="text-[9px] uppercase tracking-widest mt-1 opacity-80">{label}</span>
+      <span className="text-[8px] sm:text-[9px] uppercase tracking-widest mt-1 opacity-90">{label}</span>
     </div>
   );
 }
@@ -43,7 +43,7 @@ export default function PromoBanner() {
   const href = content.ctaHref || '/shop';
 
   return (
-    <section className="py-10 sm:py-14 md:py-20 px-4 sm:px-6">
+    <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -54,10 +54,10 @@ export default function PromoBanner() {
           <Link
             to={href}
             aria-label={content.title}
-            className="group block overflow-hidden rounded-2xl sm:rounded-3xl bg-card border border-border shadow-xl hover:shadow-2xl transition-shadow focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/60"
+            className="group relative block w-full overflow-hidden rounded-xl sm:rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/60"
           >
-            {/* Clean image */}
-            <div className="relative aspect-[16/10] sm:aspect-[21/9] md:aspect-[24/9] w-full bg-muted overflow-hidden">
+            {/* Background image — full banner */}
+            <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] md:aspect-[24/9] lg:aspect-[3/1] bg-muted overflow-hidden">
               {content.imageUrl ? (
                 <img
                   src={content.imageUrl}
@@ -69,45 +69,50 @@ export default function PromoBanner() {
                   <Sparkles className="w-20 h-20 opacity-20" />
                 </div>
               )}
-            </div>
 
-            {/* Minimal content below */}
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 sm:gap-8 p-5 sm:p-7 md:p-9 bg-card">
-              <div className="flex-1 min-w-0">
-                {content.eyebrow && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 text-accent text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3">
-                    {content.eyebrow}
-                  </span>
-                )}
-                <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-foreground leading-tight tracking-tight mb-2">
-                  {content.title}
-                </h2>
-                {content.subtitle && (
-                  <p className="text-sm sm:text-base text-muted-foreground max-w-2xl line-clamp-2">
-                    {content.subtitle}
-                  </p>
-                )}
-              </div>
+              {/* Left-side gradient overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/75 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent sm:hidden" />
 
-              <div className="flex flex-col sm:items-end gap-3 sm:gap-4">
-                {countdown && (
-                  <div className="flex gap-2">
-                    <TimeBox value={countdown.days} label="Days" />
-                    <TimeBox value={countdown.hours} label="Hrs" />
-                    <TimeBox value={countdown.mins} label="Min" />
-                    <TimeBox value={countdown.secs} label="Sec" />
-                  </div>
-                )}
-
-                <div className="flex items-center gap-3">
-                  {content.ctaLabel && (
-                    <span className="inline-flex items-center gap-1.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-primary text-primary-foreground font-display font-bold text-sm group-hover:gap-2.5 transition-all">
-                      {content.ctaLabel}
-                      <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              {/* Content overlaid on the image */}
+              <div className="absolute inset-0 flex flex-col justify-center p-5 sm:p-8 md:p-12 lg:p-16">
+                <div className="max-w-xl sm:max-w-2xl">
+                  {content.eyebrow && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent text-accent-foreground text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 sm:mb-4">
+                      {content.eyebrow}
                     </span>
                   )}
-                  {content.accentText && (
-                    <span className="hidden sm:inline-flex font-mono text-xs px-3 py-2 rounded-md bg-muted border border-border text-muted-foreground tracking-wider">
+
+                  <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.05] tracking-tight mb-2 sm:mb-3">
+                    {content.title}
+                  </h2>
+
+                  {content.subtitle && (
+                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-lg sm:max-w-xl mb-4 sm:mb-6 line-clamp-2 sm:line-clamp-none">
+                      {content.subtitle}
+                    </p>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                    {content.ctaLabel && (
+                      <span className="inline-flex items-center justify-center gap-2 w-fit px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-primary text-primary-foreground font-display font-bold text-sm group-hover:gap-3 transition-all">
+                        {content.ctaLabel}
+                        <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                      </span>
+                    )}
+
+                    {countdown && (
+                      <div className="flex gap-2 sm:gap-3">
+                        <TimeBox value={countdown.days} label="Days" />
+                        <TimeBox value={countdown.hours} label="Hrs" />
+                        <TimeBox value={countdown.mins} label="Min" />
+                        <TimeBox value={countdown.secs} label="Sec" />
+                      </div>
+                    )}
+                  </div>
+
+                  {content.accentText && !countdown && (
+                    <span className="mt-4 inline-flex font-mono text-xs px-3 py-2 rounded-md bg-muted/80 border border-border text-muted-foreground tracking-wider">
                       {content.accentText}
                     </span>
                   )}
