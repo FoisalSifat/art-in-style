@@ -8,7 +8,7 @@ export const PROMO_BANNER_DEFAULT: PromoBannerContent = {
   eyebrow: 'Limited Time',
   title: 'Winter Drop 2026',
   subtitle: 'Get 20% off on all new arrivals. Free shipping across Bangladesh on orders above ৳2000.',
-  ctaLabel: 'Shop the Drop',
+  ctaLabel: 'Shop',
   ctaHref: '/shop',
   imageUrl: '',
   layout: 'image-right',
