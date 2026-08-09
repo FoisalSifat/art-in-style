@@ -51,11 +51,7 @@ export default function PromoBanner() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7 }}
         >
-          <Link
-            to={href}
-            aria-label={content.title}
-            className="group block w-full focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/60 rounded-xl sm:rounded-2xl"
-          >
+          <div className="group block w-full rounded-xl sm:rounded-2xl">
             {/* Full image — no text on top */}
             <div className="w-full overflow-hidden rounded-xl sm:rounded-2xl bg-muted">
               {content.imageUrl ? (
@@ -77,12 +73,6 @@ export default function PromoBanner() {
                 {content.title}
               </h2>
 
-              {content.subtitle && (
-                <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
-                  {content.subtitle}
-                </p>
-              )}
-
               {countdown && (
                 <div className="flex gap-2 sm:gap-3">
                   <TimeBox value={countdown.days} label="Days" />
@@ -99,13 +89,16 @@ export default function PromoBanner() {
               )}
 
               {content.ctaLabel && (
-                <span className="inline-flex items-center justify-center gap-2 px-7 sm:px-9 py-2.5 sm:py-3 rounded-full bg-primary text-primary-foreground font-display font-bold text-sm group-hover:gap-3 transition-all">
+                <Link
+                  to={href}
+                  className="inline-flex items-center justify-center gap-2 px-7 sm:px-9 py-2.5 sm:py-3 rounded-full bg-primary text-primary-foreground font-display font-bold text-sm hover:gap-3 transition-all cursor-pointer"
+                >
                   {content.ctaLabel}
                   <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-                </span>
+                </Link>
               )}
             </div>
-          </Link>
+          </div>
 
         </motion.div>
       </div>
