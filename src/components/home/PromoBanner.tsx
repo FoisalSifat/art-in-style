@@ -82,12 +82,6 @@ export default function PromoBanner() {
                 </div>
               )}
 
-              {content.accentText && (
-                <span className="inline-flex font-mono text-xs px-3 py-2 rounded-md bg-muted border border-border text-muted-foreground tracking-wider">
-                  {content.accentText}
-                </span>
-              )}
-
               {content.ctaLabel && (
                 <Link
                   to={href}
