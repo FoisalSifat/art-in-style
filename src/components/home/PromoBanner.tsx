@@ -73,12 +73,6 @@ export default function PromoBanner() {
 
             {/* Text + CTA below the image */}
             <div className="mt-5 sm:mt-7 flex flex-col items-center text-center gap-3 sm:gap-4">
-              {content.eyebrow && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-accent text-accent-foreground text-[10px] sm:text-xs font-bold uppercase tracking-widest">
-                  {content.eyebrow}
-                </span>
-              )}
-
               <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-foreground leading-[1.1] tracking-tight">
                 {content.title}
               </h2>
