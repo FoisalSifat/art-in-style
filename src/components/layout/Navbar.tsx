@@ -16,6 +16,8 @@ const navLinks = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
   const { totalItems, setIsOpen } = useCart();
   const { wishlist } = useWishlist();
   const { theme, toggleTheme } = useTheme();
