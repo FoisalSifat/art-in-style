@@ -109,17 +109,45 @@ export default function Checkout() {
                   <span className="shrink-0">৳{item.product.price * item.quantity}</span>
                 </div>
               ))}
-              <div className="border-t border-border pt-2 sm:pt-3">
-                <div className="flex justify-between text-xs sm:text-sm"><span>Subtotal</span><span>৳{items.reduce((s, i) => s + i.product.price * i.quantity, 0)}</span></div>
-                {discount > 0 && <div className="flex justify-between text-xs sm:text-sm text-accent"><span>Discount ({discount}%)</span><span>-৳{Math.round(items.reduce((s, i) => s + i.product.price * i.quantity, 0) * discount / 100)}</span></div>}
+              <div className="border-t border-border pt-2 sm:pt-3 space-y-1.5">
+                <div className="flex justify-between text-xs sm:text-sm"><span>Subtotal</span><span>৳{subtotal}</span></div>
+                {discount > 0 && appliedCoupon && (
+                  <div className="flex justify-between text-xs sm:text-sm text-accent">
+                    <span>Discount ({appliedCoupon.code})</span>
+                    <span>-৳{Math.round(discount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-xs sm:text-sm"><span>Shipping</span><span className="text-accent">Free</span></div>
               </div>
+
+              {/* Coupon */}
+              <div className="border-t border-border pt-2 sm:pt-3">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Coupon code"
+                    value={couponCode}
+                    onChange={e => setCouponCode(e.target.value)}
+                    disabled={!!appliedCoupon}
+                    className="flex-1 min-w-0 px-3 py-2 text-xs sm:text-sm bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-60"
+                  />
+                  {appliedCoupon ? (
+                    <Button type="button" variant="outline" size="sm" onClick={removeCoupon}>Remove</Button>
+                  ) : (
+                    <Button type="button" variant="outline" size="sm" disabled={applyingCoupon} onClick={() => { void applyCoupon(form.email || undefined, form.phone || undefined); }}>
+                      {applyingCoupon ? '...' : 'Apply'}
+                    </Button>
+                  )}
+                </div>
+              </div>
+
               <div className="border-t border-border pt-2 sm:pt-3 flex justify-between font-display font-bold text-base sm:text-lg">
                 <span>Total</span>
                 <span>৳{Math.round(totalPrice)}</span>
               </div>
             </div>
           </div>
+
 
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-4">
             <h2 className="font-display font-bold text-base sm:text-lg">Shipping Information</h2>
