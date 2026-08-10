@@ -854,6 +854,9 @@ export default function AdminDashboard() {
             {/* Landing Page CMS Tab */}
             {tab === 'content' && <SiteContentEditor />}
 
+            {/* Coupons Tab */}
+            {tab === 'coupons' && <CouponManager />}
+
             {/* Orders Tab */}
             {tab === 'orders' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
