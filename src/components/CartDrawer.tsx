@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 export default function CartDrawer() {
-  const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, totalPrice, couponCode, setCouponCode, discount, applyCoupon } = useCart();
+  const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, subtotal, totalPrice, couponCode, setCouponCode, discount, applyCoupon, appliedCoupon, removeCoupon, applyingCoupon } = useCart();
 
   return (
     <AnimatePresence>
