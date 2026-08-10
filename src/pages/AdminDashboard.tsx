@@ -1,18 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout, Pencil } from 'lucide-react';
+import { Package, ShoppingCart, BarChart3, Plus, Trash2, Eye, EyeOff, Upload, LogOut, Lock, X, Image as ImageIcon, Layout, Pencil, Ticket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
 import SiteContentEditor from '@/components/admin/SiteContentEditor';
+import CouponManager from '@/components/admin/CouponManager';
 
 const ADMIN_PASSWORD = 'artin2024';
 
 type AdminProduct = Tables<'admin_products'>;
 type Order = Tables<'orders'>;
-type Tab = 'analytics' | 'products' | 'orders' | 'content';
+type Tab = 'analytics' | 'products' | 'orders' | 'content' | 'coupons';
 
 export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -386,6 +387,7 @@ export default function AdminDashboard() {
     { id: 'products', label: 'Products', icon: <Package size={18} /> },
     { id: 'content', label: 'Landing Page', icon: <Layout size={18} /> },
     { id: 'orders', label: 'Orders', icon: <ShoppingCart size={18} /> },
+    { id: 'coupons', label: 'Coupons', icon: <Ticket size={18} /> },
   ];
 
   return (
@@ -851,6 +853,9 @@ export default function AdminDashboard() {
 
             {/* Landing Page CMS Tab */}
             {tab === 'content' && <SiteContentEditor />}
+
+            {/* Coupons Tab */}
+            {tab === 'coupons' && <CouponManager />}
 
             {/* Orders Tab */}
             {tab === 'orders' && (

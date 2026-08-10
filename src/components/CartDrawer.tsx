@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 export default function CartDrawer() {
-  const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, totalPrice, couponCode, setCouponCode, discount, applyCoupon } = useCart();
+  const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, subtotal, totalPrice, couponCode, setCouponCode, discount, applyCoupon, appliedCoupon, removeCoupon, applyingCoupon } = useCart();
 
   return (
     <AnimatePresence>
@@ -86,11 +86,27 @@ export default function CartDrawer() {
                     placeholder="Coupon code"
                     value={couponCode}
                     onChange={e => setCouponCode(e.target.value)}
-                    className="flex-1 px-3 py-2 text-xs sm:text-sm bg-card border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-accent"
+                    disabled={!!appliedCoupon}
+                    className="flex-1 px-3 py-2 text-xs sm:text-sm bg-card border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-60"
                   />
-                  <Button variant="outline" size="sm" onClick={applyCoupon}>Apply</Button>
+                  {appliedCoupon ? (
+                    <Button variant="outline" size="sm" onClick={removeCoupon}>Remove</Button>
+                  ) : (
+                    <Button variant="outline" size="sm" disabled={applyingCoupon} onClick={() => { void applyCoupon(); }}>
+                      {applyingCoupon ? '...' : 'Apply'}
+                    </Button>
+                  )}
                 </div>
-                {discount > 0 && <p className="text-xs text-accent font-medium">🎉 {discount}% discount applied!</p>}
+                {appliedCoupon && discount > 0 && (
+                  <div className="flex justify-between text-xs sm:text-sm text-accent font-medium">
+                    <span>🎉 {appliedCoupon.code} applied</span>
+                    <span>-৳{discount}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
+                  <span>Subtotal</span>
+                  <span>৳{Math.round(subtotal)}</span>
+                </div>
                 <div className="flex justify-between font-display font-bold text-base sm:text-lg">
                   <span>Total</span>
                   <span>৳{Math.round(totalPrice)}</span>
