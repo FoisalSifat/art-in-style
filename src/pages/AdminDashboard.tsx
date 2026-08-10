@@ -387,6 +387,7 @@ export default function AdminDashboard() {
     { id: 'products', label: 'Products', icon: <Package size={18} /> },
     { id: 'content', label: 'Landing Page', icon: <Layout size={18} /> },
     { id: 'orders', label: 'Orders', icon: <ShoppingCart size={18} /> },
+    { id: 'coupons', label: 'Coupons', icon: <Ticket size={18} /> },
   ];
 
   return (
