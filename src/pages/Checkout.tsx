@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function Checkout() {
-  const { items, totalPrice, discount, clearCart } = useCart();
+  const { items, subtotal, totalPrice, discount, clearCart, couponCode, setCouponCode, appliedCoupon, applyCoupon, removeCoupon, applyingCoupon } = useCart();
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', city: '', zip: '' });
   const [payment, setPayment] = useState('Cash on Delivery');
   const [submitting, setSubmitting] = useState(false);
@@ -26,8 +26,6 @@ export default function Checkout() {
     );
   }
 
-  const subtotal = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -42,7 +40,24 @@ export default function Checkout() {
       image: i.product.image,
     }));
 
-    const { error } = await supabase.from('orders').insert({
+    // Re-validate the coupon server-side against this customer before charging.
+    if (appliedCoupon) {
+      const { data } = await supabase.rpc('validate_coupon', {
+        _code: appliedCoupon.code,
+        _subtotal: Math.round(subtotal),
+        _email: form.email || null,
+        _phone: form.phone || null,
+      });
+      const result = data as unknown as { valid: boolean; reason?: string } | null;
+      if (!result?.valid) {
+        toast.error(result?.reason || 'This coupon is no longer valid');
+        removeCoupon();
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    const { data: order, error } = await supabase.from('orders').insert({
       customer_name: form.name,
       customer_email: form.email,
       customer_phone: form.phone,
@@ -54,7 +69,7 @@ export default function Checkout() {
       subtotal,
       discount,
       total: Math.round(totalPrice),
-    });
+    }).select('id').single();
 
     if (error) {
       toast.error('Failed to place order. Please try again.');
@@ -62,10 +77,21 @@ export default function Checkout() {
       return;
     }
 
+    if (appliedCoupon) {
+      await supabase.rpc('redeem_coupon', {
+        _code: appliedCoupon.code,
+        _discount_amount: Math.round(discount),
+        _email: form.email || null,
+        _phone: form.phone || null,
+        _order_id: order?.id ?? null,
+      });
+    }
+
     toast.success('Order placed! Redirecting to confirmation...');
     clearCart();
     navigate('/order-success');
   };
+
 
   return (
     <section className="pt-20 sm:pt-24 pb-16 min-h-screen">
