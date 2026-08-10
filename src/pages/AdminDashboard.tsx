@@ -12,7 +12,7 @@ const ADMIN_PASSWORD = 'artin2024';
 
 type AdminProduct = Tables<'admin_products'>;
 type Order = Tables<'orders'>;
-type Tab = 'analytics' | 'products' | 'orders' | 'content';
+type Tab = 'analytics' | 'products' | 'orders' | 'content' | 'coupons';
 
 export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false);
