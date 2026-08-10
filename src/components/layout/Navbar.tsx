@@ -32,9 +32,15 @@ export default function Navbar() {
     setMobileOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-md">
+      <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'bg-background/75 backdrop-blur-xl' : 'bg-background/95 backdrop-blur-md'}`}>
         <nav className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex items-center shrink-0">
