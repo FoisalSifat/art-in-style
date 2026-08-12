@@ -13,6 +13,9 @@ export default function Checkout() {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const SHIPPING_FEE = 70;
+  const grandTotal = Math.round(totalPrice) + SHIPPING_FEE;
+
   if (items.length === 0) {
     return (
       <section className="pt-24 pb-16 min-h-screen flex items-center justify-center">
@@ -68,7 +71,7 @@ export default function Checkout() {
       items: orderItems,
       subtotal,
       discount,
-      total: Math.round(totalPrice),
+      total: grandTotal,
     }).select('id').single();
 
     if (error) {
@@ -117,7 +120,8 @@ export default function Checkout() {
                     <span>-৳{Math.round(discount)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-xs sm:text-sm"><span>Shipping</span><span className="text-accent">Free</span></div>
+                <div className="flex justify-between text-xs sm:text-sm"><span>Delivery (Inside Dhaka)</span><span>৳{SHIPPING_FEE}</span></div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Outside Dhaka delivery — coming soon.</p>
               </div>
 
               {/* Coupon */}
@@ -143,7 +147,7 @@ export default function Checkout() {
 
               <div className="border-t border-border pt-2 sm:pt-3 flex justify-between font-display font-bold text-base sm:text-lg">
                 <span>Total</span>
-                <span>৳{Math.round(totalPrice)}</span>
+                <span>৳{grandTotal}</span>
               </div>
             </div>
           </div>
@@ -171,7 +175,7 @@ export default function Checkout() {
             </div>
 
             <Button type="submit" disabled={submitting} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full mt-4 sm:mt-6 text-sm sm:text-base">
-              {submitting ? 'Placing Order...' : `Place Order — ৳${Math.round(totalPrice)}`}
+              {submitting ? 'Placing Order...' : `Place Order — ৳${grandTotal}`}
             </Button>
           </form>
         </div>

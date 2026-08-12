@@ -107,9 +107,14 @@ export default function CartDrawer() {
                   <span>Subtotal</span>
                   <span>৳{Math.round(subtotal)}</span>
                 </div>
+                <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
+                  <span>Delivery (Inside Dhaka)</span>
+                  <span>৳70</span>
+                </div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Outside Dhaka delivery — coming soon.</p>
                 <div className="flex justify-between font-display font-bold text-base sm:text-lg">
                   <span>Total</span>
-                  <span>৳{Math.round(totalPrice)}</span>
+                  <span>৳{Math.round(totalPrice) + 70}</span>
                 </div>
                 <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6" asChild>
                   <Link to="/checkout" onClick={() => setIsOpen(false)}>Checkout</Link>
