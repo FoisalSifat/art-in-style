@@ -147,7 +147,7 @@ export default function Checkout() {
 
               <div className="border-t border-border pt-2 sm:pt-3 flex justify-between font-display font-bold text-base sm:text-lg">
                 <span>Total</span>
-                <span>৳{Math.round(totalPrice)}</span>
+                <span>৳{grandTotal}</span>
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function Checkout() {
             </div>
 
             <Button type="submit" disabled={submitting} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-display font-bold py-5 sm:py-6 rounded-full mt-4 sm:mt-6 text-sm sm:text-base">
-              {submitting ? 'Placing Order...' : `Place Order — ৳${Math.round(totalPrice)}`}
+              {submitting ? 'Placing Order...' : `Place Order — ৳${grandTotal}`}
             </Button>
           </form>
         </div>

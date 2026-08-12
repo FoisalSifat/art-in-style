@@ -9,8 +9,8 @@ export default function Shipping() {
           <div className="prose prose-sm text-muted-foreground space-y-6">
             <div>
               <h2 className="font-display text-xl font-bold text-foreground">Shipping Policy</h2>
-              <p>We deliver nationwide within Bangladesh. Standard delivery takes 3-5 business days. Express delivery is available in Dhaka for 1-2 business days at an additional charge.</p>
-              <p>Shipping is free on all orders above ৳3,000.</p>
+              <p>Inside Dhaka delivery is available at a flat charge of ৳70, usually delivered within 1-2 business days.</p>
+              <p>Outside Dhaka delivery is coming soon.</p>
             </div>
             <div>
               <h2 className="font-display text-xl font-bold text-foreground">Return Policy</h2>
