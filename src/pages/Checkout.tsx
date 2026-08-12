@@ -13,6 +13,9 @@ export default function Checkout() {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const SHIPPING_FEE = 70;
+  const grandTotal = Math.round(totalPrice) + SHIPPING_FEE;
+
   if (items.length === 0) {
     return (
       <section className="pt-24 pb-16 min-h-screen flex items-center justify-center">
@@ -68,7 +71,7 @@ export default function Checkout() {
       items: orderItems,
       subtotal,
       discount,
-      total: Math.round(totalPrice),
+      total: grandTotal,
     }).select('id').single();
 
     if (error) {
@@ -117,7 +120,8 @@ export default function Checkout() {
                     <span>-৳{Math.round(discount)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-xs sm:text-sm"><span>Shipping</span><span className="text-accent">Free</span></div>
+                <div className="flex justify-between text-xs sm:text-sm"><span>Delivery (Inside Dhaka)</span><span>৳{SHIPPING_FEE}</span></div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Outside Dhaka delivery — coming soon.</p>
               </div>
 
               {/* Coupon */}
