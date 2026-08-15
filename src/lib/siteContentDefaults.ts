@@ -15,7 +15,7 @@ export const PROMO_BANNER_DEFAULT: PromoBannerContent = {
   accentText: 'USE CODE: ARTIN20',
   endDate: '',
   height: 'auto',
-  fit: 'cover',
+  fit: 'contain',
   focalY: 50,
   mobileImageUrl: '',
   rounded: true,
