@@ -10,6 +10,9 @@ import {
   BRAND_STORY_DEFAULT,
   ABOUT_DEFAULT,
   PROMO_BANNER_DEFAULT,
+  BANNER_PRESETS,
+  BANNER_ASPECT_CLASS,
+  BANNER_MOBILE_SIZE,
 } from '@/lib/siteContentDefaults';
 import type {
   HeroContent,
@@ -281,21 +284,9 @@ function PromoBannerEditor() {
 
   if (loading) return <Loader />;
 
-  const heightPresets: { id: PromoBannerContent['height']; label: string; hint: string }[] = [
-    { id: 'auto', label: 'Original', hint: 'Full image, no crop' },
-    { id: 'compact', label: 'Compact', hint: 'Slim strip' },
-    { id: 'standard', label: 'Standard', hint: 'Classic banner' },
-    { id: 'tall', label: 'Tall', hint: 'Big campaign' },
-    { id: 'fullscreen', label: 'Fullscreen', hint: 'Hero-size' },
-  ];
+  const heightPresets = BANNER_PRESETS;
 
-  const previewHeight: Record<string, string> = {
-    auto: '',
-    compact: 'h-[110px]',
-    standard: 'h-[180px]',
-    tall: 'h-[260px]',
-    fullscreen: 'h-[320px]',
-  };
+  const previewAspect = BANNER_ASPECT_CLASS;
 
   const layouts: { id: PromoBannerContent['layout']; label: string }[] = [
     { id: 'image-right', label: 'Image Right' },
@@ -424,6 +415,7 @@ function PromoBannerEditor() {
             >
               <span className="block font-display font-bold">{h.label}</span>
               <span className="block text-[10px] opacity-80">{h.hint}</span>
+              {h.ratio && <span className="block text-[10px] opacity-70">Ratio {h.ratio.replace('/', ':')}</span>}
             </button>
           ))}
         </div>
@@ -443,7 +435,7 @@ function PromoBannerEditor() {
                         : 'bg-background border-border text-muted-foreground hover:border-foreground/30'
                     }`}
                   >
-                    {f === 'cover' ? 'Fill (crop)' : 'Fit (no crop)'}
+                    {f === 'cover' ? 'Fill (may crop)' : 'Fit — show full image'}
                   </button>
                 ))}
               </div>
@@ -477,7 +469,7 @@ function PromoBannerEditor() {
           <p className="text-xs text-muted-foreground mb-2">Live preview</p>
           <div
             className={`w-full overflow-hidden bg-muted ${data.rounded !== false ? 'rounded-xl' : ''} ${
-              data.height === 'auto' ? '' : previewHeight[data.height]
+              data.height === 'auto' ? '' : previewAspect[data.height]
             }`}
           >
             {data.imageUrl ? (
@@ -511,7 +503,7 @@ function PromoBannerEditor() {
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
                 <Upload size={18} />
-                <span className="text-[10px] mt-1 text-center px-2">Mobile image (optional)</span>
+                <span className="text-[10px] mt-1 text-center px-2">Mobile image (optional)<br />{BANNER_MOBILE_SIZE.hint}</span>
               </div>
             )}
             <input

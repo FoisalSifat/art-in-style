@@ -15,7 +15,7 @@ export const PROMO_BANNER_DEFAULT: PromoBannerContent = {
   accentText: 'USE CODE: ARTIN20',
   endDate: '',
   height: 'auto',
-  fit: 'cover',
+  fit: 'contain',
   focalY: 50,
   mobileImageUrl: '',
   rounded: true,
@@ -54,4 +54,23 @@ export const ABOUT_DEFAULT: AboutContent = {
   title: 'About Art In',
   subtitle:
     "Born from the belief that fashion should be fearless, Art In transforms everyday wear into wearable galleries. We're not just a brand — we're a movement.",
+};
+
+/** Exact banner size versions — upload images at these dimensions for a perfect fit. */
+export const BANNER_PRESETS = [
+  { id: 'auto', label: 'Original', width: 0, height: 0, ratio: '', hint: 'Uses your image as-is' },
+  { id: 'compact', label: 'Compact', width: 1920, height: 480, ratio: '4/1', hint: '1920 × 480 px' },
+  { id: 'standard', label: 'Standard', width: 1920, height: 768, ratio: '5/2', hint: '1920 × 768 px' },
+  { id: 'tall', label: 'Tall', width: 1920, height: 1080, ratio: '16/9', hint: '1920 × 1080 px' },
+  { id: 'fullscreen', label: 'Fullscreen', width: 1920, height: 1440, ratio: '4/3', hint: '1920 × 1440 px' },
+] as const;
+
+export const BANNER_MOBILE_SIZE = { width: 1080, height: 1350, hint: '1080 × 1350 px (4:5)' };
+
+export const BANNER_ASPECT_CLASS: Record<string, string> = {
+  auto: '',
+  compact: 'aspect-[4/1]',
+  standard: 'aspect-[5/2]',
+  tall: 'aspect-[16/9]',
+  fullscreen: 'aspect-[4/3]',
 };
