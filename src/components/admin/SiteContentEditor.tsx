@@ -281,6 +281,22 @@ function PromoBannerEditor() {
 
   if (loading) return <Loader />;
 
+  const heightPresets: { id: PromoBannerContent['height']; label: string; hint: string }[] = [
+    { id: 'auto', label: 'Original', hint: 'Full image, no crop' },
+    { id: 'compact', label: 'Compact', hint: 'Slim strip' },
+    { id: 'standard', label: 'Standard', hint: 'Classic banner' },
+    { id: 'tall', label: 'Tall', hint: 'Big campaign' },
+    { id: 'fullscreen', label: 'Fullscreen', hint: 'Hero-size' },
+  ];
+
+  const previewHeight: Record<string, string> = {
+    auto: '',
+    compact: 'h-[110px]',
+    standard: 'h-[180px]',
+    tall: 'h-[260px]',
+    fullscreen: 'h-[320px]',
+  };
+
   const layouts: { id: PromoBannerContent['layout']; label: string }[] = [
     { id: 'image-right', label: 'Image Right' },
     { id: 'image-left', label: 'Image Left' },
