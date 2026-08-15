@@ -266,6 +266,11 @@ function PromoBannerEditor() {
     if (url) setData({ ...data, imageUrl: url });
   };
 
+  const handleMobileImage = async (file: File) => {
+    const url = await uploadSiteImage(file);
+    if (url) setData({ ...data, mobileImageUrl: url });
+  };
+
   const handleSave = async () => {
     setSaving(true);
     const { error } = await saveSection('promo_banner', data);
