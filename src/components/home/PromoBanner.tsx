@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSiteContent } from '@/hooks/useSiteContent';
-import { PROMO_BANNER_DEFAULT } from '@/lib/siteContentDefaults';
+import { PROMO_BANNER_DEFAULT, BANNER_ASPECT_CLASS } from '@/lib/siteContentDefaults';
 
 function useCountdown(endDate: string) {
   const [now, setNow] = useState(Date.now());
@@ -42,13 +42,7 @@ export default function PromoBanner() {
 
   const href = content.ctaHref || '/shop';
 
-  const heightClass: Record<string, string> = {
-    auto: '',
-    compact: 'h-[180px] sm:h-[240px] md:h-[280px]',
-    standard: 'h-[260px] sm:h-[360px] md:h-[440px]',
-    tall: 'h-[360px] sm:h-[500px] md:h-[620px]',
-    fullscreen: 'h-[70vh] md:h-[85vh]',
-  };
+  const heightClass = BANNER_ASPECT_CLASS;
   const isAuto = (content.height ?? 'auto') === 'auto';
   const radius = content.rounded === false ? '' : 'rounded-xl sm:rounded-2xl';
 
@@ -76,7 +70,7 @@ export default function PromoBanner() {
                     className={
                       isAuto
                         ? 'w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.01]'
-                        : `w-full h-full ${content.fit === 'contain' ? 'object-contain' : 'object-cover'} transition-transform duration-1000 group-hover:scale-[1.01]`
+                        : `w-full h-full ${content.fit === 'cover' ? 'object-cover' : 'object-contain'} transition-transform duration-1000 group-hover:scale-[1.01]`
                     }
                   />
                 </picture>
