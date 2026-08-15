@@ -46,6 +46,16 @@ export interface PromoBannerContent {
   layout: 'image-right' | 'image-left' | 'overlay';
   accentText: string;
   endDate: string; // ISO string, empty = no countdown
+  /** Banner size version */
+  height: 'auto' | 'compact' | 'standard' | 'tall' | 'fullscreen';
+  /** How the image fills the banner area (ignored when height = auto) */
+  fit: 'cover' | 'contain';
+  /** Vertical focal point in % for cover fit */
+  focalY: number;
+  /** Optional separate image for mobile screens */
+  mobileImageUrl: string;
+  /** Rounded corners on the image */
+  rounded: boolean;
 }
 
 export type SectionMap = {
