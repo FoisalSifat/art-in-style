@@ -266,6 +266,11 @@ function PromoBannerEditor() {
     if (url) setData({ ...data, imageUrl: url });
   };
 
+  const handleMobileImage = async (file: File) => {
+    const url = await uploadSiteImage(file);
+    if (url) setData({ ...data, mobileImageUrl: url });
+  };
+
   const handleSave = async () => {
     setSaving(true);
     const { error } = await saveSection('promo_banner', data);
@@ -275,6 +280,22 @@ function PromoBannerEditor() {
   };
 
   if (loading) return <Loader />;
+
+  const heightPresets: { id: PromoBannerContent['height']; label: string; hint: string }[] = [
+    { id: 'auto', label: 'Original', hint: 'Full image, no crop' },
+    { id: 'compact', label: 'Compact', hint: 'Slim strip' },
+    { id: 'standard', label: 'Standard', hint: 'Classic banner' },
+    { id: 'tall', label: 'Tall', hint: 'Big campaign' },
+    { id: 'fullscreen', label: 'Fullscreen', hint: 'Hero-size' },
+  ];
+
+  const previewHeight: Record<string, string> = {
+    auto: '',
+    compact: 'h-[110px]',
+    standard: 'h-[180px]',
+    tall: 'h-[260px]',
+    fullscreen: 'h-[320px]',
+  };
 
   const layouts: { id: PromoBannerContent['layout']; label: string }[] = [
     { id: 'image-right', label: 'Image Right' },
@@ -378,6 +399,144 @@ function PromoBannerEditor() {
         <Field label="Button link">
           <Input value={data.ctaHref} onChange={(e) => setData({ ...data, ctaHref: e.target.value })} placeholder="/shop" />
         </Field>
+      </div>
+
+      {/* Banner size versions */}
+      <div className="rounded-xl border border-border p-4 space-y-4">
+        <div>
+          <p className="font-display font-bold text-sm">Banner Version (Height)</p>
+          <p className="text-xs text-muted-foreground">
+            Choose how tall the banner appears on the homepage.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {heightPresets.map((h) => (
+            <button
+              key={h.id}
+              type="button"
+              onClick={() => setData({ ...data, height: h.id })}
+              className={`px-3 py-2 rounded-md text-xs font-medium border text-left transition-colors ${
+                data.height === h.id
+                  ? 'bg-accent text-accent-foreground border-accent'
+                  : 'bg-background border-border text-muted-foreground hover:border-foreground/30'
+              }`}
+            >
+              <span className="block font-display font-bold">{h.label}</span>
+              <span className="block text-[10px] opacity-80">{h.hint}</span>
+            </button>
+          ))}
+        </div>
+
+        {data.height !== 'auto' && (
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Field label="Image fit">
+              <div className="flex gap-2">
+                {(['cover', 'contain'] as const).map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setData({ ...data, fit: f })}
+                    className={`px-3 py-2 rounded-md text-xs font-medium border capitalize transition-colors ${
+                      data.fit === f
+                        ? 'bg-accent text-accent-foreground border-accent'
+                        : 'bg-background border-border text-muted-foreground hover:border-foreground/30'
+                    }`}
+                  >
+                    {f === 'cover' ? 'Fill (crop)' : 'Fit (no crop)'}
+                  </button>
+                ))}
+              </div>
+            </Field>
+            {data.fit === 'cover' && (
+              <Field label={`Image focus (vertical) — ${data.focalY ?? 50}%`}>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={data.focalY ?? 50}
+                  onChange={(e) => setData({ ...data, focalY: Number(e.target.value) })}
+                  className="w-full accent-[hsl(var(--accent))]"
+                />
+              </Field>
+            )}
+          </div>
+        )}
+
+        <label className="flex items-center gap-2 text-xs font-medium">
+          <input
+            type="checkbox"
+            checked={data.rounded !== false}
+            onChange={(e) => setData({ ...data, rounded: e.target.checked })}
+          />
+          Rounded corners
+        </label>
+
+        {/* Live preview */}
+        <div>
+          <p className="text-xs text-muted-foreground mb-2">Live preview</p>
+          <div
+            className={`w-full overflow-hidden bg-muted ${data.rounded !== false ? 'rounded-xl' : ''} ${
+              data.height === 'auto' ? '' : previewHeight[data.height]
+            }`}
+          >
+            {data.imageUrl ? (
+              <img
+                src={data.imageUrl}
+                alt="Banner preview"
+                style={
+                  data.height !== 'auto' && data.fit === 'cover'
+                    ? { objectPosition: `center ${data.focalY ?? 50}%` }
+                    : undefined
+                }
+                className={
+                  data.height === 'auto'
+                    ? 'w-full h-auto object-contain'
+                    : `w-full h-full ${data.fit === 'contain' ? 'object-contain' : 'object-cover'}`
+                }
+              />
+            ) : (
+              <div className="w-full aspect-[21/9] flex items-center justify-center text-xs text-muted-foreground">
+                No image uploaded
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile image */}
+        <div className="grid sm:grid-cols-[140px_1fr] gap-4 items-start">
+          <label className="block w-full aspect-[4/5] rounded-lg overflow-hidden border-2 border-dashed border-border cursor-pointer hover:border-accent transition-colors">
+            {data.mobileImageUrl ? (
+              <img src={data.mobileImageUrl} alt="Mobile banner" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
+                <Upload size={18} />
+                <span className="text-[10px] mt-1 text-center px-2">Mobile image (optional)</span>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleMobileImage(e.target.files[0])}
+            />
+          </label>
+          <div className="text-xs text-muted-foreground space-y-2">
+            <p>
+              Upload a separate portrait/square image shown only on phones (under 640px). Leave empty
+              to use the main image everywhere.
+            </p>
+            {data.mobileImageUrl && (
+              <button
+                type="button"
+                onClick={() => setData({ ...data, mobileImageUrl: '' })}
+                className="px-3 py-1.5 rounded-md border border-destructive/40 text-destructive text-xs font-medium"
+              >
+                Remove mobile image
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">

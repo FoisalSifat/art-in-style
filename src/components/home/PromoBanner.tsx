@@ -42,6 +42,16 @@ export default function PromoBanner() {
 
   const href = content.ctaHref || '/shop';
 
+  const heightClass: Record<string, string> = {
+    auto: '',
+    compact: 'h-[180px] sm:h-[240px] md:h-[280px]',
+    standard: 'h-[260px] sm:h-[360px] md:h-[440px]',
+    tall: 'h-[360px] sm:h-[500px] md:h-[620px]',
+    fullscreen: 'h-[70vh] md:h-[85vh]',
+  };
+  const isAuto = (content.height ?? 'auto') === 'auto';
+  const radius = content.rounded === false ? '' : 'rounded-xl sm:rounded-2xl';
+
   return (
     <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
@@ -51,17 +61,27 @@ export default function PromoBanner() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7 }}
         >
-          <div className="group block w-full rounded-xl sm:rounded-2xl">
+          <div className={`group block w-full ${radius}`}>
             {/* Full image — no text on top */}
-            <div className="w-full overflow-hidden rounded-xl sm:rounded-2xl bg-muted">
+            <div className={`w-full overflow-hidden bg-muted ${radius} ${isAuto ? '' : heightClass[content.height]}`}>
               {content.imageUrl ? (
-                <img
-                  src={content.imageUrl}
-                  alt={content.title}
-                  className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.01]"
-                />
+                <picture>
+                  {content.mobileImageUrl && (
+                    <source media="(max-width: 640px)" srcSet={content.mobileImageUrl} />
+                  )}
+                  <img
+                    src={content.imageUrl}
+                    alt={content.title}
+                    style={isAuto || content.fit === 'contain' ? undefined : { objectPosition: `center ${content.focalY ?? 50}%` }}
+                    className={
+                      isAuto
+                        ? 'w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.01]'
+                        : `w-full h-full ${content.fit === 'contain' ? 'object-contain' : 'object-cover'} transition-transform duration-1000 group-hover:scale-[1.01]`
+                    }
+                  />
+                </picture>
               ) : (
-                <div className="w-full aspect-[21/9] flex items-center justify-center">
+                <div className={`w-full ${isAuto ? 'aspect-[21/9]' : 'h-full'} flex items-center justify-center`}>
                   <Sparkles className="w-16 h-16 opacity-20" />
                 </div>
               )}
