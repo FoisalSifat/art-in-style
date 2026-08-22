@@ -43,8 +43,7 @@ export default function PromoBanner() {
   const href = content.ctaHref || '/shop';
 
   const heightClass = BANNER_ASPECT_CLASS;
-  const rawHeight = (content.height ?? 'standard') === 'fullscreen' ? 'standard' : (content.height ?? 'standard');
-  const isAuto = rawHeight === 'auto';
+  const isAuto = (content.height ?? 'standard') === 'auto';
   const radius = content.rounded === false ? '' : 'rounded-xl sm:rounded-2xl';
 
   return (
