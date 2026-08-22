@@ -47,7 +47,7 @@ export interface PromoBannerContent {
   accentText: string;
   endDate: string; // ISO string, empty = no countdown
   /** Banner size version */
-  height: 'auto' | 'compact' | 'standard' | 'tall' | 'fullscreen';
+  height: 'auto' | 'compact' | 'standard' | 'tall';
   /** How the image fills the banner area (ignored when height = auto) */
   fit: 'cover' | 'contain';
   /** Vertical focal point in % for cover fit */

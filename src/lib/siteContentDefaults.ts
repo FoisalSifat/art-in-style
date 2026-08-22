@@ -14,7 +14,7 @@ export const PROMO_BANNER_DEFAULT: PromoBannerContent = {
   layout: 'image-right',
   accentText: 'USE CODE: ARTIN20',
   endDate: '',
-  height: 'auto',
+  height: 'standard',
   fit: 'contain',
   focalY: 50,
   mobileImageUrl: '',
@@ -62,7 +62,6 @@ export const BANNER_PRESETS = [
   { id: 'compact', label: 'Compact', width: 1920, height: 480, ratio: '4/1', hint: '1920 × 480 px' },
   { id: 'standard', label: 'Standard', width: 1920, height: 768, ratio: '5/2', hint: '1920 × 768 px' },
   { id: 'tall', label: 'Tall', width: 1920, height: 1080, ratio: '16/9', hint: '1920 × 1080 px' },
-  { id: 'fullscreen', label: 'Fullscreen', width: 1920, height: 1440, ratio: '4/3', hint: '1920 × 1440 px' },
 ] as const;
 
 export const BANNER_MOBILE_SIZE = { width: 1080, height: 1350, hint: '1080 × 1350 px (4:5)' };
@@ -72,5 +71,4 @@ export const BANNER_ASPECT_CLASS: Record<string, string> = {
   compact: 'aspect-[4/1]',
   standard: 'aspect-[5/2]',
   tall: 'aspect-[16/9]',
-  fullscreen: 'aspect-[4/3]',
 };
