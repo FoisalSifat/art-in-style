@@ -258,7 +258,9 @@ function PromoBannerEditor() {
       .maybeSingle()
       .then(({ data }) => {
         if (data?.content) {
-          setData({ ...PROMO_BANNER_DEFAULT, ...(data.content as object) } as PromoBannerContent);
+          const merged = { ...PROMO_BANNER_DEFAULT, ...(data.content as object) } as PromoBannerContent;
+          if ((merged.height as string) === 'fullscreen') merged.height = 'standard';
+          setData(merged);
         }
         setLoading(false);
       });
