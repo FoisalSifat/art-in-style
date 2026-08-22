@@ -57,7 +57,7 @@ export default function PromoBanner() {
         >
           <div className={`group block w-full ${radius}`}>
             {/* Full image — no text on top */}
-            <div className={`w-full overflow-hidden bg-muted ${radius} ${isAuto ? '' : heightClass[rawHeight]}`}>
+            <div className={`w-full overflow-hidden bg-muted ${radius} ${isAuto ? '' : heightClass[content.height ?? 'standard']}`}>
               {content.imageUrl ? (
                 <picture>
                   {content.mobileImageUrl && (
