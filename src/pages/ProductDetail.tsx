@@ -125,7 +125,13 @@ export default function ProductDetail() {
   }
 
   const allProducts = [...products];
-  const relatedProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
+  const RELATED_LIMIT = 8;
+  const otherProducts = allProducts.filter(p => p.id !== product.id);
+  const sameCategory = otherProducts.filter(p => p.category === product.category);
+  const relatedProducts = [
+    ...sameCategory,
+    ...otherProducts.filter(p => !sameCategory.some(s => s.id === p.id)),
+  ].slice(0, RELATED_LIMIT);
 
   const activeSize = selectedSize || product.sizes[0];
   const stock = product.sizeStock && activeSize in product.sizeStock
