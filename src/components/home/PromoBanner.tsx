@@ -43,7 +43,8 @@ export default function PromoBanner() {
   const href = content.ctaHref || '/shop';
 
   const heightClass = BANNER_ASPECT_CLASS;
-  const isAuto = (content.height ?? 'auto') === 'auto';
+  const rawHeight = (content.height ?? 'standard') === 'fullscreen' ? 'standard' : (content.height ?? 'standard');
+  const isAuto = rawHeight === 'auto';
   const radius = content.rounded === false ? '' : 'rounded-xl sm:rounded-2xl';
 
   return (
@@ -57,7 +58,7 @@ export default function PromoBanner() {
         >
           <div className={`group block w-full ${radius}`}>
             {/* Full image — no text on top */}
-            <div className={`w-full overflow-hidden bg-muted ${radius} ${isAuto ? '' : heightClass[content.height]}`}>
+            <div className={`w-full overflow-hidden bg-muted ${radius} ${isAuto ? '' : heightClass[rawHeight]}`}>
               {content.imageUrl ? (
                 <picture>
                   {content.mobileImageUrl && (
