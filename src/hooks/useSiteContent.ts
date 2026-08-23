@@ -58,11 +58,25 @@ export interface PromoBannerContent {
   rounded: boolean;
 }
 
+export interface GalleryItem {
+  url: string;
+  alt: string;
+  href: string;
+}
+
+export interface GalleryContent {
+  eyebrow: string;
+  title: string;
+  profileUrl: string;
+  images: GalleryItem[];
+}
+
 export type SectionMap = {
   hero: HeroContent;
   brand_story: BrandStoryContent;
   about: AboutContent;
   promo_banner: PromoBannerContent;
+  gallery: GalleryContent;
 };
 
 const cache = new Map<string, unknown>();
