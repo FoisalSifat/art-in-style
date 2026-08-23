@@ -1,4 +1,4 @@
-import type { HeroContent, BrandStoryContent, AboutContent, PromoBannerContent } from '@/hooks/useSiteContent';
+import type { HeroContent, BrandStoryContent, AboutContent, PromoBannerContent, GalleryContent } from '@/hooks/useSiteContent';
 import heroImg1 from '@/assets/hero-main.jpg';
 import heroImg2 from '@/assets/hero-2.jpg';
 import brandLifestyle from '@/assets/brand-lifestyle.jpeg';
@@ -71,4 +71,14 @@ export const BANNER_ASPECT_CLASS: Record<string, string> = {
   compact: 'aspect-[4/1]',
   standard: 'aspect-[5/2]',
   tall: 'aspect-[16/9]',
+};
+
+export const INSTAGRAM_URL =
+  'https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==';
+
+export const GALLERY_DEFAULT: GalleryContent = {
+  eyebrow: '@artin.clo',
+  title: 'Follow The Art',
+  profileUrl: INSTAGRAM_URL,
+  images: [],
 };

@@ -13,6 +13,7 @@ import {
   BANNER_PRESETS,
   BANNER_ASPECT_CLASS,
   BANNER_MOBILE_SIZE,
+  GALLERY_DEFAULT,
 } from '@/lib/siteContentDefaults';
 import type {
   HeroContent,
@@ -20,11 +21,13 @@ import type {
   AboutContent,
   HeroSlide,
   PromoBannerContent,
+  GalleryContent,
+  GalleryItem,
 } from '@/hooks/useSiteContent';
 import { useAllProducts } from '@/hooks/useAllProducts';
 import { useProductOverrides } from '@/hooks/useProductOverrides';
 
-type SubTab = 'hero' | 'promo' | 'brand_story' | 'about' | 'featured';
+type SubTab = 'hero' | 'promo' | 'brand_story' | 'about' | 'gallery' | 'featured';
 
 async function uploadSiteImage(file: File): Promise<string | null> {
   const ext = file.name.split('.').pop();
@@ -60,6 +63,7 @@ export default function SiteContentEditor() {
     { id: 'promo', label: 'Promo Banner' },
     { id: 'brand_story', label: 'Brand Story' },
     { id: 'about', label: 'About Page' },
+    { id: 'gallery', label: 'Follow The Art' },
     { id: 'featured', label: 'Featured & Best Sellers' },
   ];
 
@@ -88,6 +92,7 @@ export default function SiteContentEditor() {
       {sub === 'promo' && <PromoBannerEditor />}
       {sub === 'brand_story' && <BrandStoryEditor />}
       {sub === 'about' && <AboutEditor />}
+      {sub === 'gallery' && <GalleryEditor />}
       {sub === 'featured' && <FeaturedEditor />}
     </motion.div>
   );

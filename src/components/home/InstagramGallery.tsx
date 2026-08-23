@@ -1,8 +1,18 @@
 import { motion } from 'framer-motion';
 import { products } from '@/data/products';
+import { useSiteContent } from '@/hooks/useSiteContent';
+import { GALLERY_DEFAULT, INSTAGRAM_URL } from '@/lib/siteContentDefaults';
 
 export default function InstagramGallery() {
-  const images = products.slice(0, 6).map(p => p.image);
+  const { content } = useSiteContent('gallery', GALLERY_DEFAULT);
+
+  const profileUrl = content.profileUrl || INSTAGRAM_URL;
+  const items =
+    content.images && content.images.length > 0
+      ? content.images.filter((i) => i.url)
+      : products.slice(0, 6).map((p, i) => ({ url: p.image, alt: `Instagram ${i + 1}`, href: '' }));
+
+  if (items.length === 0) return null;
 
   return (
     <section className="py-16 sm:py-24">
@@ -13,15 +23,22 @@ export default function InstagramGallery() {
           viewport={{ once: true }}
           className="text-center mb-8 sm:mb-12"
         >
-          <a href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3 inline-block hover:underline">@artin.clo</a>
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black">Follow The Art</h2>
+          <a
+            href={profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent text-xs sm:text-sm font-medium tracking-[0.3em] uppercase mb-2 sm:mb-3 inline-block hover:underline"
+          >
+            {content.eyebrow}
+          </a>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black">{content.title}</h2>
         </motion.div>
 
         <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-1.5 sm:gap-2">
-          {images.map((img, i) => (
+          {items.map((item, i) => (
             <motion.a
               key={i}
-              href="https://www.instagram.com/artin.clo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              href={item.href || profileUrl}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -30,7 +47,12 @@ export default function InstagramGallery() {
               transition={{ delay: i * 0.05 }}
               className="aspect-square overflow-hidden rounded-lg group cursor-pointer block"
             >
-              <img src={img} alt={`Instagram ${i + 1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+              <img
+                src={item.url}
+                alt={item.alt || `Art In gallery ${i + 1}`}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+              />
             </motion.a>
           ))}
         </div>
