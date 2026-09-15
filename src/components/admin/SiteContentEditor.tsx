@@ -704,6 +704,128 @@ function AboutEditor() {
   );
 }
 
+/* ----------------- Follow The Art (Gallery) Editor ----------------- */
+function GalleryEditor() {
+  const [data, setData] = useState<GalleryContent>(GALLERY_DEFAULT);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from('site_content')
+      .select('content')
+      .eq('section_key', 'gallery')
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.content) {
+          setData({ ...GALLERY_DEFAULT, ...(data.content as object) } as GalleryContent);
+        }
+        setLoading(false);
+      });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    const { error } = await saveSection('gallery', data);
+    setSaving(false);
+    if (error) toast.error('Failed to save');
+    else toast.success('Follow The Art section saved!');
+  };
+
+  const updateItem = (i: number, patch: Partial<GalleryItem>) => {
+    const images = [...data.images];
+    images[i] = { ...images[i], ...patch };
+    setData({ ...data, images });
+  };
+
+  const addItem = () => setData({ ...data, images: [...data.images, { url: '', alt: '', href: '' }] });
+  const removeItem = (i: number) => setData({ ...data, images: data.images.filter((_, idx) => idx !== i) });
+
+  const handleUpload = async (i: number, file: File) => {
+    const url = await uploadSiteImage(file);
+    if (url) updateItem(i, { url });
+  };
+
+  if (loading) return <Loader />;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 sm:p-6 space-y-5">
+      <SectionHeading
+        title="Follow The Art Gallery"
+        sub="The image grid just above the footer. Square images (1080 × 1080 px) look best."
+      />
+
+      <div className="grid sm:grid-cols-3 gap-4">
+        <Field label="Eyebrow (handle)">
+          <Input value={data.eyebrow} onChange={(e) => setData({ ...data, eyebrow: e.target.value })} placeholder="@artin.clo" />
+        </Field>
+        <Field label="Title">
+          <Input value={data.title} onChange={(e) => setData({ ...data, title: e.target.value })} />
+        </Field>
+        <Field label="Instagram profile link">
+          <Input value={data.profileUrl} onChange={(e) => setData({ ...data, profileUrl: e.target.value })} />
+        </Field>
+      </div>
+
+      <div className="border-t border-border pt-5">
+        <div className="flex items-center justify-between mb-4">
+          <SectionHeading title="Gallery Images" sub="Leave empty to auto-show products." />
+          <Button onClick={addItem} size="sm" variant="outline" className="gap-1.5">
+            <Plus size={14} /> Add Image
+          </Button>
+        </div>
+
+        <div className="space-y-3">
+          {data.images.map((item, i) => (
+            <div key={i} className="flex flex-col sm:flex-row gap-3 p-3 sm:p-4 bg-background border border-border rounded-lg">
+              <label className="block w-full sm:w-28 h-28 rounded-lg overflow-hidden border-2 border-dashed border-border cursor-pointer hover:border-accent transition-colors flex-shrink-0">
+                {item.url ? (
+                  <img src={item.url} alt={item.alt} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
+                    <ImageIcon size={20} />
+                    <span className="text-[10px] mt-1">Upload</span>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && handleUpload(i, e.target.files[0])}
+                />
+              </label>
+
+              <div className="flex-1 space-y-2">
+                <Field label={`Image ${i + 1} — Alt text`}>
+                  <Input value={item.alt} onChange={(e) => updateItem(i, { alt: e.target.value })} placeholder="Describe the image" />
+                </Field>
+                <Field label="Link (optional — defaults to Instagram profile)">
+                  <Input value={item.href} onChange={(e) => updateItem(i, { href: e.target.value })} placeholder="https://..." />
+                </Field>
+              </div>
+
+              <button
+                onClick={() => removeItem(i)}
+                className="self-start sm:self-center p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+                aria-label="Remove image"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ))}
+          {data.images.length === 0 && (
+            <p className="text-sm text-muted-foreground text-center py-6">
+              No custom images. The section currently shows the first 6 products.
+            </p>
+          )}
+        </div>
+      </div>
+
+      <SaveButton saving={saving} onClick={handleSave} />
+    </div>
+  );
+}
+
 /* ----------------- Featured / Best Sellers Editor ----------------- */
 function FeaturedEditor() {
   const { products } = useAllProducts();
