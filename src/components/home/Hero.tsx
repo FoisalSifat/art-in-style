@@ -61,8 +61,8 @@ export default function Hero() {
           />
           {isLight ? (
             <>
-              <div className="absolute inset-0 bg-gradient-to-r from-background/92 via-background/55 to-background/10 sm:from-background/80 sm:via-background/35 sm:to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent sm:from-background/50 sm:via-transparent sm:to-background/10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/25 to-transparent sm:from-background/55 sm:via-background/20 sm:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent sm:from-background/35 sm:via-transparent sm:to-background/5" />
             </>
           ) : (
             <>
