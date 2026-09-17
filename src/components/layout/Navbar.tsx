@@ -40,7 +40,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'bg-gradient-to-b from-background/45 via-background/25 to-transparent backdrop-blur-lg' : 'bg-gradient-to-b from-background/15 via-background/8 to-transparent backdrop-blur-sm'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'bg-gradient-to-b from-background/45 via-background/25 to-transparent backdrop-blur-lg' : 'bg-gradient-to-b from-background/10 via-background/5 to-transparent'}`}>
         <nav className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 lg:px-8">
           {/* Logo */}
           <Link
