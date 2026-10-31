@@ -8,7 +8,7 @@ export default function BrandStory() {
   return (
     <section className="py-16 sm:py-24 overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
