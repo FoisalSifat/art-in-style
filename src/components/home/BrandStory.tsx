@@ -16,7 +16,7 @@ export default function BrandStory() {
             transition={{ duration: 0.8 }}
             className="order-2 md:order-1"
           >
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 sm:mb-6">
               {content.headlineLine1}<br />
               <span className="text-gradient">{content.headlineHighlight}</span>
             </h2>
