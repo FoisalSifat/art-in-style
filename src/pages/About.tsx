@@ -29,7 +29,7 @@ export default function About() {
           className="mb-24"
         >
           <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3 text-center">The Visionary</p>
-          <h2 className="font-display text-4xl md:text-5xl font-black text-center mb-12">Meet the Founder</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-black text-center mb-12">Our Founder</h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
             {/* Founder Image */}
@@ -64,7 +64,7 @@ export default function About() {
               className="space-y-6"
             >
               <div>
-                <h3 className="font-display text-2xl font-black mb-3">Born to Be Different</h3>
+                <h3 className="font-display text-2xl font-black mb-3">The Vision Behind Art In</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   With an unrelenting passion for art and fashion, Asifur Rahman Tuhin founded Art In with a singular vision — to create a brand where creativity knows no boundaries. What started as a dream in Dhaka has grown into a movement that celebrates individuality and bold self-expression.
                 </p>
