@@ -69,7 +69,7 @@ export default function Contact() {
 
             <div className="pt-2 border-t border-border/50">
               <p className="text-xs font-medium tracking-[0.15em] uppercase text-muted-foreground mb-3">Follow Us</p>
-              <div className="flex gap-3">
+              <div className="flex justify-center gap-3">
                 <a href="https://www.facebook.com/profile.php?id=61580907942625" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors">
                   <Facebook size={16} />
                 </a>
