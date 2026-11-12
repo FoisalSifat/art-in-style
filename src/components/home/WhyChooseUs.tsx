@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { Gem, Palette, Truck, RotateCcw } from 'lucide-react';
+import { Gem, Palette, Truck, Undo2 } from 'lucide-react';
 
 const features = [
   { icon: Gem, title: 'Premium Fabric', desc: '220 GSM pure cotton for unmatched comfort' },
   { icon: Palette, title: 'Unique Design', desc: 'Hand-curated art from global artists' },
   { icon: Truck, title: 'Fast Delivery', desc: 'Nationwide delivery within 3-5 days' },
-  { icon: RotateCcw, title: 'Easy Returns', desc: '7-day hassle-free return policy' },
+  { icon: Undo2, title: 'Easy Returns', desc: '7-day hassle-free return policy' },
 ];
 
 export default function WhyChooseUs() {
