@@ -30,40 +30,40 @@ export default function Contact() {
   };
 
   return (
-    <section className="pt-24 pb-16 min-h-screen">
+    <section className="pt-20 sm:pt-24 pb-16 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12 sm:mb-16">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 sm:mb-16">
           <p className="text-accent text-sm font-medium tracking-[0.3em] uppercase mb-3">Get In Touch</p>
-          <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-black">Contact Us</h1>
+          <h1 className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-black">Contact Us</h1>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-10 sm:gap-16 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 sm:space-y-8">
             <div className="flex gap-4">
               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-border flex items-center justify-center flex-shrink-0">
                 <Phone size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-display font-bold text-sm sm:text-base">Phone</h3>
-                <a href="tel:01600052600" className="text-muted-foreground text-xs sm:text-sm hover:text-foreground transition-colors">01600052600</a>
+                <a href="tel:01600052600" className="text-muted-foreground text-xs sm:text-sm hover:text-foreground transition-colors whitespace-nowrap">01600052600</a>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-border flex items-center justify-center flex-shrink-0">
                 <Mail size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-display font-bold text-sm sm:text-base">Email</h3>
-                <a href="mailto:artinclo83@gmail.com" className="text-muted-foreground text-xs sm:text-sm hover:text-foreground transition-colors">artinclo83@gmail.com</a>
+                <a href="mailto:artinclo83@gmail.com" className="text-muted-foreground text-xs sm:text-sm hover:text-foreground transition-colors break-words">artinclo83@gmail.com</a>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-border flex items-center justify-center flex-shrink-0">
                 <MapPin size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-display font-bold text-sm sm:text-base">Location</h3>
-                <p className="text-muted-foreground text-xs sm:text-sm">DarusSalam, Mirpur, Dhaka - 1216</p>
+                <p className="text-muted-foreground text-xs sm:text-sm break-words">DarusSalam, Mirpur, Dhaka - 1216</p>
               </div>
             </div>
 
