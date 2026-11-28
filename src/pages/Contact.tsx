@@ -32,13 +32,13 @@ export default function Contact() {
         <motion.header
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-14 max-w-3xl sm:mb-16"
+          className="mx-auto mb-14 max-w-3xl text-center sm:mb-16"
         >
           <p className="mb-4 text-xs font-medium uppercase tracking-[0.24em] text-accent">Get in touch · Art In</p>
           <h1 className="font-display text-5xl font-black leading-none sm:text-6xl md:text-7xl">
             Contact <span className="text-accent">Us</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Questions about a piece, your order, or delivery? We’re here to help.
           </p>
           <Button asChild variant="link" className="mt-4 h-auto px-0 py-1 font-display font-bold text-accent">
